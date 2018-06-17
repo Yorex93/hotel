@@ -14,3 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/admin/{any?}', function () {
+	return view('admin.index');
+})->where('any', '[\/\w\.-]*');
