@@ -1,17 +1,16 @@
 
 // Fonts
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+@import url("https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700");
 
 // Variables
 @import "variables";
 
-@import '~vuetify/dist/vuetify.min.css';
-
 @import '~material-design-icons-iconfont/dist/material-design-icons.css';
+
+@import '~vuetify/dist/vuetify.min.css';
 
 @import "~animate.css/animate.css";
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+html{
+  font-family: 'Quicksand', sans-serif;
 }

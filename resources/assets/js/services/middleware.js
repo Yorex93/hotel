@@ -1,8 +1,10 @@
-import user from './auth'
+import user from './auth';
 
 export default {
     guest (to, from, next) {
-        next(!user.check())
+        next(!user.check() ? true: {
+            path: '/admin'
+        })
     },
 
     auth (to, from, next) {

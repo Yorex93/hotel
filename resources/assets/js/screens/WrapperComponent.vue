@@ -1,6 +1,6 @@
 <template>
-    <v-app>
-        <v-navigation-drawer app>
+    <v-app light>
+        <v-navigation-drawer app v-model="drawer" width="300">
             <v-toolbar flat class="transparent">
                 <v-list class="pa-0">
                     <v-list-tile avatar>
@@ -8,7 +8,7 @@
                             <img src="https://randomuser.me/api/portraits/men/88.jpg" >
                         </v-list-tile-avatar>
                         <v-list-tile-content>
-                            <v-list-tile-title>{{ env.MIX_APP_NAME }}</v-list-tile-title>
+                            <v-list-tile-title>{{ currentUser ? currentUser.name : ''}}</v-list-tile-title>
                         </v-list-tile-content>
                     </v-list-tile>
                 </v-list>
@@ -26,9 +26,22 @@
                         </v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
+                <v-list-tile @click="logout">
+                    <v-list-tile-action>
+                        <v-icon>power_settings_new</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title>
+                            Logout
+                        </v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
             </v-list>
         </v-navigation-drawer>
-        <v-toolbar app></v-toolbar>
+        <v-toolbar fixed app>
+            <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+            <v-toolbar-title>Administration</v-toolbar-title>
+        </v-toolbar>
 
         <v-content>
             <v-container fluid>
@@ -40,15 +53,25 @@
 </template>
 
 <script>
+    import { mapActions, mapGetters } from 'vuex'
     export default {
         name: 'WrapperComponent',
         data: () => ({
             items: [
                 { name: 'Dashboard', icon: 'home', link: '/admin', exact: true },
-                { name: 'Properties', icon: 'location_city', link: '/admin/properties' },
-                { name: 'Partners', icon: 'group', link: '/admin/partners' },
+                { name: 'Hotels', icon: 'location_city', link: '/admin/properties' },
+                { name: 'Settings', icon: 'settings', link: '/admin/settings' }
             ],
-            env: process.env
-        })
+            drawer: null
+        }),
+        methods: {
+            ...mapActions({ userLogout : 'user/logout'}),
+            logout(){
+                this.userLogout({router: this.$router});
+            }
+        },
+        computed: {
+            ...mapGetters('user', ['currentUser']),
+        }
     }
 </script>

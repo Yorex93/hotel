@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import routes from './routes/routes';
-import store from './store/store';
+import store from './store';
 import Vuetify from 'vuetify';
 
 
