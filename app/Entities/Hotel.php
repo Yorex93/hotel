@@ -27,6 +27,10 @@ class Hotel extends Model implements Transformable
     	return $this->morphToMany(Facility::class, 'has_facility');
     }
 
+	public function media(){
+		return $this->morphToMany(Media::class, 'has_media');
+	}
+
     public function location(){
     	return $this->belongsTo(Location::class);
     }

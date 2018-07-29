@@ -22,7 +22,11 @@ class State extends Model implements Transformable
      */
     protected $guarded = [];
 
-
+	/**
+	 *
+	 *
+	 * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+	 */
     public function country(){
     	return $this->belongsTo(Country::class);
     }

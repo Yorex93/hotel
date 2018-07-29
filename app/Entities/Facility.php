@@ -22,4 +22,8 @@ class Facility extends Model implements Transformable
      */
     protected $guarded = [];
 
+	public function media(){
+		return $this->morphToMany(Media::class, 'has_media');
+	}
+
 }

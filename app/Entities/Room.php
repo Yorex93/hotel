@@ -30,4 +30,12 @@ class Room extends Model implements Transformable
     	return $this->belongsToMany(Service::class, 'room_services', 'room_id', 'service_id');
     }
 
+	public function coupons(){
+		return $this->belongsToMany(Coupon::class, 'room_coupons', 'room_id', 'coupon_id');
+	}
+
+	public function media(){
+		return $this->morphToMany(Media::class, 'has_media');
+	}
+
 }

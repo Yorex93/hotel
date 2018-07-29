@@ -26,4 +26,8 @@ class Activity extends Model implements Transformable
 		return $this->hasMany(ActivitySession::class);
 	}
 
+	public function media(){
+		return $this->morphToMany(Media::class, 'has_media');
+	}
+
 }

@@ -19,6 +19,8 @@ class CreateHotelActivitiesTable extends Migration
 			$table->unsignedInteger('hotel_id');
 			$table->unsignedInteger('activity_id');
 
+			$table->timestamps();
+
 			$table->foreign('hotel_id')->references('id')->on('hotels')->onDelete('CASCADE');
 			$table->foreign('activity_id')->references('id')->on('activities')->onDelete('CASCADE');
 		});

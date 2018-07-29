@@ -20,8 +20,6 @@ class CreateHasFacilitiesTable extends Migration
 			$table->unsignedInteger('facility_id');
 			$table->unsignedInteger('has_facility_id');
 			$table->string('has_facility_type');
-
-			$table->timestamps();
 			$table->foreign('facility_id')->references('id')->on('facilities')->onDelete('CASCADE');
 		});
 	}

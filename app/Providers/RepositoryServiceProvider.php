@@ -39,6 +39,21 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\Hotel\Repositories\HotelActivitiesRepository::class, \Hotel\Repositories\HotelActivitiesRepositoryEloquent::class);
         $this->app->bind(\Hotel\Repositories\ActivitySessionRepository::class, \Hotel\Repositories\ActivitySessionRepositoryEloquent::class);
         $this->app->bind(\Hotel\Repositories\ActivitySessionTimeRepository::class, \Hotel\Repositories\ActivitySessionTimeRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\CouponRepository::class, \Hotel\Repositories\CouponRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\RoomCouponRepository::class, \Hotel\Repositories\RoomCouponRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\TaxRepository::class, \Hotel\Repositories\TaxRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\MediaRepository::class, \Hotel\Repositories\MediaRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\HasMediaRepository::class, \Hotel\Repositories\HasMediaRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\ReviewRepository::class, \Hotel\Repositories\ReviewRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\ReviewableRepository::class, \Hotel\Repositories\ReviewableRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\TagRepository::class, \Hotel\Repositories\TagRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\TaggableRepository::class, \Hotel\Repositories\TaggableRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\SlideShowRepository::class, \Hotel\Repositories\SlideShowRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\PageRepository::class, \Hotel\Repositories\PageRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\PageItemRepository::class, \Hotel\Repositories\PageItemRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\EmailTemplateRepository::class, \Hotel\Repositories\EmailTemplateRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\SocialRepository::class, \Hotel\Repositories\SocialRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\HotelSocialRepository::class, \Hotel\Repositories\HotelSocialRepositoryEloquent::class);
         //:end-bindings:
     }
 }
