@@ -20,6 +20,27 @@ class Hotel extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+
+    protected $guarded = [];
+
+    public function facilities(){
+    	return $this->morphToMany(Facility::class, 'has_facility');
+    }
+
+    public function location(){
+    	return $this->belongsTo(Location::class);
+    }
+
+    public function parent(){
+    	return $this->belongsTo(Hotel::class, 'parent_hotel_id', 'id');
+    }
+
+    public function activities(){
+    	return $this->belongsToMany(Activity::class, 'hotel_activities', 'hotel_id', 'activity_id');
+    }
+
+	public function activitySessions(){
+		return $this->hasMany(ActivitySession::class);
+	}
 
 }
