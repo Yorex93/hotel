@@ -25,6 +25,8 @@ set('shared_files', ['.env']);
 // Writable dirs by web server 
 set('writable_dirs', ['storage', 'vendor']);
 
+set('writable_mode', 'chmod');
+set('writable_chmod_mode', '0775');
 
 // Hosts
 
