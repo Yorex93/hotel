@@ -7,6 +7,7 @@ use Hotel\Entities\Coupon;
 use Hotel\Entities\Facility;
 use Hotel\Entities\Hotel;
 use Hotel\Entities\Room;
+use Hotel\Entities\RoomType;
 use Hotel\Entities\Service;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Schema;
@@ -25,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
 
 	    Relation::morphMap([
 		    'hotels' => Hotel::class,
-		    'rooms' => Room::class,
+		    'room_types' => RoomType::class,
 		    'activities' => Activity::class,
 		    'coupons' => Coupon::class,
 		    'facilities' => Facility::class,

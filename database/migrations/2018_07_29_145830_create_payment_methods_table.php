@@ -4,9 +4,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Class CreateRoomsTable.
+ * Class CreatePaymentMethodsTable.
  */
-class CreateRoomsTable extends Migration
+class CreatePaymentMethodsTable extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -15,13 +15,11 @@ class CreateRoomsTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('rooms', function(Blueprint $table) {
+		Schema::create('payment_methods', function(Blueprint $table) {
             $table->increments('id');
-            $table->string('room_code')->unique();
-            $table->unsignedInteger('room_type_id');
+            $table->string('name');
+            $table->string('description');
             $table->timestamps();
-
-            $table->foreign('room_type_id')->references('id')->on('room_types')->onDelete('CASCADE');
 		});
 	}
 
@@ -32,6 +30,6 @@ class CreateRoomsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('rooms');
+		Schema::drop('payment_methods');
 	}
 }

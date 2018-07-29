@@ -22,4 +22,13 @@ class ActivitySessionTime extends Model implements Transformable
      */
     protected $guarded = [];
 
+    public function activity_session(){
+    	return $this->belongsTo(ActivitySession::class);
+    }
+
+    public function booking_activities(){
+    	return $this->hasMany(BookingActivity::class);
+    }
+
+
 }

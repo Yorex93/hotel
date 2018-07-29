@@ -23,14 +23,6 @@ class Hotel extends Model implements Transformable
 
     protected $guarded = [];
 
-    public function facilities(){
-    	return $this->morphToMany(Facility::class, 'has_facility');
-    }
-
-	public function media(){
-		return $this->morphToMany(Media::class, 'has_media');
-	}
-
     public function location(){
     	return $this->belongsTo(Location::class);
     }
@@ -45,6 +37,26 @@ class Hotel extends Model implements Transformable
 
 	public function activitySessions(){
 		return $this->hasMany(ActivitySession::class);
+	}
+
+	public function socials(){
+		return $this->hasMany(HotelSocial::class);
+	}
+
+	public function tags(){
+		return $this->morphToMany(Facility::class, 'taggable');
+	}
+
+	public function reviews(){
+		return $this->morphToMany(Review::class, 'reviewable');
+	}
+
+	public function facilities(){
+		return $this->morphToMany(Facility::class, 'has_facility');
+	}
+
+	public function media(){
+		return $this->morphToMany(Media::class, 'has_media');
 	}
 
 }

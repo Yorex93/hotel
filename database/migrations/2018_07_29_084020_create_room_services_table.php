@@ -4,9 +4,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * Class CreateRoomsTable.
+ * Class CreateRoomServicesTable.
  */
-class CreateRoomsTable extends Migration
+class CreateRoomServicesTable extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -15,13 +15,11 @@ class CreateRoomsTable extends Migration
 	 */
 	public function up()
 	{
-		Schema::create('rooms', function(Blueprint $table) {
-            $table->increments('id');
-            $table->string('room_code')->unique();
+		Schema::create('room_services', function(Blueprint $table) {
             $table->unsignedInteger('room_type_id');
-            $table->timestamps();
-
+            $table->unsignedInteger('service_id');
             $table->foreign('room_type_id')->references('id')->on('room_types')->onDelete('CASCADE');
+            $table->foreign('service_id')->references('id')->on('services')->onDelete('CASCADE');
 		});
 	}
 
@@ -32,6 +30,6 @@ class CreateRoomsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop('rooms');
+		Schema::drop('room_services');
 	}
 }

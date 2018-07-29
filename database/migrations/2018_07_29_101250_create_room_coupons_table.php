@@ -16,11 +16,11 @@ class CreateRoomCouponsTable extends Migration
 	public function up()
 	{
 		Schema::create('room_coupons', function(Blueprint $table) {
-            $table->unsignedInteger('room_id');
+            $table->unsignedInteger('room_type_id');
             $table->unsignedInteger('coupon_id');
 
             $table->timestamps();
-            $table->foreign('room_id')->references('id')->on('rooms')->onDelete('CASCADE');
+            $table->foreign('room_type_id')->references('id')->on('room_types')->onDelete('CASCADE');
             $table->foreign('coupon_id')->references('id')->on('coupons')->onDelete('CASCADE');
 		});
 	}

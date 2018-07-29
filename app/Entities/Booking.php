@@ -7,11 +7,11 @@ use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
 /**
- * Class ActivitySession.
+ * Class Booking.
  *
  * @package namespace Hotel\Entities;
  */
-class ActivitySession extends Model implements Transformable
+class Booking extends Model implements Transformable
 {
     use TransformableTrait;
 
@@ -22,12 +22,12 @@ class ActivitySession extends Model implements Transformable
      */
     protected $guarded = [];
 
-    public function activity(){
-    	return $this->hasMany(Activity::class);
+    public function rooms(){
+    	return $this->hasMany(BookingRoom::class);
     }
 
-    public function times(){
-    	return $this->hasMany(ActivitySessionTime::class);
+    public function activity(){
+    	return $this->hasMany(BookingActivity::class);
     }
 
 }

@@ -54,6 +54,13 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(\Hotel\Repositories\EmailTemplateRepository::class, \Hotel\Repositories\EmailTemplateRepositoryEloquent::class);
         $this->app->bind(\Hotel\Repositories\SocialRepository::class, \Hotel\Repositories\SocialRepositoryEloquent::class);
         $this->app->bind(\Hotel\Repositories\HotelSocialRepository::class, \Hotel\Repositories\HotelSocialRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\RoomTypeRepository::class, \Hotel\Repositories\RoomTypeRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\BookingRepository::class, \Hotel\Repositories\BookingRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\BookingServiceRepository::class, \Hotel\Repositories\BookingServiceRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\BookingActivityRepository::class, \Hotel\Repositories\BookingActivityRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\BookingRoomRepository::class, \Hotel\Repositories\BookingRoomRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\PaymentRepository::class, \Hotel\Repositories\PaymentRepositoryEloquent::class);
+        $this->app->bind(\Hotel\Repositories\PaymentMethodRepository::class, \Hotel\Repositories\PaymentMethodRepositoryEloquent::class);
         //:end-bindings:
     }
 }
