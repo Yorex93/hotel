@@ -79,7 +79,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Hotel App
+                    Hotel App Test DB
                 </div>
             </div>
         </div>
