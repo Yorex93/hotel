@@ -3,6 +3,7 @@
 namespace Hotel\Http\Api\Controllers;
 
 use Illuminate\Http\Request;
+use Hotel\Http\Controllers\Controller;
 
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;

@@ -2,6 +2,7 @@
 
 namespace Hotel\Http\Api\Controllers;
 
+use Hotel\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use Hotel\Http\Requests;
