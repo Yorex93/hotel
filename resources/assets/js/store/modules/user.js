@@ -1,5 +1,5 @@
 import * as authService from "../../services/auth-service";
-import { getQueryParams } from "../../services/helpers";
+import {getQueryParams} from "../../services/helpers";
 
 const state = {
     user: JSON.parse(localStorage.getItem('user')),
@@ -24,15 +24,20 @@ const getters = {
 };
 
 const actions = {
-    login({ commit, state }, { email, password , router}){
+    login({commit, state}, {email, password, router}) {
         let queryParams = getQueryParams();
         commit('attemptLogin', true);
         return authService.login(email, password).then((response) => {
             commit('attemptLogin', false);
-            commit('setUser', { user: response.data.success.user });
+            commit('setUser', {user: response.data.success.user});
             localStorage.setItem('token', response.data.success.token);
             localStorage.setItem('user', JSON.stringify(response.data.success.user));
-            router.replace(`/admin/${queryParams['redirect'] ? queryParams['redirect'] : ''}`);
+
+            if (queryParams['redirect']) {
+                router.push({name: queryParams['redirect']});
+            } else {
+                router.push({name: 'dashboard'});
+            }
             return Promise.resolve(response);
         }).catch(error => {
             //console.log(error.response);
@@ -41,7 +46,7 @@ const actions = {
         });
     },
 
-    logout({ commit, state }, { router }){
+    logout({commit, state}, {router}) {
         return authService.logout().then((resp) => {
 
         }).catch(e => {
@@ -49,7 +54,7 @@ const actions = {
         }).finally(() => {
             localStorage.clear();
             commit('logout');
-            if(router){
+            if (router) {
                 router.replace('/admin/login');
             }
         });
@@ -61,11 +66,11 @@ const mutations = {
         state.attemptingLogin = status;
     },
 
-    logout(state){
+    logout(state) {
         state.user = null
     },
 
-    setUser(state, { user }){
+    setUser(state, {user}) {
         state.user = user;
     }
 };

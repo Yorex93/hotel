@@ -1,6 +1,6 @@
 <?php
 
-namespace Hotel\Http\Frontend\Controllers;
+namespace Hotel\Http\Controllers\Frontend;
 
 use Illuminate\Http\Request;
 use Hotel\Http\Controllers\Controller;

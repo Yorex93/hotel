@@ -33,6 +33,7 @@
         "animate.css": "^3.6.1",
         "material-design-icons-iconfont": "^3.0.3",
         "moment": "^2.22.2",
+        "vue-froala-wysiwyg": "^2.8.4",
         "vuetify": "^1.1.4"
     }
 }

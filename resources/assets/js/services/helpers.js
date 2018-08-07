@@ -48,9 +48,7 @@ let currencyFilters = {
 };
 
 let urlResolvers = {
-    properties(type, slug){
-        return `${SITE_URL}/properties/${type.toLowerCase()}/${slug}`;
-    }
+
 };
 
 

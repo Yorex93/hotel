@@ -22,4 +22,8 @@ class Location extends Model implements Transformable
      */
     protected $guarded = [];
 
+    public function contactPerson(){
+    	$this->hasOne(ContactPerson::class);
+    }
+
 }

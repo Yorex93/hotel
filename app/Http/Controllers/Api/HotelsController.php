@@ -1,44 +1,43 @@
 <?php
 
-namespace Hotel\Http\Api\Controllers;
+namespace Hotel\Http\Controllers\Api;
 
 use Hotel\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Hotel\Services\Hotel\HotelService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-use Hotel\Http\Requests;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Hotel\Http\Requests\HotelCreateRequest;
 use Hotel\Http\Requests\HotelUpdateRequest;
-use Hotel\Repositories\HotelRepository;
 use Hotel\Validators\HotelValidator;
 
 /**
  * Class HotelsController.
  *
- * @package namespace Hotel\Http\Api\Controllers;
+ * @package namespace Hotel\Http\Controllers\Api;
  */
 class HotelsController extends Controller
 {
     /**
-     * @var HotelRepository
+     * @var HotelService
      */
-    protected $repository;
+    protected $hotelService;
 
     /**
      * @var HotelValidator
      */
     protected $validator;
 
-    /**
-     * HotelsController constructor.
-     *
-     * @param HotelRepository $repository
-     * @param HotelValidator $validator
-     */
-    public function __construct(HotelRepository $repository, HotelValidator $validator)
+	/**
+	 * HotelsController constructor.
+	 *
+	 * @param HotelService $hotel_service
+	 * @param HotelValidator $validator
+	 */
+    public function __construct(HotelService $hotel_service, HotelValidator $validator)
     {
-        $this->repository = $repository;
+        $this->hotelService = $hotel_service;
         $this->validator  = $validator;
     }
 
@@ -49,17 +48,12 @@ class HotelsController extends Controller
      */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $hotels = $this->repository->all();
+        $hotels = $this->hotelService->getHotels();
 
-        if (request()->wantsJson()) {
+        return response()->json([
+            'data' => $hotels,
+        ]);
 
-            return response()->json([
-                'data' => $hotels,
-            ]);
-        }
-
-        return view('hotels.index', compact('hotels'));
     }
 
     /**
@@ -69,15 +63,15 @@ class HotelsController extends Controller
      *
      * @return \Illuminate\Http\Response
      *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function store(HotelCreateRequest $request)
     {
+    	$this->middleware('permission: create hotel');
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
 
-            $hotel = $this->repository->create($request->all());
+            $hotel = $this->hotelService->createHotel($request);
 
             $response = [
                 'message' => 'Hotel created.',
@@ -111,31 +105,15 @@ class HotelsController extends Controller
      */
     public function show($id)
     {
-        $hotel = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $hotel,
-            ]);
-        }
-
-        return view('hotels.show', compact('hotel'));
+    	$hotel = null;
+    	try{
+		    $hotel = $this->hotelService->getHotelById($id);
+	    } catch (ModelNotFoundException $ex){
+		    return response()->json([ 'error' => 'Hotel Not found' ], 404);
+	    }
+	    return response()->json([ 'data' => $hotel ], 200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $hotel = $this->repository->find($id);
-
-        return view('hotels.edit', compact('hotel'));
-    }
 
     /**
      * Update the specified resource in storage.
@@ -143,40 +121,30 @@ class HotelsController extends Controller
      * @param  HotelUpdateRequest $request
      * @param  string            $id
      *
-     * @return Response
+     * @return \Illuminate\Http\Response
      *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function update(HotelUpdateRequest $request, $id)
     {
+	    $this->middleware('permission: update hotel');
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
-            $hotel = $this->repository->update($request->all(), $id);
+            $hotel = $this->hotelService->updateHotel($id, $request);
 
             $response = [
                 'message' => 'Hotel updated.',
                 'data'    => $hotel->toArray(),
             ];
 
-            if ($request->wantsJson()) {
+            return response()->json($response, 200);
 
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
         } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            return response()->json([
+                'error'   => true,
+                'message' => $e->getMessageBag()
+            ], 400);
         }
     }
 
@@ -190,16 +158,11 @@ class HotelsController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'Hotel deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
-
-        return redirect()->back()->with('message', 'Hotel deleted.');
+	    $this->middleware('permission: delete hotel');
+        $deleted = $this->hotelService->deleteHotel($id);
+        return response()->json([
+            'message' => 'Hotel deleted.',
+            'deleted' => $deleted,
+        ]);
     }
 }

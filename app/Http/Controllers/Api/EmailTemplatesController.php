@@ -1,6 +1,6 @@
 <?php
 
-namespace Hotel\Http\Api\Controllers;
+namespace Hotel\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Hotel\Http\Controllers\Controller;
@@ -16,7 +16,7 @@ use Hotel\Validators\EmailTemplateValidator;
 /**
  * Class EmailTemplatesController.
  *
- * @package namespace Hotel\Http\Api\Controllers;
+ * @package namespace Hotel\Http\Controllers\Api;
  */
 class EmailTemplatesController extends Controller
 {

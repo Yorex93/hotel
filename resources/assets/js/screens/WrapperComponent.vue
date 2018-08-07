@@ -16,7 +16,7 @@
             <v-list class="pt-0" dense>
                 <v-divider></v-divider>
 
-                <v-list-tile v-for="item in items" :to="item.link" :key="item.name" :exact="item.exact">
+                <v-list-tile v-for="item in items" :to="{name: item.link}" :key="item.name" :exact="item.exact">
                     <v-list-tile-action>
                         <v-icon>{{ item.icon }}</v-icon>
                     </v-list-tile-action>
@@ -58,20 +58,25 @@
         name: 'WrapperComponent',
         data: () => ({
             items: [
-                { name: 'Dashboard', icon: 'home', link: '/admin', exact: true },
-                { name: 'Hotels', icon: 'location_city', link: '/admin/properties' },
-                { name: 'Settings', icon: 'settings', link: '/admin/settings' }
+                { name: 'Dashboard', icon: 'home', link: 'dashboard', exact: true },
+                { name: 'Hotels', icon: 'location_city', link: 'hotels' },
+                { name: 'Settings', icon: 'settings', link: 'settings' }
             ],
             drawer: null
         }),
         methods: {
             ...mapActions({ userLogout : 'user/logout'}),
+            ...mapActions({ fetchHotels : 'hotel/fetchHotels' }),
             logout(){
                 this.userLogout({router: this.$router});
             }
         },
         computed: {
             ...mapGetters('user', ['currentUser']),
+        },
+
+        created(){
+            this.fetchHotels();
         }
     }
 </script>

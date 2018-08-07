@@ -6,9 +6,11 @@ use Hotel\Entities\Activity;
 use Hotel\Entities\Coupon;
 use Hotel\Entities\Facility;
 use Hotel\Entities\Hotel;
-use Hotel\Entities\Room;
 use Hotel\Entities\RoomType;
 use Hotel\Entities\Service;
+
+use Hotel\Services\Hotel\DefaultHotelService;
+use Hotel\Services\Hotel\HotelService;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
@@ -41,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+	    $this->app->register(RepositoryServiceProvider::class);
+        $this->app->bind(HotelService::class, DefaultHotelService::class);
     }
 }

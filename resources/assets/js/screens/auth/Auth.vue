@@ -68,6 +68,10 @@
         margin: 100px auto;
         border-radius: 8px;
         padding: 40px 30px;
+
+        @media screen and (max-width: 360px){
+            width: 320px;
+        }
     }
 
     .box h1 {

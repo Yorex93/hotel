@@ -1,6 +1,6 @@
 <?php
 
-namespace Hotel\Http\Api\Controllers;
+namespace Hotel\Http\Controllers\Api;
 
 use Hotel\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -16,7 +16,7 @@ use Hotel\Validators\TagValidator;
 /**
  * Class TagsController.
  *
- * @package namespace Hotel\Http\Api\Controllers;
+ * @package namespace Hotel\Http\Controllers\Api;
  */
 class TagsController extends Controller
 {
