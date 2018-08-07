@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-class RolesandPermissionsSeeder extends Seeder
+class RolesAndPermissionsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,13 +17,13 @@ class RolesandPermissionsSeeder extends Seeder
 		app()['cache']->forget('spatie.permission.cache');
 
 		// create permissions
-		Permission::create(['name' => 'create hotel']);
-		Permission::create(['name' => 'update hotel']);
-		Permission::create(['name' => 'delete hotel']);
+		Permission::firstOrCreate(['name' => 'create hotel', 'guard_name' => 'api']);
+		Permission::firstOrCreate(['name' => 'update hotel' , 'guard_name' => 'api']);
+		Permission::firstOrCreate(['name' => 'delete hotel', 'guard_name' => 'api']);
 
 		// create roles and assign created permissions
 
-		$role = Role::create(['name' => 'admin']);
+		$role = Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'api']);
 		$role->givePermissionTo(Permission::all());
 	}
 }
