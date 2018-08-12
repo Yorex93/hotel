@@ -2,10 +2,12 @@
 
 namespace Hotel\Services\Hotel;
 
+use Hotel\Entities\Location;
 use Hotel\Http\Requests\HotelCreateRequest;
 use Hotel\Http\Requests\HotelUpdateRequest;
+use Hotel\Services\IncludesMedia;
 
-interface HotelService{
+interface HotelService extends IncludesMedia {
 
 	/**
 	 * @return mixed | \Illuminate\Support\Collection
@@ -42,5 +44,13 @@ interface HotelService{
 	 * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
 	 */
 	function getHotelById(int $hotelId);
+
+	/**
+	 * @param int $hotel_id
+	 * @param Location $location
+	 *
+	 * @return mixed
+	 */
+	public function setLocation( int $hotel_id, Location $location );
 
 }

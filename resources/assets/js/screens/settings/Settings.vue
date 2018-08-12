@@ -1,27 +1,37 @@
 <template>
   <div>
-    Settings
+    <h2 class="primary-text mb-3">
+      Settings
+    </h2>
   </div>
 </template>
 
 <script>
+    import {mapActions, mapGetters} from 'vuex'
     export default {
-        name: 'settings',
 
+        name: 'Settings',
         data: () => ({
 
         }),
 
+        validations: {},
+
         methods: {
-
-        },
-
-        created(){
-
+            // ...mapActions(''),
         },
 
         computed: {
+            // ...mapGetters('', []),
+        },
 
+        created() {},
+
+        watch: {},
+
+        beforeRouteLeave(to, from, next){
+            next();
         }
+
     }
 </script>

@@ -3,16 +3,15 @@ import VueRouter from 'vue-router';
 import routes from './routes/routes';
 import store from './store';
 import Vuetify from 'vuetify';
+import Vuelidate from 'vuelidate';
+import VueImg from 'v-img';
+import vue2Dropzone from 'vue2-dropzone'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 
-require('froala-editor/js/froala_editor.pkgd.min');
-require('froala-editor/css/froala_editor.pkgd.min.css');
-require('font-awesome/css/font-awesome.css');
-require('froala-editor/css/froala_style.min.css');
 
-window.$ = window.jQuery = require('jquery');
 
-// Import and use Vue Froala lib.
-import VueFroala from 'vue-froala-wysiwyg';
+import Toastr from 'vue-toastr';
+require('vue-toastr/src/vue-toastr.scss');
 
 
 const router = new VueRouter({
@@ -22,7 +21,12 @@ const router = new VueRouter({
 
 Vue.use(VueRouter);
 Vue.use(Vuetify);
-Vue.use(VueFroala);
+Vue.use(Toastr);
+Vue.use(Vuelidate);
+Vue.use(VueImg);
+Vue.use(vue2Dropzone);
+
+Vue.component('vue-toastr',Toastr);
 
 new Vue({
     router,

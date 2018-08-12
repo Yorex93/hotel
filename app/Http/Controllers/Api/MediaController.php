@@ -3,6 +3,7 @@
 namespace Hotel\Http\Controllers\Api;
 
 use Hotel\Http\Controllers\Controller;
+use Hotel\Services\Media\MediaService;
 use Illuminate\Http\Request;
 
 use Hotel\Http\Requests;
@@ -21,24 +22,24 @@ use Hotel\Validators\MediaValidator;
 class MediaController extends Controller
 {
     /**
-     * @var MediaRepository
+     * @var MediaService
      */
-    protected $repository;
+    protected $mediaService;
 
     /**
      * @var MediaValidator
      */
     protected $validator;
 
-    /**
-     * MediaController constructor.
-     *
-     * @param MediaRepository $repository
-     * @param MediaValidator $validator
-     */
-    public function __construct(MediaRepository $repository, MediaValidator $validator)
+	/**
+	 * MediaController constructor.
+	 *
+	 * @param MediaService $media_service
+	 * @param MediaValidator $validator
+	 */
+    public function __construct(MediaService $media_service, MediaValidator $validator)
     {
-        $this->repository = $repository;
+        $this->mediaService = $media_service;
         $this->validator  = $validator;
     }
 
@@ -49,17 +50,7 @@ class MediaController extends Controller
      */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $media = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $media,
-            ]);
-        }
-
-        return view('media.index', compact('media'));
+      return null;
     }
 
     /**
@@ -68,38 +59,37 @@ class MediaController extends Controller
      * @param  MediaCreateRequest $request
      *
      * @return \Illuminate\Http\Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function store(MediaCreateRequest $request)
     {
-        try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $medium = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'Media created.',
-                'data'    => $medium->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
+//        try {
+//
+//            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
+//
+//            $medium = $this->repository->create($request->all());
+//
+//            $response = [
+//                'message' => 'Media created.',
+//                'data'    => $medium->toArray(),
+//            ];
+//
+//            if ($request->wantsJson()) {
+//
+//                return response()->json($response);
+//            }
+//
+//            return redirect()->back()->with('message', $response['message']);
+//        } catch (ValidatorException $e) {
+//            if ($request->wantsJson()) {
+//                return response()->json([
+//                    'error'   => true,
+//                    'message' => $e->getMessageBag()
+//                ]);
+//            }
+//
+//            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+//        }
+	    return null;
     }
 
     /**
@@ -111,74 +101,22 @@ class MediaController extends Controller
      */
     public function show($id)
     {
-        $medium = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $medium,
-            ]);
-        }
-
-        return view('media.show', compact('medium'));
+//        $medium = $this->repository->find($id);
+//
+//        if (request()->wantsJson()) {
+//
+//            return response()->json([
+//                'data' => $medium,
+//            ]);
+//        }
+//
+//        return view('media.show', compact('medium'));
+	    return null;
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $medium = $this->repository->find($id);
 
-        return view('media.edit', compact('medium'));
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  MediaUpdateRequest $request
-     * @param  string            $id
-     *
-     * @return Response
-     *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
-     */
-    public function update(MediaUpdateRequest $request, $id)
-    {
-        try {
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
-            $medium = $this->repository->update($request->all(), $id);
-
-            $response = [
-                'message' => 'Media updated.',
-                'data'    => $medium->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
-    }
 
 
     /**
@@ -190,16 +128,33 @@ class MediaController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
+//        $deleted = $this->repository->delete($id);
+//
+//        if (request()->wantsJson()) {
+//
+//            return response()->json([
+//                'message' => 'Media deleted.',
+//                'deleted' => $deleted,
+//            ]);
+//        }
 
-        if (request()->wantsJson()) {
+        return null;
+    }
 
-            return response()->json([
-                'message' => 'Media deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
 
-        return redirect()->back()->with('message', 'Media deleted.');
+    public function deleteAll(Request $request){
+	    $this->validate($request, [
+		    'mediaIds' => 'required | array | filled',
+	    ]);
+
+	    if($this->mediaService->deleteAll($request->get('mediaIds'))){
+	    	return response()->json([
+	    		'message' => 'Deleted successfully'
+		    ], 200);
+	    } else {
+		    return response()->json([
+			    'error' => 'There was an error deleting files'
+		    ], 500);
+	    }
     }
 }

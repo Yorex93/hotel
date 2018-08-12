@@ -31,7 +31,8 @@ function getForPromise(url){
     return axios.get(url, getRequestConfig()).then((response) => {
         return response;
     }).catch((error) => {
-        checkForUnauthorized(error.response);
+        if(localStorage.getItem('token')) checkForUnauthorized(error.response);
+        return Promise.reject(error);
     });
 }
 
@@ -46,10 +47,43 @@ function postForPromise(url, data){
         return response;
     }).catch((error) => {
         if(localStorage.getItem('token')) checkForUnauthorized(error.response);
+        return Promise.reject(error);
     });
 }
 
+/**
+ *
+ * @param url
+ * @param data
+ * @return {Promise<AxiosResponse<any>>}
+ */
+function putForPromise(url, data){
+    return axios.put(url, data, getRequestConfig()).then((response) => {
+        return response;
+    }).catch((error) => {
+        if(localStorage.getItem('token')) checkForUnauthorized(error.response);
+        return Promise.reject(error);
+    });
+}
+
+/**
+ *
+ * @param url
+ * @return {Promise<AxiosResponse<any>>}
+ */
+function deleteForPromise(url){
+    return axios.delete(url, getRequestConfig()).then((response) => {
+        return response;
+    }).catch((error) => {
+        if(localStorage.getItem('token')) checkForUnauthorized(error.response);
+        return Promise.reject(error);
+    });
+}
+
+
 export {
     getForPromise,
-    postForPromise
+    postForPromise,
+    putForPromise,
+    deleteForPromise
 }

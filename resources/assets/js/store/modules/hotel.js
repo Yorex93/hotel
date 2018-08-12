@@ -3,11 +3,15 @@ import * as hotelService from "../../services/hotels-service";
 const state = {
     hotels: [],
     fetchingHotels: false,
-    fetchingHotelsError: "",
+    fetchingHotelsError: {},
+    fetched: false,
     creatingHotel: false,
-    creatingHotelError: "",
+    creatingHotelError: {},
+    created: false,
     updatingHotel: false,
-    updatingHotelError: ""
+    updatingHotelError: {},
+    updated: false
+
 };
 
 const getters = {
@@ -15,11 +19,15 @@ const getters = {
         return state.hotels
     },
 
-    getHotelById: (state) => (id) => {
-        return state.find(h => h.id === id);
+    getEligibleParentHotels: (state) => {
+        return state.hotels.filter(h => h.parent_hotel_id === null)
     },
 
-    isFetching: (state) => {
+    getHotelById: (state) => (id) => {
+        return state.hotels.find(h => h.id === id);
+    },
+
+    isFetchingHotels: (state) => {
         return state.fetchingHotels;
     },
 
@@ -27,22 +35,33 @@ const getters = {
         return state.fetchingHotelsError
     },
 
-    isCreating: (state) => {
+    fetchedHotel: (state) => {
+        return state.fetched;
+    },
+
+    isCreatingHotel: (state) => {
         return state.creatingHotel;
     },
 
-    creatingError: (state) => {
+    creatingHotelError: (state) => {
         return state.creatingHotelError
     },
 
-    isUpdating: (state) => {
+    createdHotel: (state) => {
+        return state.created
+    },
+
+    isUpdatingHotel: (state) => {
         return state.updatingHotel;
     },
 
-    updatingError: (state) => {
+    updatingHotelError: (state) => {
         return state.updatingHotelError
     },
 
+    updatedHotel: (state) => {
+        return state.updated
+    }
 };
 
 const actions = {
@@ -61,26 +80,44 @@ const actions = {
     createHotel({commit, dispatch}, data) {
         console.log(data);
         commit('setCreatingHotel', true);
+        commit('setCreatingHotelError', {});
         hotelService.createHotel(data).then((resp) => {
-            let result = resp.data;
             dispatch('fetchHotels');
-        }).catch(error => {
-            console.log(error);
+            commit('setCreated', true);
+        }).catch((error) => {
+            if (error.response) {
+                if(error.response.data){
+                    commit('setCreatingHotelError', error.response.data.message);
+                }
+            }
         }).finally(() => {
             commit('setCreatingHotel', false);
         });
     },
 
-    updateHotel({commit, dispatch}, { id, data }) {
+    updateHotel({commit, dispatch}, data) {
         commit('setUpdatingHotel', true);
-        hotelService.updateHotel(id, data).then((resp) => {
+        commit('setUpdatingHotelError', {});
+        hotelService.updateHotel(data).then((resp) => {
             let result = resp.data;
             dispatch('fetchHotels');
+            commit('setUpdated', true);
         }).catch(error => {
-            console.log(error);
+            if (error.response) {
+                if(error.response.data){
+                    commit('setCreatingHotelError', error.response.data.message);
+                }
+            }
         }).finally(() => {
             commit('setUpdatingHotel', false);
         });
+    },
+
+    clearHotelComponentData({commit}){
+        commit('setUpdatingHotelError', {});
+        commit('setCreatingHotelError', {});
+        commit('setCreated', false);
+        commit('setUpdated', false);
     }
 };
 
@@ -93,8 +130,24 @@ const mutations = {
       state.creatingHotel = status;
     },
 
+    setCreated(state, status){
+        state.created = status;
+    },
+
+    setCreatingHotelError(state, error){
+        state.creatingHotelError = error;
+    },
+
     setUpdatingHotel(state, status){
         state.updatingHotel = status;
+    },
+
+    setUpdatingHotelError(state, error){
+        state.updatingHotelError = error;
+    },
+
+    setUpdated(state, status){
+        state.updated = status;
     },
 
     setHotels(state, {hotels}) {

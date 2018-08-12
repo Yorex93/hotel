@@ -10,6 +10,27 @@ use Prettus\Repository\Traits\TransformableTrait;
  * Class BookingRoom.
  *
  * @package namespace Hotel\Entities;
+ * @property int $id
+ * @property int $booking_id
+ * @property int|null $room_type_id
+ * @property int|null $room_id
+ * @property string $check_in
+ * @property string $check_out
+ * @property int $adults
+ * @property int $children
+ * @property float $amount
+ * @property int|null $coupon_id
+ * @property float $discount
+ * @property float $tax
+ * @property float $total
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \Hotel\Entities\Booking $booking
+ * @property-read \Hotel\Entities\Coupon|null $coupon
+ * @property-read \Hotel\Entities\Room|null $room
+ * @property-read \Hotel\Entities\RoomType|null $room_type
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Hotel\Entities\BookingService[] $services
+ * @mixin \Eloquent
  */
 class BookingRoom extends Model implements Transformable
 {

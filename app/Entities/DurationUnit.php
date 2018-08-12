@@ -10,6 +10,12 @@ use Prettus\Repository\Traits\TransformableTrait;
  * Class DurationUnit.
  *
  * @package namespace Hotel\Entities;
+ * @property int $id
+ * @property string $name
+ * @property string $description
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @mixin \Eloquent
  */
 class DurationUnit extends Model implements Transformable
 {

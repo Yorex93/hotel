@@ -3,6 +3,8 @@
 namespace Hotel\Http\Controllers\Api;
 
 use Hotel\Http\Controllers\Controller;
+use Hotel\Services\Hotel\HotelService;
+use Hotel\Services\Location\LocationService;
 use Illuminate\Http\Request;
 
 use Hotel\Http\Requests;
@@ -21,25 +23,33 @@ use Hotel\Validators\LocationValidator;
 class LocationsController extends Controller
 {
     /**
-     * @var LocationRepository
+     * @var LocationService
      */
-    protected $repository;
+    protected $locationService;
 
     /**
      * @var LocationValidator
      */
     protected $validator;
 
-    /**
-     * LocationsController constructor.
-     *
-     * @param LocationRepository $repository
-     * @param LocationValidator $validator
-     */
-    public function __construct(LocationRepository $repository, LocationValidator $validator)
+	/**
+	 * @var HotelService
+	 */
+    protected $hotelService;
+
+	/**
+	 * LocationsController constructor.
+	 *
+	 * @param LocationService $location_service
+	 * @param LocationValidator $validator
+	 * @param HotelService $hotel_service
+	 */
+
+    public function __construct(LocationService $location_service, LocationValidator $validator, HotelService $hotel_service)
     {
-        $this->repository = $repository;
+        $this->locationService = $location_service;
         $this->validator  = $validator;
+        $this->hotelService = $hotel_service;
     }
 
     /**
@@ -49,17 +59,10 @@ class LocationsController extends Controller
      */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $locations = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
+        $locations = $this->locationService->getAllLocations();
             return response()->json([
                 'data' => $locations,
             ]);
-        }
-
-        return view('locations.index', compact('locations'));
     }
 
     /**
@@ -77,65 +80,27 @@ class LocationsController extends Controller
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
 
-            $location = $this->repository->create($request->all());
+            $location = $this->locationService->createLocation($request);
 
             $response = [
                 'message' => 'Location created.',
                 'data'    => $location->toArray(),
             ];
 
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
+            if($request->has('hotel_id')){
+            	$this->hotelService->setLocation($request->get('hotel_id'), $location);
             }
 
-            return redirect()->back()->with('message', $response['message']);
+            return response()->json($response);
+
         } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
                 return response()->json([
                     'error'   => true,
                     'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+                ], 400);
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $location = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $location,
-            ]);
-        }
-
-        return view('locations.show', compact('location'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $location = $this->repository->find($id);
-
-        return view('locations.edit', compact('location'));
-    }
 
     /**
      * Update the specified resource in storage.
@@ -153,30 +118,19 @@ class LocationsController extends Controller
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
-            $location = $this->repository->update($request->all(), $id);
+            $location = $this->locationService->updateLocation($request, $id);
 
             $response = [
                 'message' => 'Location updated.',
                 'data'    => $location->toArray(),
             ];
 
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
+            return response()->json($response);
         } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            return response()->json([
+                'error'   => true,
+                'message' => $e->getMessageBag()
+            ]);
         }
     }
 
@@ -190,16 +144,22 @@ class LocationsController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'Location deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
-
-        return redirect()->back()->with('message', 'Location deleted.');
+        $deleted = $this->locationService->deleteLocation($id);
+        return response()->json([
+            'message' => 'Location deleted.',
+            'deleted' => $deleted,
+        ]);
     }
+
+    public function countries(){
+		return response()->json([
+			'data' => $this->locationService->getCountries()
+		]);
+    }
+
+	public function states(int $id){
+		return response()->json([
+			'data' => $this->locationService->getStatesByCountry($id)
+		]);
+	}
 }

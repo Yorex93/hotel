@@ -3,9 +3,12 @@
 namespace Hotel\Http\Controllers\Api;
 
 use Hotel\Http\Controllers\Controller;
+use Hotel\Services\RoomType\RoomTypeService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 use Hotel\Http\Requests;
+use Illuminate\Http\Response;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Hotel\Http\Requests\RoomTypeCreateRequest;
@@ -21,24 +24,24 @@ use Hotel\Validators\RoomTypeValidator;
 class RoomTypesController extends Controller
 {
     /**
-     * @var RoomTypeRepository
+     * @var RoomTypeService
      */
-    protected $repository;
+    protected $roomTypeService;
 
     /**
      * @var RoomTypeValidator
      */
     protected $validator;
 
-    /**
-     * RoomTypesController constructor.
-     *
-     * @param RoomTypeRepository $repository
-     * @param RoomTypeValidator $validator
-     */
-    public function __construct(RoomTypeRepository $repository, RoomTypeValidator $validator)
+	/**
+	 * RoomTypesController constructor.
+	 *
+	 * @param RoomTypeService $room_type_service
+	 * @param RoomTypeValidator $validator
+	 */
+    public function __construct(RoomTypeService $room_type_service, RoomTypeValidator $validator)
     {
-        $this->repository = $repository;
+        $this->roomTypeService = $room_type_service;
         $this->validator  = $validator;
     }
 
@@ -49,17 +52,10 @@ class RoomTypesController extends Controller
      */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $roomTypes = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $roomTypes,
-            ]);
-        }
-
-        return view('roomTypes.index', compact('roomTypes'));
+        $roomTypes = $this->roomTypeService->getAll();
+        return response()->json([
+            'data' => $roomTypes,
+        ]);
     }
 
     /**
@@ -69,7 +65,6 @@ class RoomTypesController extends Controller
      *
      * @return \Illuminate\Http\Response
      *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function store(RoomTypeCreateRequest $request)
     {
@@ -77,28 +72,19 @@ class RoomTypesController extends Controller
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
 
-            $roomType = $this->repository->create($request->all());
+            $roomType = $this->roomTypeService->create($request);
 
             $response = [
                 'message' => 'RoomType created.',
                 'data'    => $roomType->toArray(),
             ];
+            return response()->json($response);
 
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
         } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            return response()->json([
+                'error'   => true,
+                'message' => $e->getMessageBag()
+            ]);
         }
     }
 
@@ -111,31 +97,14 @@ class RoomTypesController extends Controller
      */
     public function show($id)
     {
-        $roomType = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $roomType,
-            ]);
-        }
-
-        return view('roomTypes.show', compact('roomType'));
+    	try{
+		    $roomType = $this->roomTypeService->getById($id);
+		    return response()->json([ 'data' => $roomType ]);
+	    } catch (ModelNotFoundException $exception){
+		    return response()->json([ 'error' => 'Not Found', 'message' => 'Room type with id '.$id.' not found' ], 404);
+	    }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $roomType = $this->repository->find($id);
-
-        return view('roomTypes.edit', compact('roomType'));
-    }
 
     /**
      * Update the specified resource in storage.
@@ -145,7 +114,6 @@ class RoomTypesController extends Controller
      *
      * @return Response
      *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function update(RoomTypeUpdateRequest $request, $id)
     {
@@ -153,30 +121,22 @@ class RoomTypesController extends Controller
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
-            $roomType = $this->repository->update($request->all(), $id);
+            $roomType = $this->roomTypeService->update($request, $id);
 
             $response = [
                 'message' => 'RoomType updated.',
                 'data'    => $roomType->toArray(),
             ];
 
-            if ($request->wantsJson()) {
 
-                return response()->json($response);
-            }
+            return response()->json($response);
 
-            return redirect()->back()->with('message', $response['message']);
         } catch (ValidatorException $e) {
 
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            return response()->json([
+                'error'   => true,
+                'message' => $e->getMessageBag()
+            ]);
         }
     }
 
@@ -190,16 +150,39 @@ class RoomTypesController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
+        $deleted = $this->roomTypeService->delete($id);
 
             return response()->json([
                 'message' => 'RoomType deleted.',
                 'deleted' => $deleted,
             ]);
-        }
 
-        return redirect()->back()->with('message', 'RoomType deleted.');
     }
+
+	public function addMedia( Request $request, $id){
+		try{
+			$roomType = $this->roomTypeService->getById($id);
+		} catch (ModelNotFoundException $exception){
+			return response()->json([ 'error' => 'Not Found', 'message' => 'Room type with id '.$id.' not found' ], 404);
+		}
+
+		$this->validate($request, [
+			'files' => 'required',
+			'files.*' => 'mimes:jpg,pdf,png,jpeg,svg,doc,docx'
+		]);
+
+		$media = $this->roomTypeService->addMedia($request->file('files'), $roomType);
+
+		if($media === null || count($media) === 0){
+			return response()->json([
+				'message' => 'Error',
+				'error' => 'Error uploading media',
+			], 400);
+		}
+
+		return response()->json([
+			'message' => 'Media Added',
+			'data' => $media,
+		]);
+	}
 }

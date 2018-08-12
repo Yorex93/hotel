@@ -12,10 +12,11 @@
     >
       <template slot="items" slot-scope="props">
         <td>{{ props.item.id }}</td>
-        <td>{{ props.item.image }}</td>
         <td>{{ props.item.name }}</td>
         <td>{{ props.item.email }}</td>
         <td>{{ props.item.phone }}</td>
+        <td>{{ props.item.room_types.length }}</td>
+        <td>{{ props.item.rooms.length }}</td>
         <td>{{ props.item.created_at }}</td>
         <td class="justify-center layout px-0">
           <v-icon small class="mr-2" @click.prevent="viewHotel(props.item)">visibility</v-icon>
@@ -29,8 +30,8 @@
 </template>
 
 <script>
-  import { urlResolvers } from "../../services/helpers";
-  import { mapActions, mapGetters } from 'vuex'
+  import { mapActions, mapGetters } from 'vuex';
+  import { fileResolvers, urlResolvers } from '../../services/helpers';
   export default {
         name: 'HotelsList',
         data: () => ({
@@ -43,10 +44,11 @@
                     sortable: false,
                     value: 'id'
                 },
-                { text: 'Image', value: 'image' , sortable: false},
                 { text: 'Title', value: 'name' , sortable: false},
                 { text: 'Email', value: 'email' , sortable: false},
                 { text: 'Phone', value: 'phone' , sortable: false},
+                { text: 'Room Types' , value: 'room_types', sortable: false},
+                { text: 'Rooms', value: 'rooms', sortable: false},
                 { text: 'Creation Date', value: 'created_at' , sortable: false},
                 { text: 'Actions', value: 'name' , sortable: false},
             ]
@@ -63,7 +65,7 @@
             },
 
             editHotel(hotel){
-                if(property){
+                if(hotel){
                     this.$router.push({ name: 'editHotel' , params: { id: hotel.id }});
                 }
             },
@@ -78,7 +80,14 @@
 
             viewHotel(property){
 
-            }
+            },
+
+            getImageUrl(hotel){
+                let imageMedia = hotel.media.find(m => fileResolvers.isImage(m));
+                if(imageMedia) return urlResolvers.getImage(imageMedia.file);
+                return false;
+            },
+
         },
 
         created(){

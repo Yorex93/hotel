@@ -49,6 +49,7 @@
             </v-container>
         </v-content>
         <v-footer app></v-footer>
+        <vue-toastr></vue-toastr>
     </v-app>
 </template>
 
@@ -60,13 +61,24 @@
             items: [
                 { name: 'Dashboard', icon: 'home', link: 'dashboard', exact: true },
                 { name: 'Hotels', icon: 'location_city', link: 'hotels' },
-                { name: 'Settings', icon: 'settings', link: 'settings' }
+                { name: 'Room Types', icon: 'hotel', link: 'roomTypes' },
+                { name: 'Rooms', icon: 'hotel', link: 'rooms' },
+                { name: 'Activities', icon: 'beach_access', link: 'activities' },
+                { name: 'Facilities', icon: 'hot_tub', link: 'facilities' },
+                { name: 'Services', icon: 'room_service', link: 'services' },
+                { name: 'Bookings', icon: 'event', link: 'bookings' },
+                { name: 'Payments', icon: 'credit_card', link: 'payments' },
+                { name: 'Coupons', icon: 'card_giftcard', link: 'coupons' },
+                { name: 'Users', icon: 'persons', link: 'users' },
+                { name: 'Settings', icon: 'settings', link: 'settings' },
             ],
             drawer: null
         }),
         methods: {
             ...mapActions({ userLogout : 'user/logout'}),
             ...mapActions({ fetchHotels : 'hotel/fetchHotels' }),
+            ...mapActions({ fetchCountries : 'location/fetchCountries' }),
+            ...mapActions({ fetchRoomTypes : 'room/fetchRoomTypes' }),
             logout(){
                 this.userLogout({router: this.$router});
             }
@@ -77,6 +89,16 @@
 
         created(){
             this.fetchHotels();
+            this.fetchCountries();
+            this.fetchRoomTypes();
+            this.$toastr.defaultProgressBar = false;
+            this.$toastr.defaultTimeout = 3000;
+        },
+
+        watch:{
+            $route (to, from){
+                console.log("route changed");
+            }
         }
     }
 </script>

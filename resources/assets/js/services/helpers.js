@@ -48,7 +48,18 @@ let currencyFilters = {
 };
 
 let urlResolvers = {
+    getImage(location){
+        return `${SITE_URL}/${location}`;
+    }
+};
 
+let fileResolvers = {
+    isImage(media){
+        if(media.mime_type){
+            return !!media.mime_type.match(/image/);
+        }
+        return false
+    },
 };
 
 
@@ -56,5 +67,6 @@ export {
     getQueryParams,
     dateHelpers,
     currencyFilters,
-    urlResolvers
+    urlResolvers,
+    fileResolvers
 }

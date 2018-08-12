@@ -10,6 +10,10 @@ use Prettus\Repository\Traits\TransformableTrait;
  * Class Taggable.
  *
  * @package namespace Hotel\Entities;
+ * @property int $tag_id
+ * @property int $taggable_id
+ * @property int $taggable_type
+ * @mixin \Eloquent
  */
 class Taggable extends Model implements Transformable
 {

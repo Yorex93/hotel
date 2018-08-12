@@ -10,6 +10,9 @@ use Prettus\Repository\Traits\TransformableTrait;
  * Class RoomService.
  *
  * @package namespace Hotel\Entities;
+ * @property int $room_type_id
+ * @property int $service_id
+ * @mixin \Eloquent
  */
 class RoomService extends Model implements Transformable
 {

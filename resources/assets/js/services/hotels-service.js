@@ -12,13 +12,12 @@ function getHotels(){
 
 /**
  *
- * @param hotelId
  * @param data
  * @return Promise
  */
-function updateHotel(hotelId, data){
-    let url = `${HOTEL_URLS.GET}/${hotelId}/update`;
-    return apiClient.postForPromise(url, data);
+function updateHotel(data){
+    let url = `${HOTEL_URLS.GET}/${data.id}`;
+    return apiClient.putForPromise(url, data);
 }
 
 /**

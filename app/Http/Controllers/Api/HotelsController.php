@@ -6,6 +6,7 @@ use Hotel\Http\Controllers\Controller;
 use Hotel\Services\Hotel\HotelService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
+use Illuminate\Http\Request;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Hotel\Http\Requests\HotelCreateRequest;
@@ -37,6 +38,9 @@ class HotelsController extends Controller
 	 */
     public function __construct(HotelService $hotel_service, HotelValidator $validator)
     {
+	    $this->middleware('permission:create hotel', ['only' => ['store']]);
+	    $this->middleware('permission:update hotel', ['only' => ['update']]);
+	    $this->middleware('permission:delete hotel', ['only' => ['destroy']]);
         $this->hotelService = $hotel_service;
         $this->validator  = $validator;
     }
@@ -66,7 +70,6 @@ class HotelsController extends Controller
      */
     public function store(HotelCreateRequest $request)
     {
-    	$this->middleware('permission: create hotel');
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
@@ -85,14 +88,10 @@ class HotelsController extends Controller
 
             return redirect()->back()->with('message', $response['message']);
         } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            return response()->json([
+                'error'   => true,
+                'message' => $e->getMessageBag()
+            ], 400);
         }
     }
 
@@ -126,7 +125,6 @@ class HotelsController extends Controller
      */
     public function update(HotelUpdateRequest $request, $id)
     {
-	    $this->middleware('permission: update hotel');
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
@@ -158,11 +156,41 @@ class HotelsController extends Controller
      */
     public function destroy($id)
     {
-	    $this->middleware('permission: delete hotel');
         $deleted = $this->hotelService->deleteHotel($id);
         return response()->json([
             'message' => 'Hotel deleted.',
             'deleted' => $deleted,
         ]);
+    }
+
+
+    public function addMedia( Request $request, $id){
+    	try{
+		    $hotel = $this->hotelService->getHotelById($id);
+	    } catch (ModelNotFoundException $exception){
+		    return response()->json([
+			    'message' => 'Hotel with id '.$id.' does not exist',
+			    'error' => 'Hotel not found',
+		    ], 404);
+	    }
+
+	    $this->validate($request, [
+		    'files' => 'required',
+		    'files.*' => 'mimes:jpg,pdf,png,jpeg,svg,doc,docx'
+	    ]);
+
+    	$media = $this->hotelService->addMedia($request->file('files'), $hotel);
+
+    	if($media === null || count($media) === 0){
+		    return response()->json([
+			    'message' => 'Error',
+			    'error' => 'Error uploading media',
+		    ], 400);
+	    }
+
+	    return response()->json([
+		    'message' => 'Media Added',
+		    'data' => $media,
+	    ]);
     }
 }
