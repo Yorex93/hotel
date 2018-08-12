@@ -161,7 +161,7 @@
         },
 
         methods: {
-            ...mapActions('hotel', ['createHotel', 'clearComponentData']),
+            ...mapActions('hotel', ['createHotel', 'clearHotelComponentData']),
             submit(){
                 this.$v.$touch();
                 console.log(this.$v);
