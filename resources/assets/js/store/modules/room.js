@@ -14,15 +14,15 @@ const state = {
 };
 
 const getters = {
-    roomTypes: (state) => { return state.roomTypes },
-    createRoomType: (state) => { return state.createRoomType },
-    updateRoomType: (state) => { return state.updateRoomType },
-    deleteRoomType: (state) => { return state.deleteRoomType },
+    getRoomTypes: (state) => { return state.roomTypes },
+    getCreateRoomType: (state) => { return state.createRoomType },
+    getUpdateRoomType: (state) => { return state.updateRoomType },
+    getDeleteRoomType: (state) => { return state.deleteRoomType },
 
-    rooms: (state) => { return state.rooms },
-    createRooms: (state) => { return state.createRooms },
-    updateRooms: (state) => { return state.updateRooms },
-    deleteRooms: (state) => { return state.deleteRooms },
+    getRooms: (state) => { return state.rooms },
+    getCreateRooms: (state) => { return state.createRooms },
+    getUpdateRooms: (state) => { return state.updateRooms },
+    getDeleteRooms: (state) => { return state.deleteRooms },
 };
 
 const actions = {
@@ -54,11 +54,7 @@ const actions = {
             commit('setCreateRoomType', { type: 'DONE', value: true });
             dispatch('fetchRoomTypes');
         }).catch(error => {
-            if (error.response) {
-                if(error.response.data){
-                    commit('setCreateRoomType', { type: 'ERROR', value: error.response.data.message });
-                }
-            }
+            commit('setCreateRoomType', { type: 'ERROR', value: error });
         }).finally(() => {
             commit('setCreateRoomType', { type: 'LOADING', value: false});
         });
@@ -73,26 +69,35 @@ const actions = {
             commit('setUpdateRoomType', { type: 'DONE', value: true });
             dispatch('setUpdateRoomType');
         }).catch(error => {
-            if (error.response) {
-                if(error.response.data){
-                    commit('setUpdateRoomType', { type: 'ERROR', value: error.response.data.message });
-                }
-            }
+            commit('setUpdateRoomType', { type: 'ERROR', value: error });
         }).finally(() => {
             commit('setUpdateRoomType', { type: 'LOADING', value: false});
         });
     },
 
+    clearRoomComponentData({commit}, dataToClear){
+        if(typeof dataToClear === 'string'){
+            try{
+                commit(dataToClear, { type: 'DONE', value: false });
+                commit(dataToClear, { type: 'ERROR', value: {} });
+            } catch (e){
+                console.log(`Unknown mutant: '${dataToClear}'`);
+                console.log(e);
+            }
+        }
+    }
+
 };
 
 const mutations = {
-    setRoomTypes(state, { type, value }) { state.roomTypes.mutate( type, value ) },
+
     setCreateRoomType(state, { type, value }) { state.createRoomType.mutate( type, value ) },
+    setRoomTypes(state, { type, value }) { state.roomTypes.mutate( type, value ) },
     setUpdateRoomType(state, { type, value }) { state.updateRoomType.mutate( type, value ) },
     setDeleteRoomType(state, { type, value }) { state.deleteRoomType.mutate( type, value ) },
 
-    setRooms(state, { type, value }) { state.roomTypes.mutate( type, value ) },
     setCreateRooms(state, { type, value }) { state.createRooms.mutate( type, value ) },
+    setRooms(state, { type, value }) { state.roomTypes.mutate( type, value ) },
     setUpdateRooms(state, { type, value }) { state.updateRooms.mutate( type, value ) },
     setDeleteRooms(state, { type, value }) { state.deleteRooms.mutate( type, value ) },
 };

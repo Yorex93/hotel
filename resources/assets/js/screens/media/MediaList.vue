@@ -117,10 +117,11 @@
             dropZoneOptions: {
                 url: this.uploadLink,
                 autoProcessQueue: false,
-                thumbnailWidth: 240,
+                thumbnailWidth: 200,
                 addRemoveLinks: true,
                 paramName: 'files',
                 uploadMultiple: true,
+                parallelUploads: 10,
                 headers: {
                     "Accepts" : 'application/json',
                     "Authorization" : 'Bearer '+localStorage.getItem('token')

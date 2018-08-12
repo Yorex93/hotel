@@ -1,6 +1,7 @@
 export default {
     done : false,
     error : {},
+    errorMessage: "",
     loading : false,
     data : [],
 
@@ -13,7 +14,25 @@ export default {
                 break;
 
             case 'ERROR':
-                this.error = value;
+                if(!value){
+                    this.error = {};
+                    this.errorMessage = "";
+                    return;
+                }
+
+                if(Object.keys(value).length === 0){
+                    this.error = {};
+                    this.errorMessage = "";
+                    return;
+                }
+
+                if (value.response) {
+                    if(value.response.data){
+                        this.error = value.response.data;
+                        this.errorMessage = value.response.data.message
+                    }
+                }
+
                 break;
 
             case 'LOADING':
@@ -28,8 +47,4 @@ export default {
                 return;
         }
     },
-
-    generate(){
-        return JSON.parse(JSON.stringify(this));
-    }
 }

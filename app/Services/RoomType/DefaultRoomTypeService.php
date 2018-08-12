@@ -58,7 +58,7 @@ class DefaultRoomTypeService implements RoomTypeService {
 	 */
 	function create( RoomTypeCreateRequest $request ) {
 		$body = $request->only('hotel_id', 'title', 'sub_title',
-			'max_children', 'max_adults', 'max_people', 'description', 'maintenance_start', 'maintenance_end');
+			'max_children', 'max_adults', 'max_people', 'description', 'maintenance_start', 'maintenance_end', 'base_price_per_night');
 
 		$body['slug'] = str_slug($request->get('title'));
 		if($request->has('is_homepage')){

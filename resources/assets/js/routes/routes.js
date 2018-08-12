@@ -90,8 +90,8 @@ const routes = [
 
 
             { path: 'room-types', component: RoomTypeList, name: 'roomTypes' },
-            { path: 'room-types/create', component: RoomTypeEdit, name: 'createRoomType' },
-            { path: 'room-types/:id/edit', component: RoomTypeCreate, name: 'editRoomType' },
+            { path: 'room-types/create', component: RoomTypeCreate, name: 'createRoomType' },
+            { path: 'room-types/:id/edit', component: RoomTypeEdit, name: 'editRoomType' },
 
             { path: 'rooms', component: RoomList, name: 'rooms' },
 
