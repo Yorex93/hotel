@@ -1,4 +1,4 @@
-const SITE_URL = "http://167.99.96.137";
+const SITE_URL = "http://hotelvaleriesuitesng.com";
 const API_URL = `${SITE_URL}/api/v1`;
 
 const AUTH_URLS = {
