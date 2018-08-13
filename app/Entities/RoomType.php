@@ -46,6 +46,14 @@ class RoomType extends Model implements Transformable
      */
     protected $guarded = [];
 
+	public function hotel(){
+		return $this->belongsTo(Hotel::class);
+	}
+
+	public function rooms(){
+		return $this->hasMany(Room::class);
+	}
+
 	public function facilities(){
 		return $this->morphToMany(Facility::class, 'has_facility', 'has_facilities');
 	}
@@ -63,7 +71,7 @@ class RoomType extends Model implements Transformable
 	}
 
 	public function tags(){
-		return $this->morphToMany(Facility::class, 'taggable', 'taggables');
+		return $this->morphToMany(Tag::class, 'taggable', 'taggables');
 	}
 
 	public function reviews(){

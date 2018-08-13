@@ -31,7 +31,7 @@ class DefaultRoomTypeService implements RoomTypeService {
 	protected $fileService;
 	protected $mediaRepo;
 
-	protected $relations = ['media'];
+	protected $relations = ['media', 'rooms', 'hotel', 'facilities', 'services', 'tags'];
 
 
 	public function __construct(RoomTypeRepository $room_type_repository,
