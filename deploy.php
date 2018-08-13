@@ -18,7 +18,8 @@ set('shared_dirs', [
 	'storage/framework/cache',
 	'storage/framework/sessions',
 	'storage/framework/views',
-	'storage/logs'
+	'storage/logs',
+	'public/files'
 ]);
 set('shared_files', ['.env']);
 
@@ -40,10 +41,16 @@ task('build', function () {
     run('cd {{release_path}} && build');
 });
 
+desc('Execute artisan artisan passport:keys');
+task('passport:keys', function () {
+	run('{{bin/php}} {{release_path}}/artisan passport:keys --force');
+});
+
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
 
 // Migrate database before symlink new release.
 
 before('deploy:symlink', 'artisan:migrate');
+before('artisan:optimize', 'passport:keys');
 
