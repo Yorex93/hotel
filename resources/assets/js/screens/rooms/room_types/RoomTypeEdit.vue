@@ -363,6 +363,10 @@
                     this.clearRoomComponentData('setUpdateRoomType');
                     this.$router.push({ name: 'roomTypes'});
                 }
+            },
+
+            'getRoomTypes.data': function(){
+                this.loadRoomTypes();
             }
         },
 

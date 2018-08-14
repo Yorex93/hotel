@@ -49,7 +49,7 @@ let currencyFilters = {
 
 let urlResolvers = {
     getImage(location){
-        return `${SITE_URL}/${location}`;
+        return `${SITE_URL}/storage/${location}`;
     }
 };
 

@@ -68,7 +68,6 @@ class LocalStorageFileService implements FileService {
 	 * @return boolean
 	 */
 	function deleteFileInLocation( $location ) {
-		$path = public_path().'/'.$location;
-		return File::delete($path);
+		return Storage::disk('public')->delete($location);
 	}
 }
