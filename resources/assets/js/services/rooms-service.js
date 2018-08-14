@@ -24,8 +24,9 @@ function createRoomType(data){
  * @return Promise
  */
 function updateRoomType(id, data){
-    let url = `${ROOM_URLS.ROOM_TYPE}/${id}/update`;
-    return apiClient.putForPromise(url, data);
+    let url = `${ROOM_URLS.ROOM_TYPE}/${id}`;
+    const { hotel, tags, facilities, media, services, rooms,  ...postObject } = data;
+    return apiClient.putForPromise(url, postObject);
 }
 
 /**

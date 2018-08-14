@@ -32,7 +32,10 @@ Route::group(['namespace'=>'Api', 'prefix'=>'v1'], function() {
 		Route::post('hotels/{id}/addMedia', 'HotelsController@addMedia');
 
 		Route::resource('locations', 'LocationsController');
+
 		Route::resource('roomTypes', 'RoomTypesController');
+		Route::post('roomTypes/{id}/addMedia', 'RoomTypesController@addMedia');
+
 		Route::resource('rooms', 'RoomsController');
 //		Route::group(['prefix' => 'hotel'], function(){
 //			Route::get('', 'HotelsController@index')->name('admin.hotel.index');

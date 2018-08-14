@@ -67,7 +67,7 @@ const actions = {
             let result = resp.data;
             commit('setUpdateRoomType', { type: 'DATA', value: result.data });
             commit('setUpdateRoomType', { type: 'DONE', value: true });
-            dispatch('setUpdateRoomType');
+            dispatch('fetchRoomTypes');
         }).catch(error => {
             commit('setUpdateRoomType', { type: 'ERROR', value: error });
         }).finally(() => {

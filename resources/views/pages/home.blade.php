@@ -196,7 +196,7 @@
                 <div class="section_about__content">
                     <div class="col-md-6">
                         <div class="about__pic">
-                            <img src="{{ asset('assets/img/about_img.jpg') }}" class="img-responsive" alt="...">
+                            <img src="{{ asset('files/zGoQfcL2RtcjOpkGfkQZifxX0Vo54VEy9Rhek8L1.png') }}" class="img-responsive" alt="...">
                         </div> <!-- / .about__pic -->
                     </div>
                     <div class="col-md-6">

@@ -17,9 +17,40 @@ class FileUpload {
 
 	private $fileLocation;
 
-	private $file;
 
 	private $public = false;
+
+	private $fileSize;
+
+	private $mimeType;
+
+	/**
+	 * @return mixed
+	 */
+	public function getFileSize() {
+		return $this->fileSize;
+	}
+
+	/**
+	 * @param mixed $fileSize
+	 */
+	public function setFileSize( $fileSize ): void {
+		$this->fileSize = $fileSize;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getMimeType() {
+		return $this->mimeType;
+	}
+
+	/**
+	 * @param mixed $mimeType
+	 */
+	public function setMimeType( $mimeType ): void {
+		$this->mimeType = $mimeType;
+	}
 
 	private $storageSystem = "LOCAL";
 
@@ -29,20 +60,6 @@ class FileUpload {
 
 	public function setFileName($fileName): void{
 		$this->fileName = $fileName;
-	}
-
-	/**
-	 * @return File
-	 */
-	public function getFile(): File {
-		return $this->file;
-	}
-
-	/**
-	 * @param File $file
-	 */
-	public function setFile( File $file ): void {
-		$this->file = $file;
 	}
 
 	/**
@@ -90,8 +107,8 @@ class FileUpload {
 	public function toModelCreateArray(): array{
 		return [
 			'title' => $this->fileName,
-			'mime_type' => $this->getFile()->getMimeType(),
-			'size' => $this->getFile()->getSize(),
+			'mime_type' => $this->getMimeType(),
+			'size' => $this->getFileSize(),
 			'file' => $this->getFileLocation(),
 			'is_public' => $this->public,
 			'storage_system' => $this->storageSystem

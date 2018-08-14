@@ -28,17 +28,17 @@ class LocalStorageFileService implements FileService {
 	 */
 	function saveFile( UploadedFile $file, $location = null ): FileUpload {
 		$title = $file->getClientOriginalName();
-		$saveTo = 'files/';
+		$saveTo = 'files';
 		if($location){
-			$saveTo = $saveTo.$location.'/';
+			$saveTo = $saveTo."/".$location;
 		}
-		$filename = uniqid().".".$file->getClientOriginalExtension();
-		$fileLocation = $saveTo.$filename;
-		$uploadedFile = $file->move(public_path().'/'.$saveTo, $filename);
+		//$filename = uniqid().".".$file->getClientOriginalExtension();
+		$uploadedFile = $file->store($saveTo, 'public');
 		$fileUpload = new FileUpload();
-		$fileUpload->setFile($uploadedFile);
+		$fileUpload->setFileSize($file->getSize());
+		$fileUpload->setMimeType($file->getMimeType());
 		$fileUpload->setFileName($title);
-		$fileUpload->setFileLocation($fileLocation);
+		$fileUpload->setFileLocation($uploadedFile);
 		$fileUpload->setPublic(true);
 		return $fileUpload;
 	}

@@ -52,6 +52,19 @@
           </v-flex>
 
           <v-flex xs12 sm12>
+            <v-textarea
+                    v-model="roomType.short_description"
+                    label="Short Description"
+                    required
+                    :error-messages="shortDescErrors"
+                    @input="$v.roomType.short_description.$touch()"
+                    @blur="$v.roomType.short_description.$touch()"
+            >
+
+            </v-textarea>
+          </v-flex>
+
+          <v-flex xs12 sm12>
             <vue-editor v-model="roomType.description" placeholder="Enter Room description"/>
           </v-flex>
 
@@ -152,6 +165,8 @@
                 hotel_id: undefined,
                 title: '',
                 sub_title: '',
+                short_description: '',
+                display_image: '',
                 description: '',
                 max_children: undefined,
                 max_adults: undefined,
@@ -175,6 +190,10 @@
                     required,
                     minLength: minLength(10)
                 },
+                short_description:{
+                    required,
+                    maxLength: maxLength(140)
+                },
                 max_children: {
                     required,
                     maxValue: maxValue(5)
@@ -189,7 +208,6 @@
                 },
                 base_price_per_night: {
                     required,
-                    numeric,
                 },
             }
         },
@@ -257,6 +275,13 @@
                 const errors = [];
                 if (!this.$v.roomType.base_price_per_night.$dirty) return errors;
                 !this.$v.roomType.base_price_per_night.required && errors.push('This is super required!!!');
+                return errors
+            },
+            shortDescErrors(){
+                const errors = [];
+                if (!this.$v.roomType.short_description.$dirty) return errors;
+                !this.$v.roomType.short_description.required && errors.push('A short description of the room is required');
+                !this.$v.roomType.short_description.maxLength && errors.push(`Should not be longer than ${this.$v.roomType.short_description.$params.minLength.min} characters`);
                 return errors
             }
         },

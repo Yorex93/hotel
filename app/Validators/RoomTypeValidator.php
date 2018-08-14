@@ -26,6 +26,7 @@ class RoomTypeValidator extends LaravelValidator
 	        'max_adults' => 'required |integer | max:5',
 	        'max_people' => 'required | integer | max:5',
 	        'base_price_per_night' => 'required | numeric',
+	        'short_description' => 'required | max:140',
 	        'is_homepage' => 'boolean'
         ],
         ValidatorInterface::RULE_UPDATE => [
@@ -36,7 +37,8 @@ class RoomTypeValidator extends LaravelValidator
 	        'max_adults' => 'required |integer | max:5',
 	        'max_people' => 'required | integer | max:5',
 	        'base_price_per_night' => 'required | numeric',
-	        'is_homepage' => 'boolean'
+	        'is_homepage' => 'boolean',
+	        'short_description' => 'required | max:140',
         ],
     ];
 }

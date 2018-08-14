@@ -19,7 +19,6 @@ set('shared_dirs', [
 	'storage/framework/sessions',
 	'storage/framework/views',
 	'storage/logs',
-	'public/files'
 ]);
 set('shared_files', ['.env']);
 
