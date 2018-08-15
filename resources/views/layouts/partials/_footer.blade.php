@@ -4,8 +4,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-4 col-sm-push-4 col-md-6 col-md-push-3">
                     <div class="footer__item">
-                        <h2 class="brand__logo">{{ substr(env('HOTEL_NAME'),0,strrpos(env('HOTEL_NAME'),' ')) }}</h2>
-                        <p class="brand__sublogo">{{ explode(' ', env('HOTEL_NAME'))[count(explode(' ', env('HOTEL_NAME'))) - 1] }}</p>
+                        <img src="{{ asset('images/valerie-logo.png') }}" />
                         <ul class="social__icons">
                             <li class="social-icons__item"><a href="#"><i class="icon ion-social-twitter" aria-hidden="true"></i></a></li>
                             <li class="social-icons__item"><a href="#"><i class="icon ion-social-facebook" aria-hidden="true"></i></a></li>

@@ -21,8 +21,14 @@
             padding: 3px 15px;
         }
 
-        .navbar-brand > img{
+        .navbar-brand > img {
             height: 80px;
+        }
+
+        .footer__item img{
+            height: 120px;
+            display: block;
+            margin: 0 auto;
         }
     </style>
 

@@ -19,7 +19,7 @@
                     <li class="social-icons__item"><a href="#"><i class="icon ion-social-facebook" aria-hidden="true"></i></a></li>
                     <li class="social-icons__item"><a href="#"><i class="icon ion-social-googleplus" aria-hidden="true"></i></a></li>
                 </ul> <!-- .social__icons -->
-                <a href="{{ route('reservations.index') }}" class="btn btn-reservation-top">Reservations</a>
+                <a href="{{ 1 == 2 ? route('reservations.index') : '#' }}" class="btn btn-reservation-top">Reservations</a>
 
                 @if(false)
                 <div class="dropdown lang-menu">

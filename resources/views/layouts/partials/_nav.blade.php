@@ -23,11 +23,11 @@
         <div class="collapse navbar-collapse" id="navbar__collapse">
             <ul class="nav navbar-nav navbar-left">
                 <li>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    <a href="{{ route('home') }}">
                         Home
                     </a>
                 </li>
-                <li><a href="{{ route('page.about') }}">About Us</a></li>
+                <li><a href="{{ 1 == 2 ? route('page.about') : '#'}}">About Us</a></li>
                 <li>
                     <a href="{{ route('rooms.index') }}">
                         Rooms
@@ -35,9 +35,12 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{{ route('services.index') }}">Services</a></li>
-                <li><a href="{{ route('facilities.index') }}">Facilities</a></li>
-                <li><a href="{{ route('page.contact') }}">Contact</a></li>
+                <li><a href="#">Services</a></li>
+                <li><a href="#">Facilities</a></li>
+                <li><a href="#">Contact</a></li>
+                {{--<li><a href="{{ route('services.index') }}">Services</a></li>--}}
+                {{--<li><a href="{{ route('facilities.index') }}">Facilities</a></li>--}}
+                {{--<li><a href="{{ route('page.contact') }}">Contact</a></li>--}}
             </ul>
         </div><!-- /.navbar-collapse -->
 
