@@ -84,6 +84,7 @@
             ...mapActions({ fetchHotels : 'hotel/fetchHotels' }),
             ...mapActions({ fetchCountries : 'location/fetchCountries' }),
             ...mapActions({ fetchRoomTypes : 'room/fetchRoomTypes' }),
+            ...mapActions({ fetchFacilities : 'facility/fetchFacilities' }),
             logout(){
                 this.userLogout({router: this.$router});
             }
@@ -92,18 +93,20 @@
             ...mapGetters('user', ['currentUser']),
         },
 
-        created(){
-            this.fetchHotels();
-            this.fetchCountries();
-            this.fetchRoomTypes();
-            this.$toastr.defaultProgressBar = false;
-            this.$toastr.defaultTimeout = 3000;
+        mounted(){
+            setTimeout(() => {
+                this.fetchHotels();
+                this.fetchCountries();
+                this.fetchRoomTypes();
+                this.fetchFacilities();
+                this.$toastr.defaultProgressBar = false;
+                this.$toastr.defaultTimeout = 3000;
+            }, 1000);
+
         },
 
         watch:{
-            $route (to, from){
-                console.log("route changed");
-            }
+
         }
     }
 </script>

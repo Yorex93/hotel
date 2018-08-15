@@ -1,7 +1,15 @@
 @extends('layouts.app')
 
 @section('styles')
+<style>
+    .carousel .carousel-inner .item.no-tint:before{
+        background-color: rgba(0,0,0,0.1);
+    }
 
+    .testimonials__img img{
+        height: 120px;
+    }
+</style>
 @endsection
 
 @section('content')
@@ -26,20 +34,20 @@
             <!-- Wrapper for slides -->
             <div class="carousel-inner" role="listbox">
 
-                <div class="item item__1 active" style="background: url('{{ asset('assets/img/slide_bg_1.jpg') }}') no-repeat center center / cover;">
+                <div class="item item__1 active" style="background: url('{{ asset('images/room-banner.jpeg') }}') no-repeat center center / cover;">
                     <div class="item__container">
                         <div class="item-container__inner">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="item__content">
-                                            <h1 class="item_content__title">Feel the <span>Harmony</span></h1>
+                                            <h1 class="item_content__title">An Oasis of <span>Serenity</span></h1>
                                             <div class="divider">
                                                 <hr class="line1">
                                                 <hr class="line2">
                                                 <hr class="line1">
                                             </div> <!-- / .divider -->
-                                            <p class="item_content__desc">Enjoy your stay with our services</p>
+                                            <p class="item_content__desc">Experience a quiet and relaxing atmosphere</p>
                                             <a href="#section__about" class="btn btn-reservation">Explore it</a>
                                         </div> <!-- .slide__content -->
                                     </div>
@@ -49,21 +57,21 @@
                     </div> <!-- / .item__container -->
                 </div> <!-- / .item -->
 
-                <div class="item item__2" style="background: url('{{ asset('assets/img/slide_bg_2.jpg') }}') no-repeat center center / cover;">
+                <div class="item no-tint item__2" style="background: url('{{ asset('images/dinner-banner.jpeg') }}') no-repeat center center / cover;">
                     <div class="item__container">
                         <div class="item-container__inner">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="item__content">
-                                            <h1 class="item_content__title">Home <span>Atmosphere</span></h1>
+                                            <h1 class="item_content__title">Best <span>Cousine</span></h1>
                                             <div class="divider">
                                                 <hr class="line1">
                                                 <hr class="line2">
                                                 <hr class="line1">
                                             </div> <!-- / .divider -->
-                                            <p class="item_content__desc">Discover our best rooms</p>
-                                            <a href="#" class="btn btn-reservation">Discover rooms</a>
+                                            <p class="item_content__desc">Enjoy our best meals</p>
+                                            <a href="#" class="btn btn-reservation">Discover meals</a>
                                         </div> <!-- .slide__content -->
                                     </div>
                                 </div> <!-- / .row -->
@@ -72,20 +80,20 @@
                     </div> <!-- / .item__container -->
                 </div> <!-- / .item -->
 
-                <div class="item item__3" style="background: url('{{ asset('assets/img/slide_bg_3.jpg') }}') no-repeat center center / cover;">
+                <div class="item item__3" style="background: url('{{ asset('images/pool-banner.jpg') }}') no-repeat center center / cover;">
                     <div class="item__container">
                         <div class="item-container__inner">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="item__content">
-                                            <h1 class="item_content__title">Tasty <span>Jorney</span></h1>
+                                            <h1 class="item_content__title">Experience <span>Nature</span></h1>
                                             <div class="divider">
                                                 <hr class="line1">
                                                 <hr class="line2">
                                                 <hr class="line1">
                                             </div> <!-- / .divider -->
-                                            <p class="item_content__desc">Try best dishes in our restaurant</p>
+                                            <p class="item_content__desc">Hotel Valerie on the shores of Kuramo lagoon</p>
                                             <a href="#section__about" class="btn btn-reservation">Explore it</a>
                                         </div> <!-- .slide__content -->
                                     </div>
@@ -196,16 +204,20 @@
                 <div class="section_about__content">
                     <div class="col-md-6">
                         <div class="about__pic">
-                            <img src="{{ asset('files/zGoQfcL2RtcjOpkGfkQZifxX0Vo54VEy9Rhek8L1.png') }}" class="img-responsive" alt="...">
+                            <img src="{{ asset('images/home-image-1.jpeg') }}" class="img-responsive" alt="...">
                         </div> <!-- / .about__pic -->
                     </div>
                     <div class="col-md-6">
                         <div class="about__desc">
                             <p class="about_desc__subtitle">About us</p>
-                            <h3 class="about_desc__title">Probably the best place to enjoy your life</h3>
-                            <p class="about_desc__desc">A wonderful serenity has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence in this spot, which was created for the bliss of souls like mine. I am so happy, my dear friend, so absorbed in the exquisite sense of mere tranquil existence. When, while the lovely valley teems with vapour around me, and the meridian sun strikes the upper surface of the impenetrable foliage of my trees, and but a few stray gleams steal into the inner sanctuary.</p>
-                            <h4 class="about_desc__quote">The European languages are members of the same family. Their separate existence is a myth. For science, music, sport, etc, Europe uses the same vocabulary.</h4>
-                            <a href="#" class="btn btn-default">Learn More</a>
+                            <h3 class="about_desc__title">AN OASIS OF SERENITY</h3>
+                            <p class="about_desc__desc">
+                                Hotel Valerie is a luxury and affordable boutique hotel located in Asaba, Delta State Nigeria that provides to its guests elegant, comfortable and modern rooms, delicious meals and other facilities.
+                            </p>
+                            <p class="about_desc__desc">
+                                Our signature style of hospitality and value is unmatched. No matter where you go, you will be surrounded by our friendly smiles. And the considerate service of staff will make your experience in our hotel wonderful and memorable
+                            </p>
+                            <a href="{{ route('page.about') }}" class="btn btn-default">Learn More</a>
                         </div> <!-- / .about__desc -->
                     </div>
                 </div> <!-- / .section_about__content -->
@@ -218,74 +230,40 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <h2 class="section__title">Our <strong>Best rooms</strong></h2>
+                    <h2 class="section__title">Our <strong> rooms</strong></h2>
                     <div class="divider">
                         <hr class="line1">
                         <hr class="line2">
                         <hr class="line1">
                     </div> <!-- / .divider -->
-                    <p class="section__subtitle">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti sit dicta quae natus quasi ratione quis id, tenetur atque blanditiis.</p>
+                    <p class="section__subtitle">All our rooms are ensuite bathrooms and have dial-up & wi-fi internet access, mini bar, safe box, hair dryers, intercom and telephone facilities that will make you feel completely at home.</p>
                 </div>
             </div> <!-- / .row -->
         </div> <!-- / .container -->
         <div class="container">
             <div class="best-rooms__content">
-                <div class="row">
+                @foreach($roomTypes AS $room)
+                    @if($loop->iteration % 2 == 1 || $loop->first)
+                        <div class="row">
+                    @endif
                     <div class="col-sm-6">
                         <figure class="best-rooms__item">
-                            <img src="{{ asset('assets/img/single_room.jpg') }}" class="img-responsive" alt="...">
+                            <img src="{{ count($room->media) > 0 ? asset('storage/'.$room->media[0]->file) : '' }}" class="img-responsive" alt="...">
                             <figcaption>
-                                <h3>Single room</h3>
+                                <h3>{{ $room->title }}</h3>
                                 <div class="item__price">
-                                    &#8358;11,500 <small>/ night</small>
+                                    &#8358;{{ number_format($room->base_price_per_night, 2) }}<small>/ night</small>
                                 </div>
-                                <p class="item__desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti sit dicta quae natus quasi ratione quis id, tenetur atque blanditiis.</p>
+                                <p class="item__desc">{{ $room->short_description }}</p>
                                 <a href="#" class="btn-book">Book now <i class="icon ion-chevron-right"></i><i class="icon ion-chevron-right"></i></a>
+                                <a href="{{ route('rooms.show', ['slug' => $room->slug]) }}" class="btn-book">Find out more</a>
                             </figcaption>
                         </figure> <!-- / .best-rooms__item -->
                     </div>
-                    <div class="col-sm-6">
-                        <figure class="best-rooms__item">
-                            <img src="{{ asset('assets/img/double_room.jpg') }}" class="img-responsive" alt="...">
-                            <figcaption>
-                                <h3>Double room</h3>
-                                <div class="item__price">
-                                    &#8358;13,500 <small>/ night</small>
-                                </div>
-                                <p class="item__desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti sit dicta quae natus quasi ratione quis id, tenetur atque blanditiis.</p>
-                                <a href="#" class="btn-book">Book now <i class="icon ion-chevron-right"></i><i class="icon ion-chevron-right"></i></a>
-                            </figcaption>
-                        </figure> <!-- / .best-rooms__item -->
-                    </div>
-                </div> <!-- / .row -->
-                <div class="row">
-                    <div class="col-sm-6">
-                        <figure class="best-rooms__item">
-                            <img src="{{ asset('assets/img/deluxe_room.jpg') }}" class="img-responsive" alt="...">
-                            <figcaption>
-                                <h3>Deluxe room</h3>
-                                <div class="item__price">
-                                    &#8358;16,500 <small>/ night</small>
-                                </div>
-                                <p class="item__desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti sit dicta quae natus quasi ratione quis id, tenetur atque blanditiis.</p>
-                                <a href="#" class="btn-book">Book now <i class="icon ion-chevron-right"></i><i class="icon ion-chevron-right"></i></a>
-                            </figcaption>
-                        </figure> <!-- / .best-rooms__item -->
-                    </div>
-                    <div class="col-sm-6">
-                        <figure class="best-rooms__item">
-                            <img src="{{ asset('assets/img/royal_room.jpg') }}" class="img-responsive" alt="...">
-                            <figcaption>
-                                <h3>Royal room</h3>
-                                <div class="item__price">
-                                    &#8358;20,500 <small>/ night</small>
-                                </div>
-                                <p class="item__desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam illum modi explicabo obcaecati odit, omnis quis alias.</p>
-                                <a href="#" class="btn-book">Book now <i class="icon ion-chevron-right"></i><i class="icon ion-chevron-right"></i></a>
-                            </figcaption>
-                        </figure> <!-- / .best-rooms__item -->
-                    </div>
-                </div> <!-- / .row -->
+                    @if($loop->iteration % 2 == 0 || $loop->last)
+                        </div>
+                     @endif
+                @endforeach
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="rooms__button">
@@ -303,46 +281,54 @@
             <div class="row">
                 <div class="col-md-3 col-sm-6">
                     <div class="services__item">
-                        <h2 class="services_item__title">Parking</h2>
+                        <h2 class="services_item__title">Luxury Rooms</h2>
                         <div class="services_item__divider">
                             <i class="icon ion-android-star"></i>
                             <i class="icon ion-android-star"></i>
                             <i class="icon ion-android-star"></i>
                         </div> <!-- .services_item__divider -->
-                        <p class="services_item__desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel temporibus adipisci mollitia ducimus facilis nesciunt at minima magni optio, dignissimos, neque dolore iste labore dolor enim, ipsam quisquam, quae nihil!</p>
+                        <p class="services_item__desc">
+                            Our stylish rooms and suites in our luxury hotel have been beautifully designed with hotel’s philosophy of understated luxury and supreme comfort.
+                        </p>
                     </div> <!-- .services__item -->
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="services__item">
-                        <h2 class="services_item__title">Fitness hall</h2>
+                        <h2 class="services_item__title">Restaurant & Bar</h2>
                         <div class="services_item__divider">
                             <i class="icon ion-android-star"></i>
                             <i class="icon ion-android-star"></i>
                             <i class="icon ion-android-star"></i>
                         </div> <!-- .services_item__divider -->
-                        <p class="services_item__desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi eaque, eum. Voluptates corporis tenetur commodi nihil velit perspiciatis natus fugit rerum nisi, at, voluptas autem quisquam reprehenderit odit dolores quas!</p>
+                        <p class="services_item__desc">
+                            In a cozy atmosphere you can enjoy not only our Local delicacies but also our intercontinental-style cuisine with an African touch.
+                        </p>
                     </div> <!-- .services__item -->
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="services__item">
-                        <h2 class="services_item__title">Restaurant</h2>
+                        <h2 class="services_item__title">Meetings & Events Center</h2>
                         <div class="services_item__divider">
                             <i class="icon ion-android-star"></i>
                             <i class="icon ion-android-star"></i>
                             <i class="icon ion-android-star"></i>
                         </div> <!-- .services_item__divider -->
-                        <p class="services_item__desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Non nesciunt ullam porro ipsa, architecto, doloribus illo veritatis consequatur temporibus eveniet labore, vitae laudantium possimus placeat libero magnam.</p>
+                        <p class="services_item__desc">
+                            Our events facilities include all equipments with the state-of-the-art audio & visual and  business support unit.
+                        </p>
                     </div> <!-- .services__item -->
                 </div>
                 <div class="col-md-3 col-sm-6">
                     <div class="services__item">
-                        <h2 class="services_item__title">Spa center</h2>
+                        <h2 class="services_item__title">Fitness Center</h2>
                         <div class="services_item__divider">
                             <i class="icon ion-android-star"></i>
                             <i class="icon ion-android-star"></i>
                             <i class="icon ion-android-star"></i>
                         </div> <!-- .services_item__divider -->
-                        <p class="services_item__desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed animi voluptates, laudantium aspernatur, libero nulla ut. Quibusdam distinctio eaque cum officia expedita dolore, perspiciatis quisquam vel et neque tempora cupiditate.</p>
+                        <p class="services_item__desc">
+                            Hotel Valerie presents an awesome fitness facility to make you feel good. Just exactly what you need to keep fit
+                        </p>
                     </div> <!-- .services__item -->
                 </div>
             </div> <!-- / .row -->
@@ -360,7 +346,9 @@
                         <hr class="line2">
                         <hr class="line1">
                     </div> <!-- / .divider -->
-                    <p class="section__subtitle">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti sit dicta quae natus quasi ratione quis id, tenetur atque blanditiis aperiam mollitia enim corporis ex praesentium reprehenderit.</p>
+                    <p class="section__subtitle">
+                        A couple of views from our hotel in Asaba
+                    </p>
                 </div>
             </div> <!-- / .row -->
         </div> <!-- / .container -->
@@ -368,13 +356,13 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div id="gallery__carousel" class="owl-carousel owl-theme gallery__body">
-                        @for($i = 1; $i < 13; $i++)
+                        @foreach($hotels[0]->media AS $media)
                         <div class="gallery__item">
-                            <a href="{{ asset('assets/img/gallery_img'.$i.'.jpg') }}" data-lightbox="gallery" data-title="Your caption">
-                                <img src="{{ asset('assets/img/gallery_img'.$i.'.jpg') }}" class="img-responsive" alt="...">
+                            <a href="{{ asset('storage/'.$media->file) }}" data-lightbox="gallery" data-title="">
+                                <img src="{{ asset('storage/'.$media->file) }}" class="img-responsive" alt="...">
                             </a>
                         </div> <!-- .gallery__item -->
-                        @endfor
+                        @endforeach
                         <!-- .gallery__item -->
                     </div> <!-- .gallery__body -->
                 </div>
@@ -393,7 +381,9 @@
                         <hr class="line2">
                         <hr class="line1">
                     </div> <!-- / .divider -->
-                    <p class="section__subtitle testimonials__subtitle">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti sit dicta quae natus quasi ratione quis id, tenetur atque blanditiis aperiam.</p>
+                    <p class="section__subtitle testimonials__subtitle">
+                        What our customers say about us
+                    </p>
                 </div>
             </div> <!-- / .row -->
         </div> <!-- / .container -->
@@ -404,72 +394,26 @@
                         <div class="testimonials__wrapper">
                             <div class="testimonials__item">
                                 <div class="testimonials__img">
-                                    <img src="{{ asset('assets/img/testimonials_img1.jpg') }}" class="img-responsive" alt="...">
+                                    <img src="{{ asset('images/user.svg') }}" class="img-responsive" alt="...">
                                 </div>
                                 <div class="testimonials__caption">
-                                    <h3 class="testimonials_caption__name">John Doe</h3>
-                                    <p class="testimonials_caption__prof">Photographer</p>
-                                    <p class="testimonials_caption__text">I should be incapable of drawing a single stroke at the present moment; and yet I feel that I never was a greater artist than now. When, while the lovely valley teems with vapour around me.</p>
+                                    <h3 class="testimonials_caption__name">John Ajuranki</h3>
+                                    <p class="testimonials_caption__prof">Lawyer</p>
+                                    <p class="testimonials_caption__text">
+                                        Many thanks for the wonderful service and kindness extended to our group. We will recommend Hotel Valerie every time!!
+                                    </p>
                                 </div> <!-- .testimonials__caption -->
                             </div> <!-- .testimonials__item -->
                         </div><!-- .testimonials__wrapper -->
                         <div class="testimonials__wrapper">
                             <div class="testimonials__item">
                                 <div class="testimonials__img">
-                                    <img src="{{ asset('assets/img/testimonials_img2.jpg') }}" class="img-responsive" alt="...">
+                                    <img src="{{ asset('images/user.svg') }}" class="img-responsive" alt="...">
                                 </div>
                                 <div class="testimonials__caption">
-                                    <h3 class="testimonials_caption__name">Maria Atkinson</h3>
-                                    <p class="testimonials_caption__prof">Writer</p>
-                                    <p class="testimonials_caption__text">I should be incapable of drawing a single stroke at the present moment; and yet I feel that I never was a greater artist than now. When, while the lovely valley teems with vapour around me.</p>
-                                </div> <!-- .testimonials__caption -->
-                            </div> <!-- .testimonials__item -->
-                        </div><!-- .testimonials__wrapper -->
-                        <div class="testimonials__wrapper">
-                            <div class="testimonials__item">
-                                <div class="testimonials__img">
-                                    <img src="{{ asset('assets/img/testimonials_img3.jpg') }}" class="img-responsive" alt="...">
-                                </div>
-                                <div class="testimonials__caption">
-                                    <h3 class="testimonials_caption__name">Brad Pitt</h3>
-                                    <p class="testimonials_caption__prof">Actor</p>
-                                    <p class="testimonials_caption__text">I should be incapable of drawing a single stroke at the present moment; and yet I feel that I never was a greater artist than now. When, while the lovely valley teems with vapour around me.</p>
-                                </div> <!-- .testimonials__caption -->
-                            </div> <!-- .testimonials__item -->
-                        </div><!-- .testimonials__wrapper -->
-                        <div class="testimonials__wrapper">
-                            <div class="testimonials__item">
-                                <div class="testimonials__img">
-                                    <img src="{{ asset('assets/img/testimonials_img4.jpg') }}" class="img-responsive" alt="...">
-                                </div>
-                                <div class="testimonials__caption">
-                                    <h3 class="testimonials_caption__name">Jessica Doe</h3>
-                                    <p class="testimonials_caption__prof">Singer</p>
-                                    <p class="testimonials_caption__text">I should be incapable of drawing a single stroke at the present moment; and yet I feel that I never was a greater artist than now. When, while the lovely valley teems with vapour around me.</p>
-                                </div> <!-- .testimonials__caption -->
-                            </div> <!-- .testimonials__item -->
-                        </div><!-- .testimonials__wrapper -->
-                        <div class="testimonials__wrapper">
-                            <div class="testimonials__item">
-                                <div class="testimonials__img">
-                                    <img src="{{ asset('assets/img/testimonials_img1.jpg') }}" class="img-responsive" alt="...">
-                                </div>
-                                <div class="testimonials__caption">
-                                    <h3 class="testimonials_caption__name">Robert Jones</h3>
-                                    <p class="testimonials_caption__prof">Art Director</p>
-                                    <p class="testimonials_caption__text">I should be incapable of drawing a single stroke at the present moment; and yet I feel that I never was a greater artist than now. When, while the lovely valley teems with vapour around me.</p>
-                                </div> <!-- .testimonials__caption -->
-                            </div> <!-- .testimonials__item -->
-                        </div><!-- .testimonials__wrapper -->
-                        <div class="testimonials__wrapper">
-                            <div class="testimonials__item">
-                                <div class="testimonials__img">
-                                    <img src="{{ asset('assets/img/testimonials_img4.jpg') }}" class="img-responsive" alt="...">
-                                </div>
-                                <div class="testimonials__caption">
-                                    <h3 class="testimonials_caption__name">Melissa Portland</h3>
-                                    <p class="testimonials_caption__prof">Designer</p>
-                                    <p class="testimonials_caption__text">I should be incapable of drawing a single stroke at the present moment; and yet I feel that I never was a greater artist than now. When, while the lovely valley teems with vapour around me.</p>
+                                    <h3 class="testimonials_caption__name">Maria Okigbe</h3>
+                                    <p class="testimonials_caption__prof">Business woman</p>
+                                    <p class="testimonials_caption__text">My stay exceeded my expectations...room, comfy-like home. All of the extras are here. The business center is a major convenience-very nice!</p>
                                 </div> <!-- .testimonials__caption -->
                             </div> <!-- .testimonials__item -->
                         </div><!-- .testimonials__wrapper -->

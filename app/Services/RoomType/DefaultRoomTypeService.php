@@ -176,4 +176,18 @@ class DefaultRoomTypeService implements RoomTypeService {
 	public function getById( int $id ) {
 		return $this->roomTypeRepo->with($this->relations)->find($id);
 	}
+
+	/**
+	 * @param string $slug
+	 *
+	 * @return mixed|RoomType
+	 * @throws ModelNotFoundException
+	 */
+	public function getBySlug( string $slug ) {
+		$r = $this->roomTypeRepo->with($this->relations)->findByField('slug', $slug);
+		if(count($r) == 0){
+			throw new ModelNotFoundException();
+		}
+		return $r[0];
+	}
 }

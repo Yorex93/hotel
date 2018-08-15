@@ -26,11 +26,16 @@ const ROOM_URLS = {
     ROOM: `${API_URL}/rooms`,
 };
 
+const FACILITY_URLS = {
+    GET: `${API_URL}/facilities`,
+};
+
 export {
     SITE_URL,
     AUTH_URLS,
     HOTEL_URLS,
     LOCATION_URLS,
     MEDIA_URLS,
-    ROOM_URLS
+    ROOM_URLS,
+    FACILITY_URLS
 }

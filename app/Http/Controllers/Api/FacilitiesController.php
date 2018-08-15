@@ -2,10 +2,13 @@
 
 namespace Hotel\Http\Controllers\Api;
 
+use Hotel\Services\Facility\FacilityService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Hotel\Http\Controllers\Controller;
 
 use Hotel\Http\Requests;
+use Illuminate\Support\Facades\Response;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use Hotel\Http\Requests\FacilityCreateRequest;
@@ -21,24 +24,24 @@ use Hotel\Validators\FacilityValidator;
 class FacilitiesController extends Controller
 {
     /**
-     * @var FacilityRepository
+     * @var FacilityService
      */
-    protected $repository;
+    protected $facilityService;
 
     /**
      * @var FacilityValidator
      */
     protected $validator;
 
-    /**
-     * FacilitiesController constructor.
-     *
-     * @param FacilityRepository $repository
-     * @param FacilityValidator $validator
-     */
-    public function __construct(FacilityRepository $repository, FacilityValidator $validator)
+	/**
+	 * FacilitiesController constructor.
+	 *
+	 * @param FacilityService $facility_service
+	 * @param FacilityValidator $validator
+	 */
+    public function __construct(FacilityService $facility_service, FacilityValidator $validator)
     {
-        $this->repository = $repository;
+        $this->facilityService = $facility_service;
         $this->validator  = $validator;
     }
 
@@ -49,17 +52,9 @@ class FacilitiesController extends Controller
      */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $facilities = $this->repository->all();
+        $facilities = $this->facilityService->getAllFacilities();
+        return response()->json([ 'data' => $facilities ]);
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $facilities,
-            ]);
-        }
-
-        return view('facilities.index', compact('facilities'));
     }
 
     /**
@@ -69,7 +64,6 @@ class FacilitiesController extends Controller
      *
      * @return \Illuminate\Http\Response
      *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function store(FacilityCreateRequest $request)
     {
@@ -77,28 +71,20 @@ class FacilitiesController extends Controller
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
 
-            $facility = $this->repository->create($request->all());
+            $facility = $this->facilityService->createFacility($request);
 
             $response = [
                 'message' => 'Facility created.',
                 'data'    => $facility->toArray(),
             ];
 
-            if ($request->wantsJson()) {
+            return response()->json($response);
 
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
         } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            return response()->json([
+                'error'   => true,
+                'message' => $e->getMessageBag()
+            ], 400);
         }
     }
 
@@ -111,31 +97,14 @@ class FacilitiesController extends Controller
      */
     public function show($id)
     {
-        $facility = $this->repository->find($id);
+        $facility = $this->facilityService->getFacilityById($id);
 
-        if (request()->wantsJson()) {
+        return response()->json([
+            'data' => $facility,
+        ]);
 
-            return response()->json([
-                'data' => $facility,
-            ]);
-        }
-
-        return view('facilities.show', compact('facility'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $facility = $this->repository->find($id);
-
-        return view('facilities.edit', compact('facility'));
-    }
 
     /**
      * Update the specified resource in storage.
@@ -145,7 +114,6 @@ class FacilitiesController extends Controller
      *
      * @return Response
      *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function update(FacilityUpdateRequest $request, $id)
     {
@@ -153,30 +121,30 @@ class FacilitiesController extends Controller
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
-            $facility = $this->repository->update($request->all(), $id);
+            $facility = $this->facilityService->updateFacility($id, $request);
 
             $response = [
                 'message' => 'Facility updated.',
                 'data'    => $facility->toArray(),
             ];
 
-            if ($request->wantsJson()) {
 
-                return response()->json($response);
-            }
+            return response()->json($response);
 
-            return redirect()->back()->with('message', $response['message']);
         } catch (ValidatorException $e) {
 
-            if ($request->wantsJson()) {
+            return response()->json([
+                'error'   => true,
+                'message' => $e->getMessageBag()
+            ], 400);
 
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
+        } catch ( \Exception $e ) {
 
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+	        return response()->json([
+		        'error'   => true,
+		        'message' => $e->getMessage()
+	        ], 500);
+
         }
     }
 
@@ -190,16 +158,42 @@ class FacilitiesController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
+        $deleted = $this->facilityService->deleteFacilityById($id);
 
             return response()->json([
                 'message' => 'Facility deleted.',
                 'deleted' => $deleted,
-            ]);
-        }
+            ], 201);
 
-        return redirect()->back()->with('message', 'Facility deleted.');
     }
+
+
+	public function addMedia( Request $request, $id){
+		try{
+			$facility = $this->facilityService->getFacilityById($id);
+		} catch (ModelNotFoundException $exception){
+			return response()->json([
+				'message' => 'Facility with id '.$id.' does not exist',
+				'error' => 'Facility not found',
+			], 404);
+		}
+
+		$this->validate($request, [
+			'files' => 'required',
+			'files.*' => 'mimes:jpg,pdf,png,jpeg,svg,doc,docx'
+		]);
+
+		$media = $this->facilityService->addMedia($request->file('files'), $facility);
+
+		if($media === null || count($media) === 0){
+			return response()->json([
+				'message' => 'Error',
+				'error' => 'Error uploading media',
+			], 400);
+		}
+		return response()->json([
+			'message' => 'Media Added',
+			'data' => $media,
+		]);
+	}
 }

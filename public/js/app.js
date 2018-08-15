@@ -6335,12 +6335,13 @@ module.exports = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return SITE_URL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return SITE_URL; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AUTH_URLS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return HOTEL_URLS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return LOCATION_URLS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return MEDIA_URLS; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return ROOM_URLS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return HOTEL_URLS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return LOCATION_URLS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return MEDIA_URLS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return ROOM_URLS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return FACILITY_URLS; });
 var SITE_URL = "http://hotelvaleriesuitesng.com";
 //const SITE_URL = "http://127.0.0.1:8000";
 var API_URL = SITE_URL + "/api/v1";
@@ -6367,6 +6368,10 @@ var MEDIA_URLS = {
 var ROOM_URLS = {
     ROOM_TYPE: API_URL + "/roomTypes",
     ROOM: API_URL + "/rooms"
+};
+
+var FACILITY_URLS = {
+    GET: API_URL + "/facilities"
 };
 
 
@@ -6442,7 +6447,7 @@ var currencyFilters = {
 
 var urlResolvers = {
     getImage: function getImage(location) {
-        return __WEBPACK_IMPORTED_MODULE_2__constants__["f" /* SITE_URL */] + "/storage/" + location;
+        return __WEBPACK_IMPORTED_MODULE_2__constants__["g" /* SITE_URL */] + "/storage/" + location;
     }
 };
 
@@ -6466,8 +6471,13 @@ var fileResolvers = {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return postForPromise; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return putForPromise; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return deleteForPromise; });
+/* unused harmony export postFormData */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__(187);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 
 
 /**
@@ -6475,12 +6485,16 @@ var fileResolvers = {
  * @return {{}}
  */
 function getRequestConfig() {
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+    var additionalHeaders = _objectWithoutProperties(_ref, []);
+
     var config = {};
     if (localStorage.getItem('token')) {
-        config.headers = {
+        config.headers = _extends({
             Authorization: 'Bearer ' + localStorage.getItem('token'),
             Accept: 'application/json'
-        };
+        }, additionalHeaders);
     }
     return config;
 }
@@ -6514,6 +6528,21 @@ function getForPromise(url) {
  */
 function postForPromise(url, data) {
     return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(url, data, getRequestConfig()).then(function (response) {
+        return response;
+    }).catch(function (error) {
+        if (localStorage.getItem('token')) checkForUnauthorized(error.response);
+        return Promise.reject(error);
+    });
+}
+
+/**
+ *
+ * @param url
+ * @param data
+ * @return {Promise<AxiosResponse<any>>}
+ */
+function postFormData(url, data) {
+    return __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post(url, data, getRequestConfig({ 'Content-Type': 'Multipart/formdata' })).then(function (response) {
         return response;
     }).catch(function (error) {
         if (localStorage.getItem('token')) checkForUnauthorized(error.response);
@@ -29888,7 +29917,7 @@ process.umask = function() { return 0; };
  * @return Promise
  */
 function getLocations() {
-    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["c" /* LOCATION_URLS */].GET;
+    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["d" /* LOCATION_URLS */].GET;
     return __WEBPACK_IMPORTED_MODULE_0__api_client__["b" /* getForPromise */](url);
 }
 
@@ -29897,7 +29926,7 @@ function getLocations() {
  * @return Promise
  */
 function createLocationForHotel(data) {
-    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["c" /* LOCATION_URLS */].GET;
+    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["d" /* LOCATION_URLS */].GET;
     return __WEBPACK_IMPORTED_MODULE_0__api_client__["c" /* postForPromise */](url, data);
 }
 
@@ -29906,7 +29935,7 @@ function createLocationForHotel(data) {
  * @return Promise
  */
 function updateLocationForHotel(data) {
-    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["c" /* LOCATION_URLS */].GET + "/" + data.id;
+    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["d" /* LOCATION_URLS */].GET + "/" + data.id;
     return __WEBPACK_IMPORTED_MODULE_0__api_client__["d" /* putForPromise */](url, data);
 }
 
@@ -29915,7 +29944,7 @@ function updateLocationForHotel(data) {
  * @return Promise
  */
 function getCountries() {
-    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["c" /* LOCATION_URLS */].COUNTRIES;
+    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["d" /* LOCATION_URLS */].COUNTRIES;
     return __WEBPACK_IMPORTED_MODULE_0__api_client__["b" /* getForPromise */](url);
 }
 
@@ -29924,7 +29953,7 @@ function getCountries() {
  * @return Promise
  */
 function getStatesForCountry(countryId) {
-    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["c" /* LOCATION_URLS */].COUNTRIES + "/" + countryId + "/states";
+    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["d" /* LOCATION_URLS */].COUNTRIES + "/" + countryId + "/states";
     return __WEBPACK_IMPORTED_MODULE_0__api_client__["b" /* getForPromise */](url);
 }
 
@@ -34565,27 +34594,28 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             drawer: null
         };
     },
-    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({ userLogout: 'user/logout' }), Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({ fetchHotels: 'hotel/fetchHotels' }), Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({ fetchCountries: 'location/fetchCountries' }), Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({ fetchRoomTypes: 'room/fetchRoomTypes' }), {
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({ userLogout: 'user/logout' }), Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({ fetchHotels: 'hotel/fetchHotels' }), Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({ fetchCountries: 'location/fetchCountries' }), Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({ fetchRoomTypes: 'room/fetchRoomTypes' }), Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])({ fetchFacilities: 'facility/fetchFacilities' }), {
         logout: function logout() {
             this.userLogout({ router: this.$router });
         }
     }),
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])('user', ['currentUser'])),
 
-    created: function created() {
-        this.fetchHotels();
-        this.fetchCountries();
-        this.fetchRoomTypes();
-        this.$toastr.defaultProgressBar = false;
-        this.$toastr.defaultTimeout = 3000;
+    mounted: function mounted() {
+        var _this = this;
+
+        setTimeout(function () {
+            _this.fetchHotels();
+            _this.fetchCountries();
+            _this.fetchRoomTypes();
+            _this.fetchFacilities();
+            _this.$toastr.defaultProgressBar = false;
+            _this.$toastr.defaultTimeout = 3000;
+        }, 1000);
     },
 
 
-    watch: {
-        $route: function $route(to, from) {
-            console.log("route changed");
-        }
-    }
+    watch: {}
 });
 
 /***/ }),
@@ -36167,7 +36197,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             return this.location.country_id;
         },
         uploadLink: function uploadLink() {
-            return __WEBPACK_IMPORTED_MODULE_2__constants__["b" /* HOTEL_URLS */].GET + '/' + (this.hotel ? this.hotel.id : '') + '/addMedia';
+            return __WEBPACK_IMPORTED_MODULE_2__constants__["c" /* HOTEL_URLS */].GET + '/' + (this.hotel ? this.hotel.id : '') + '/addMedia';
         }
     }),
 
@@ -38145,7 +38175,7 @@ module.exports = function (css) {
  * @return Promise
  */
 function deleteMedia(ids) {
-    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["d" /* MEDIA_URLS */].DELETE;
+    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["e" /* MEDIA_URLS */].DELETE;
     return __WEBPACK_IMPORTED_MODULE_0__api_client__["c" /* postForPromise */](url, { mediaIds: ids });
 }
 
@@ -41315,7 +41345,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -41521,11 +41551,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
-//
-//
-//
 
 
 
@@ -41544,7 +41569,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         return {
             valid: true,
             tabs: '',
-            uploadFile: '',
             roomType: {
                 hotel_id: undefined,
                 title: '',
@@ -41621,15 +41645,12 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         uploadedMedia: function uploadedMedia(files) {
             this.$toastr.s("Files uploaded successfully");
             this.fetchRoomTypes();
-        },
-        filesChange: function filesChange(name, files) {
-            this.uploadFile = files[0];
         }
     }),
 
     computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])('room', ['getUpdateRoomType', 'getRoomTypes']), Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])('hotel', ['getEligibleParentHotels']), {
         uploadLink: function uploadLink() {
-            return __WEBPACK_IMPORTED_MODULE_4__constants__["e" /* ROOM_URLS */].ROOM_TYPE + '/' + (this.roomType ? this.roomType.id : '') + '/addMedia';
+            return __WEBPACK_IMPORTED_MODULE_4__constants__["f" /* ROOM_URLS */].ROOM_TYPE + '/' + (this.roomType ? this.roomType.id : '') + '/addMedia';
         },
         hotelIdErrors: function hotelIdErrors() {
             var errors = [];
@@ -42073,22 +42094,6 @@ var render = function() {
                             ],
                             1
                           ),
-                          _vm._v(" "),
-                          _c("v-flex", { attrs: { xs12: "", sm3: "" } }, [
-                            _c("h4", [_vm._v("Main Display Image")]),
-                            _vm._v(" "),
-                            _c("input", {
-                              attrs: { type: "file", name: "file" },
-                              on: {
-                                change: function($event) {
-                                  _vm.filesChange(
-                                    $event.target.name,
-                                    $event.target.files
-                                  )
-                                }
-                              }
-                            })
-                          ]),
                           _vm._v(" "),
                           _c(
                             "v-flex",
@@ -42874,10 +42879,6 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(282)
-}
 var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(284)
@@ -42886,7 +42887,7 @@ var __vue_template__ = __webpack_require__(285)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = injectStyle
+var __vue_styles__ = null
 /* scopeId */
 var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
@@ -42921,52 +42922,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 282 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(283);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(4)("7bd52bb6", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3ac1a885\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FacilityList.vue", function() {
-     var newContent = require("!!../../../../../node_modules/css-loader/index.js!../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-3ac1a885\",\"scoped\":false,\"hasInlineConfig\":true}!../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./FacilityList.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 283 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(3)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
-
-// exports
-
-
-/***/ }),
+/* 282 */,
+/* 283 */,
 /* 284 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_helpers__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store_modules_facility__ = __webpack_require__(397);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 //
 //
 //
@@ -42975,33 +42942,68 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-
     name: 'FacilityList',
     data: function data() {
-        return {};
+        return {
+            loading: false,
+            totalFacilities: 0,
+            headers: [{
+                text: 'Id',
+                align: 'left',
+                sortable: false,
+                value: 'id'
+            }, { text: 'Name', value: 'name', sortable: false }, { text: 'Icon', value: 'icon', sortable: false }, { text: 'Image', value: 'image', sortable: false }, { text: 'Creation Date', value: 'created_at', sortable: false }, { text: 'Actions', value: 'name', sortable: false }]
+        };
     },
 
-    validations: {},
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])('facility', ['getFacilities'])),
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])('facility', ['fetchFacilities']), {
+        editFacility: function editFacility(facility) {
+            if (facility) {
+                this.$router.push({ name: 'editFacility', params: { id: facility.id } });
+            }
+        },
+        newFacility: function newFacility() {
+            this.$router.push({ name: 'createFacility' });
+        },
+        deleteFacility: function deleteFacility(roomType) {},
+        viewFacility: function viewFacility(roomType) {},
+        getImageUrl: function getImageUrl(facility) {
+            var imageMedia = facility.media.find(function (m) {
+                return __WEBPACK_IMPORTED_MODULE_1__services_helpers__["a" /* fileResolvers */].isImage(m);
+            });
+            if (imageMedia) return __WEBPACK_IMPORTED_MODULE_1__services_helpers__["c" /* urlResolvers */].getImage(imageMedia.file);
+            return false;
+        }
+    }),
 
-    methods: {
-        // ...mapActions(''),
-    },
-
-    computed: {
-        // ...mapGetters('', []),
-    },
-
-    created: function created() {},
-
-
-    watch: {},
-
-    beforeRouteLeave: function beforeRouteLeave(to, from, next) {
-        next();
-    }
+    created: function created() {}
 });
 
 /***/ }),
@@ -43012,20 +43014,112 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c(
+    "div",
+    [
+      _c("h1", { staticClass: "display-1 primary-text mb-3" }, [
+        _vm._v("Facilities")
+      ]),
+      _vm._v(" "),
+      _c(
+        "v-btn",
+        {
+          staticClass: "ml-0 mb-2",
+          attrs: { color: "primary", dark: "" },
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.newFacility($event)
+            }
+          }
+        },
+        [_vm._v("New Facility ")]
+      ),
+      _vm._v(" "),
+      _c("v-data-table", {
+        staticClass: "elevation-1",
+        attrs: {
+          headers: _vm.headers,
+          items: _vm.getFacilities.data,
+          loading: _vm.getFacilities.loading,
+          "disable-page-reset": true,
+          "hide-actions": ""
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "items",
+            fn: function(props) {
+              return [
+                _c("td", [_vm._v(_vm._s(props.item.id))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(props.item.name))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(props.item.icon))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(props.item.image))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(props.item.created_at))]),
+                _vm._v(" "),
+                _c(
+                  "td",
+                  { staticClass: "justify-center layout px-0" },
+                  [
+                    _c(
+                      "v-icon",
+                      {
+                        staticClass: "mr-2",
+                        attrs: { small: "" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.viewFacility(props.item)
+                          }
+                        }
+                      },
+                      [_vm._v("visibility")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-icon",
+                      {
+                        staticClass: "mr-2",
+                        attrs: { small: "" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.editFacility(props.item)
+                          }
+                        }
+                      },
+                      [_vm._v("edit")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "v-icon",
+                      {
+                        attrs: { small: "" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.deleteFacility(props.item)
+                          }
+                        }
+                      },
+                      [_vm._v("delete")]
+                    )
+                  ],
+                  1
+                )
+              ]
+            }
+          }
+        ])
+      })
+    ],
+    1
+  )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("h2", { staticClass: "primary-text mb-3" }, [
-        _vm._v("\n    Facilities\n  ")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -43121,7 +43215,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -43133,6 +43227,12 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuex__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue2_editor__ = __webpack_require__(148);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue2_editor___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vue2_editor__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuelidate_lib_validators__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuelidate_lib_validators___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vuelidate_lib_validators__);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 //
 //
 //
@@ -43141,29 +43241,147 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
     name: 'FacilityCreate',
+
+    components: {
+        'vue-editor': __WEBPACK_IMPORTED_MODULE_1_vue2_editor__["VueEditor"]
+    },
     data: function data() {
-        return {};
+        return {
+            valid: true,
+            facility: {
+                id: undefined,
+                name: '',
+                short_description: '',
+                description: '',
+                image: '',
+                icon: '',
+                iconFile: undefined
+            }
+        };
     },
 
-    validations: {},
-
-    methods: {
-        // ...mapActions(''),
+    validations: {
+        facility: {
+            name: {
+                required: __WEBPACK_IMPORTED_MODULE_2_vuelidate_lib_validators__["required"]
+            }
+        }
     },
 
-    computed: {
-        // ...mapGetters('', []),
-    },
+    methods: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["b" /* mapActions */])('facility', ['createFacility', 'fetchFacilities', 'clearFacilityComponentData']), {
+        submit: function submit() {
+            this.$v.$touch();
+            var data = new FormData();
+            if (!this.$v.facility.$invalid) {
+                this.createFacility(this.facility);
+            }
+        },
+        fileChanged: function fileChanged(files) {
+            this.facility.iconFile = files ? files[0] : undefined;
+        }
+    }),
+
+    computed: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_0_vuex__["c" /* mapGetters */])('facility', ['getFacilities', 'getCreateFacility']), {
+        nameErrors: function nameErrors() {
+            var errors = [];
+            if (!this.$v.facility.name.$dirty) return errors;
+            !this.$v.facility.name.required && errors.push('Please enter a name');
+            return errors;
+        }
+    }),
 
     created: function created() {},
 
 
-    watch: {},
+    watch: {
+        'getCreateFacility.done': function getCreateFacilityDone(value) {
+            if (value) {
+                this.$toastr.s(this.facility.name + ' created successfully');
+                this.clearFacilityComponentData('setCreateFacility');
+                this.$router.push({ name: 'facilities' });
+            }
+        }
+    },
 
     beforeRouteLeave: function beforeRouteLeave(to, from, next) {
         next();
@@ -43178,20 +43396,200 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
+  return _c(
+    "div",
+    [
       _c("h2", { staticClass: "primary-text mb-3" }, [
-        _vm._v("\n    Create Facility\n  ")
-      ])
-    ])
-  }
-]
+        _vm._v("\n    Creating Facility\n    "),
+        _c("span", { staticClass: "teal--text" }, [
+          _vm._v(" " + _vm._s(_vm.facility.name))
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "v-alert",
+        {
+          attrs: {
+            value: _vm.getCreateFacility.errorMessage,
+            color: "error",
+            icon: "warning",
+            dismissible: "",
+            outline: "",
+            transition: "scale-transition"
+          }
+        },
+        [_vm._v("\n    " + _vm._s(_vm.getCreateFacility.errorMessage) + "\n  ")]
+      ),
+      _vm._v(" "),
+      _c(
+        "v-form",
+        {
+          model: {
+            value: _vm.valid,
+            callback: function($$v) {
+              _vm.valid = $$v
+            },
+            expression: "valid"
+          }
+        },
+        [
+          _c(
+            "v-container",
+            [
+              _c(
+                "v-layout",
+                { attrs: { row: "", wrap: "" } },
+                [
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", sm4: "" } },
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          label: "Name",
+                          required: "",
+                          "error-messages": _vm.nameErrors
+                        },
+                        on: {
+                          input: function($event) {
+                            _vm.$v.facility.name.$touch()
+                          },
+                          blur: function($event) {
+                            _vm.$v.facility.name.$touch()
+                          }
+                        },
+                        model: {
+                          value: _vm.facility.name,
+                          callback: function($$v) {
+                            _vm.$set(_vm.facility, "name", $$v)
+                          },
+                          expression: "facility.name"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-flex", { attrs: { xs12: "", sm4: "" } }, [
+                    _c("h4", [_vm._v("Icon")]),
+                    _vm._v(" "),
+                    _c("input", {
+                      attrs: { type: "file" },
+                      on: {
+                        change: function($event) {
+                          _vm.fileChanged($event.target.files)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", sm12: "" } },
+                    [
+                      _c("v-textarea", {
+                        attrs: { label: "Short Description" },
+                        model: {
+                          value: _vm.facility.short_description,
+                          callback: function($$v) {
+                            _vm.$set(_vm.facility, "short_description", $$v)
+                          },
+                          expression: "facility.short_description"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", sm12: "" } },
+                    [
+                      _c("vue-editor", {
+                        attrs: {
+                          placeholder: "A longer description can go here"
+                        },
+                        model: {
+                          value: _vm.facility.description,
+                          callback: function($$v) {
+                            _vm.$set(_vm.facility, "description", $$v)
+                          },
+                          expression: "facility.description"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-flex",
+                    { attrs: { xs12: "", sm12: "" } },
+                    [
+                      _c(
+                        "v-btn",
+                        {
+                          attrs: { disabled: !_vm.valid },
+                          on: {
+                            click: function($event) {
+                              $event.preventDefault()
+                              return _vm.submit($event)
+                            }
+                          }
+                        },
+                        [_vm._v("\n            submit\n          ")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-dialog",
+        {
+          attrs: { "hide-overlay": "", persistent: "", width: "300" },
+          model: {
+            value: _vm.getCreateFacility.loading,
+            callback: function($$v) {
+              _vm.$set(_vm.getCreateFacility, "loading", $$v)
+            },
+            expression: "getCreateFacility.loading"
+          }
+        },
+        [
+          _c(
+            "v-card",
+            { attrs: { color: "blue", dark: "" } },
+            [
+              _c(
+                "v-card-text",
+                [
+                  _vm._v("\n        Creating facility\n        "),
+                  _c("v-progress-linear", {
+                    staticClass: "mb-0",
+                    attrs: { indeterminate: "", color: "white" }
+                  })
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -45869,6 +46267,8 @@ if (false) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_hotel__ = __webpack_require__(374);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_location__ = __webpack_require__(376);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_room__ = __webpack_require__(377);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_facility__ = __webpack_require__(397);
+
 
 
 
@@ -45883,7 +46283,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
         user: __WEBPACK_IMPORTED_MODULE_2__modules_user__["a" /* default */],
         hotel: __WEBPACK_IMPORTED_MODULE_3__modules_hotel__["a" /* default */],
         location: __WEBPACK_IMPORTED_MODULE_4__modules_location__["a" /* default */],
-        room: __WEBPACK_IMPORTED_MODULE_5__modules_room__["a" /* default */]
+        room: __WEBPACK_IMPORTED_MODULE_5__modules_room__["a" /* default */],
+        facility: __WEBPACK_IMPORTED_MODULE_6__modules_facility__["a" /* default */]
     }
 }));
 
@@ -46208,6 +46609,8 @@ var mutations = {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createHotel; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_client__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(7);
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
 
 
 
@@ -46216,7 +46619,7 @@ var mutations = {
  * @return Promise
  */
 function getHotels() {
-    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["b" /* HOTEL_URLS */].GET;
+    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["c" /* HOTEL_URLS */].GET;
     return __WEBPACK_IMPORTED_MODULE_0__api_client__["b" /* getForPromise */](url);
 }
 
@@ -46226,8 +46629,18 @@ function getHotels() {
  * @return Promise
  */
 function updateHotel(data) {
-    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["b" /* HOTEL_URLS */].GET + "/" + data.id;
-    return __WEBPACK_IMPORTED_MODULE_0__api_client__["d" /* putForPromise */](url, data);
+    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["c" /* HOTEL_URLS */].GET + "/" + data.id;
+
+    var hotel = data.hotel,
+        tags = data.tags,
+        facilities = data.facilities,
+        media = data.media,
+        services = data.services,
+        rooms = data.rooms,
+        room_types = data.room_types,
+        postObject = _objectWithoutProperties(data, ["hotel", "tags", "facilities", "media", "services", "rooms", "room_types"]);
+
+    return __WEBPACK_IMPORTED_MODULE_0__api_client__["d" /* putForPromise */](url, postObject);
 }
 
 /**
@@ -46236,7 +46649,7 @@ function updateHotel(data) {
  * @return {Promise<AxiosResponse<any>>}
  */
 function createHotel(data) {
-    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["b" /* HOTEL_URLS */].GET;
+    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["c" /* HOTEL_URLS */].GET;
     return __WEBPACK_IMPORTED_MODULE_0__api_client__["c" /* postForPromise */](url, data);
 }
 
@@ -46668,7 +47081,7 @@ function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in ob
  * @return Promise
  */
 function getRoomTypes() {
-    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["e" /* ROOM_URLS */].ROOM_TYPE;
+    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["f" /* ROOM_URLS */].ROOM_TYPE;
     return __WEBPACK_IMPORTED_MODULE_0__api_client__["b" /* getForPromise */](url);
 }
 
@@ -46677,7 +47090,7 @@ function getRoomTypes() {
  * @return Promise
  */
 function createRoomType(data) {
-    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["e" /* ROOM_URLS */].ROOM_TYPE;
+    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["f" /* ROOM_URLS */].ROOM_TYPE;
     return __WEBPACK_IMPORTED_MODULE_0__api_client__["c" /* postForPromise */](url, data);
 }
 
@@ -46686,7 +47099,7 @@ function createRoomType(data) {
  * @return Promise
  */
 function updateRoomType(id, data) {
-    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["e" /* ROOM_URLS */].ROOM_TYPE + "/" + id;
+    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["f" /* ROOM_URLS */].ROOM_TYPE + "/" + id;
 
     var hotel = data.hotel,
         tags = data.tags,
@@ -46704,7 +47117,7 @@ function updateRoomType(id, data) {
  * @return Promise
  */
 function deleteRoomType(id) {
-    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["e" /* ROOM_URLS */].ROOM_TYPE + "/" + id;
+    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["f" /* ROOM_URLS */].ROOM_TYPE + "/" + id;
     return __WEBPACK_IMPORTED_MODULE_0__api_client__["a" /* deleteForPromise */](url);
 }
 
@@ -46713,7 +47126,7 @@ function deleteRoomType(id) {
  * @return Promise
  */
 function getRooms() {
-    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["e" /* ROOM_URLS */].ROOM;
+    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["f" /* ROOM_URLS */].ROOM;
     return __WEBPACK_IMPORTED_MODULE_0__api_client__["b" /* getForPromise */](url);
 }
 
@@ -46722,7 +47135,7 @@ function getRooms() {
  * @return Promise
  */
 function createRoom(hotelId, roomTypeId, roomCount) {
-    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["e" /* ROOM_URLS */].ROOM;
+    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["f" /* ROOM_URLS */].ROOM;
     var data = {
         hotelId: hotelId, roomTypeId: roomTypeId, roomCount: roomCount
     };
@@ -46734,7 +47147,7 @@ function createRoom(hotelId, roomTypeId, roomCount) {
  * @return Promise
  */
 function updateRoom(roomId, data) {
-    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["e" /* ROOM_URLS */].ROOM + "/" + roomId + "/update";
+    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["f" /* ROOM_URLS */].ROOM + "/" + roomId + "/update";
     return __WEBPACK_IMPORTED_MODULE_0__api_client__["d" /* putForPromise */](url, data);
 }
 
@@ -46743,7 +47156,7 @@ function updateRoom(roomId, data) {
  * @return Promise
  */
 function deleteRooms(roomIds) {
-    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["e" /* ROOM_URLS */].ROOM + "-deleteAll";
+    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["f" /* ROOM_URLS */].ROOM + "-deleteAll";
     var data = { roomIds: roomIds };
     return __WEBPACK_IMPORTED_MODULE_0__api_client__["c" /* postForPromise */](url, data);
 }
@@ -67744,6 +68157,225 @@ exports.push([module.i, ".toast-title {\n  font-weight: bold; }\n\n.toast-messag
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 388 */,
+/* 389 */,
+/* 390 */,
+/* 391 */,
+/* 392 */,
+/* 393 */,
+/* 394 */,
+/* 395 */,
+/* 396 */,
+/* 397 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__services_facility_service__ = __webpack_require__(398);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_store_state__ = __webpack_require__(379);
+
+
+
+var state = {
+    facilities: Object.assign({}, __WEBPACK_IMPORTED_MODULE_1__models_store_state__["a" /* default */]),
+    createFacility: Object.assign({}, __WEBPACK_IMPORTED_MODULE_1__models_store_state__["a" /* default */]),
+    updateFacility: Object.assign({}, __WEBPACK_IMPORTED_MODULE_1__models_store_state__["a" /* default */]),
+    deleteFacility: Object.assign({}, __WEBPACK_IMPORTED_MODULE_1__models_store_state__["a" /* default */])
+};
+
+var getters = {
+    getFacilities: function getFacilities(state) {
+        return state.facilities;
+    },
+    getCreateFacility: function getCreateFacility(state) {
+        return state.createFacility;
+    },
+    getUpdateFacility: function getUpdateFacility(state) {
+        return state.updateFacility;
+    },
+    getDeleteFacility: function getDeleteFacility(state) {
+        return state.deleteFacility;
+    }
+};
+
+var actions = {
+    fetchFacilities: function fetchFacilities(_ref) {
+        var commit = _ref.commit,
+            dispatch = _ref.dispatch;
+
+        commit('setFacilities', { type: 'LOADING', value: true });
+        commit('setFacilities', { type: 'ERROR', value: {} });
+        __WEBPACK_IMPORTED_MODULE_0__services_facility_service__["c" /* getFacilities */]().then(function (resp) {
+            var result = resp.data;
+            commit('setFacilities', { type: 'DATA', value: result.data });
+            commit('setFacilities', { type: 'DONE', value: true });
+        }).catch(function (error) {
+            if (error.response) {
+                if (error.response.data) {
+                    commit('setFacilities', { type: 'ERROR', value: error.response.data.message });
+                }
+            }
+        }).finally(function () {
+            commit('setFacilities', { type: 'LOADING', value: false });
+        });
+    },
+    createFacility: function createFacility(_ref2, data) {
+        var commit = _ref2.commit,
+            dispatch = _ref2.dispatch;
+
+        commit('setCreateFacility', { type: 'LOADING', value: true });
+        commit('setCreateFacility', { type: 'ERROR', value: {} });
+        __WEBPACK_IMPORTED_MODULE_0__services_facility_service__["a" /* createFacility */](data).then(function (resp) {
+            var result = resp.data;
+            commit('setCreateFacility', { type: 'DATA', value: result.data });
+            commit('setCreateFacility', { type: 'DONE', value: true });
+            dispatch('fetchFacilities');
+        }).catch(function (error) {
+            commit('setCreateFacility', { type: 'ERROR', value: error });
+        }).finally(function () {
+            commit('setCreateFacility', { type: 'LOADING', value: false });
+        });
+    },
+    updateFacility: function updateFacility(_ref3, data) {
+        var commit = _ref3.commit,
+            dispatch = _ref3.dispatch;
+
+        commit('setUpdateFacility', { type: 'LOADING', value: true });
+        commit('setUpdateFacility', { type: 'ERROR', value: {} });
+        __WEBPACK_IMPORTED_MODULE_0__services_facility_service__["d" /* updateFacility */](data.id, data).then(function (resp) {
+            var result = resp.data;
+            commit('setUpdateFacility', { type: 'DATA', value: result.data });
+            commit('setUpdateFacility', { type: 'DONE', value: true });
+            dispatch('fetchFacilities');
+        }).catch(function (error) {
+            commit('setUpdateFacility', { type: 'ERROR', value: error });
+        }).finally(function () {
+            commit('setUpdateFacility', { type: 'LOADING', value: false });
+        });
+    },
+    deleteFacility: function deleteFacility(_ref4, data) {
+        var commit = _ref4.commit,
+            dispatch = _ref4.dispatch;
+
+        commit('setUpdateFacility', { type: 'LOADING', value: true });
+        commit('setUpdateFacility', { type: 'ERROR', value: {} });
+        __WEBPACK_IMPORTED_MODULE_0__services_facility_service__["b" /* deleteFacility */](data).then(function (resp) {
+            var result = resp.data;
+            commit('setUpdateFacility', { type: 'DATA', value: result.data });
+            commit('setUpdateFacility', { type: 'DONE', value: true });
+            dispatch('fetchFacilities');
+        }).catch(function (error) {
+            commit('setUpdateFacility', { type: 'ERROR', value: error });
+        }).finally(function () {
+            commit('setUpdateFacility', { type: 'LOADING', value: false });
+        });
+    },
+    clearFacilityComponentData: function clearFacilityComponentData(_ref5, dataToClear) {
+        var commit = _ref5.commit;
+
+        if (typeof dataToClear === 'string') {
+            try {
+                commit(dataToClear, { type: 'DONE', value: false });
+                commit(dataToClear, { type: 'ERROR', value: {} });
+            } catch (e) {
+                console.log("Unknown mutant: '" + dataToClear + "'");
+                console.log(e);
+            }
+        }
+    }
+};
+
+var mutations = {
+    setCreateFacility: function setCreateFacility(state, _ref6) {
+        var type = _ref6.type,
+            value = _ref6.value;
+        state.createFacility.mutate(type, value);
+    },
+    setFacilities: function setFacilities(state, _ref7) {
+        var type = _ref7.type,
+            value = _ref7.value;
+        state.facilities.mutate(type, value);
+    },
+    setUpdateFacility: function setUpdateFacility(state, _ref8) {
+        var type = _ref8.type,
+            value = _ref8.value;
+        state.updateFacility.mutate(type, value);
+    },
+    setDeleteFacility: function setDeleteFacility(state, _ref9) {
+        var type = _ref9.type,
+            value = _ref9.value;
+        state.deleteFacility.mutate(type, value);
+    }
+};
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    namespaced: true,
+    state: state,
+    getters: getters,
+    actions: actions,
+    mutations: mutations
+});
+
+/***/ }),
+/* 398 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getFacilities; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createFacility; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return updateFacility; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return deleteFacility; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_client__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__constants__ = __webpack_require__(7);
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+
+
+
+/**
+ *
+ * @return Promise
+ */
+function getFacilities() {
+    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["b" /* FACILITY_URLS */].GET;
+    return __WEBPACK_IMPORTED_MODULE_0__api_client__["b" /* getForPromise */](url);
+}
+
+/**
+ *
+ * @param data
+ * @return Promise
+ */
+function updateFacility(data) {
+    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["b" /* FACILITY_URLS */].GET + "/" + data.id;
+
+    var postObject = _objectWithoutProperties(data, []);
+
+    return __WEBPACK_IMPORTED_MODULE_0__api_client__["d" /* putForPromise */](url, postObject);
+}
+
+/**
+ *
+ * @param data
+ * @return {Promise<AxiosResponse<any>>}
+ */
+function createFacility(data) {
+    var url = "" + __WEBPACK_IMPORTED_MODULE_1__constants__["b" /* FACILITY_URLS */].GET;
+    return __WEBPACK_IMPORTED_MODULE_0__api_client__["c" /* postForPromise */](url, data);
+}
+
+/**
+ *
+ * @param data
+ * @return {Promise<AxiosResponse<any>>}
+ */
+function deleteFacility(data) {
+    var url = __WEBPACK_IMPORTED_MODULE_1__constants__["b" /* FACILITY_URLS */].GET + "/" + data.id;
+    return __WEBPACK_IMPORTED_MODULE_0__api_client__["a" /* deleteForPromise */](url);
+}
+
+
 
 /***/ })
 /******/ ]);

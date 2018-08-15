@@ -4,12 +4,13 @@ import axios from "axios";
  *
  * @return {{}}
  */
-function getRequestConfig() {
+function getRequestConfig({...additionalHeaders} = null) {
     let config = {};
     if(localStorage.getItem('token')){
         config.headers =  {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
-            Accept: `application/json`
+            Accept: `application/json`,
+          ...additionalHeaders
         };
     }
     return config;
@@ -57,6 +58,22 @@ function postForPromise(url, data){
  * @param data
  * @return {Promise<AxiosResponse<any>>}
  */
+function postFormData(url, data){
+    return axios.post(url, data, getRequestConfig({ 'Content-Type': 'Multipart/formdata' })).then((response) => {
+        return response;
+    }).catch((error) => {
+        if(localStorage.getItem('token')) checkForUnauthorized(error.response);
+        return Promise.reject(error);
+    });
+}
+
+
+/**
+ *
+ * @param url
+ * @param data
+ * @return {Promise<AxiosResponse<any>>}
+ */
 function putForPromise(url, data){
     return axios.put(url, data, getRequestConfig()).then((response) => {
         return response;
@@ -85,5 +102,6 @@ export {
     getForPromise,
     postForPromise,
     putForPromise,
-    deleteForPromise
+    deleteForPromise,
+    postFormData
 }

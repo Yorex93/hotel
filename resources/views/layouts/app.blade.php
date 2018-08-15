@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="{{ asset('assets/ico/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="">
+    <meta name="description" content="Located in the heart of Asaba, Delta State Nigeria, we offer our exclusive quality and affordable hotel and rooms for business and leisure activities">
 
-    <title>{{ config('app.name', 'Hotel') }}{{ isset($pageTitle) ? '| '.$pageTitle : '' }}</title>
+    <title>{{ config('app.name', 'Hotel Valerie') }}{{ isset($pageTitle) ? ' | '.$pageTitle : '' }}</title>
 
     <link href="{{ asset('assets/plugins/lightbox/dist/css/lightbox.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/plugins/ionicons/css/ionicons.min.css') }}" rel="stylesheet" type="text/css">
@@ -19,6 +19,10 @@
     <style>
         .btn-reservation-top{
             padding: 3px 15px;
+        }
+
+        .navbar-brand > img{
+            height: 80px;
         }
     </style>
 

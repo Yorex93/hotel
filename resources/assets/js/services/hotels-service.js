@@ -17,7 +17,8 @@ function getHotels(){
  */
 function updateHotel(data){
     let url = `${HOTEL_URLS.GET}/${data.id}`;
-    return apiClient.putForPromise(url, data);
+    const { hotel, tags, facilities, media, services, rooms, room_types,  ...postObject } = data;
+    return apiClient.putForPromise(url, postObject);
 }
 
 /**

@@ -129,11 +129,6 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex xs12 sm3>
-                <h4>Main Display Image</h4>
-                <input type="file" name="file"  @change="filesChange($event.target.name, $event.target.files)"/>
-              </v-flex>
-
               <v-flex xs12 sm12>
                 <v-btn :disabled="!valid" @click.prevent="submit">
                   submit
@@ -205,7 +200,6 @@
         data: () => ({
             valid: true,
             tabs: '',
-            uploadFile: '',
             roomType: {
                 hotel_id: undefined,
                 title: '',
@@ -281,10 +275,6 @@
                 this.$toastr.s("Files uploaded successfully");
                 this.fetchRoomTypes();
             },
-
-            filesChange(name, files){
-                this.uploadFile = files[0];
-            }
         },
 
         computed: {

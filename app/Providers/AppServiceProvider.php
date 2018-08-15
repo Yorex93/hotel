@@ -9,6 +9,8 @@ use Hotel\Entities\Hotel;
 use Hotel\Entities\RoomType;
 use Hotel\Entities\Service;
 
+use Hotel\Services\Facility\DefaultFacilityService;
+use Hotel\Services\Facility\FacilityService;
 use Hotel\Services\File\FileService;
 use Hotel\Services\File\LocalStorageFileService;
 use Hotel\Services\Hotel\DefaultHotelService;
@@ -57,5 +59,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(LocationService::class, DefaultLocationService::class);
         $this->app->bind(RoomTypeService::class, DefaultRoomTypeService::class);
         $this->app->bind(MediaService::class, DefaultMediaService::class);
+        $this->app->bind(FacilityService::class, DefaultFacilityService::class);
     }
 }

@@ -14,8 +14,7 @@
 
             <!-- Logo -->
             <a class="navbar-brand" href="{{ route('home') }}">
-                <h3 class="navbar-brand__logo">Hotel Valerie</h3>
-                <p class="navbar-brand__sublogo">Suites</p>
+                <img src="{{ asset('images/valerie-logo.png') }}" />
             </a>
 
         </div> <!-- / .navbar-header -->
@@ -30,7 +29,7 @@
                 </li>
                 <li><a href="{{ route('page.about') }}">About Us</a></li>
                 <li>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    <a href="{{ route('rooms.index') }}">
                         Rooms
                     </a>
                 </li>

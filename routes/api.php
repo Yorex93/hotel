@@ -36,6 +36,9 @@ Route::group(['namespace'=>'Api', 'prefix'=>'v1'], function() {
 		Route::resource('roomTypes', 'RoomTypesController');
 		Route::post('roomTypes/{id}/addMedia', 'RoomTypesController@addMedia');
 
+		Route::resource('facilities', 'FacilitiesController');
+		Route::post('facilities/{id}/addMedia', 'FacilitiesController@addMedia');
+
 		Route::resource('rooms', 'RoomsController');
 //		Route::group(['prefix' => 'hotel'], function(){
 //			Route::get('', 'HotelsController@index')->name('admin.hotel.index');

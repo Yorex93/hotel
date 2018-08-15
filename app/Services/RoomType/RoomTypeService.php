@@ -84,4 +84,12 @@ interface RoomTypeService extends IncludesMedia {
 	 */
 	public function getById( int $id );
 
+	/**
+	 * @param string $slug
+	 *
+	 * @return mixed|RoomType
+	 * @throws ModelNotFoundException
+	 */
+	public function getBySlug(string $slug);
+
 }
