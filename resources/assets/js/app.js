@@ -6,7 +6,8 @@ import Vuetify from 'vuetify';
 import Vuelidate from 'vuelidate';
 import VueImg from 'v-img';
 import vue2Dropzone from 'vue2-dropzone'
-import 'vue2-dropzone/dist/vue2Dropzone.min.css'
+import 'vue2-dropzone/dist/vue2Dropzone.min.css';
+import VueEditor from 'vue2-editor';
 
 
 
@@ -27,6 +28,7 @@ Vue.use(VueImg);
 Vue.use(vue2Dropzone);
 
 Vue.component('vue-toastr',Toastr);
+Vue.component('vue-editor',VueEditor);
 
 new Vue({
     router,

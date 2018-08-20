@@ -41,8 +41,12 @@ task('build', function () {
 });
 
 desc('Execute artisan artisan passport:keys');
+
 task('passport:keys', function () {
 	run('{{bin/php}} {{release_path}}/artisan passport:keys --force');
+	run('composer dump-autoload');
+	run('{{bin/php}} {{release_path}}/artisan db:seed --class=PageItemSeeder');
+	run('{{bin/php}} {{release_path}}/artisan db:seed --class=HotelServiceSeeder');
 });
 
 // [Optional] if deploy fails automatically unlock.

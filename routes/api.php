@@ -39,7 +39,13 @@ Route::group(['namespace'=>'Api', 'prefix'=>'v1'], function() {
 		Route::resource('facilities', 'FacilitiesController');
 		Route::post('facilities/{id}/addMedia', 'FacilitiesController@addMedia');
 
+		Route::resource('hotelServices', 'HotelServicesController');
+		Route::post('hotelServices/{id}/addMedia', 'HotelServicesController@addMedia');
+
 		Route::resource('rooms', 'RoomsController');
+
+		Route::resource('pages', 'PagesController')->only(['index', 'update']);
+		Route::resource('pageItems', 'PageItemsController')->only(['index', 'update']);
 //		Route::group(['prefix' => 'hotel'], function(){
 //			Route::get('', 'HotelsController@index')->name('admin.hotel.index');
 //			Route::post('create', 'HotelsController@store')->name('admin.hotel.create');

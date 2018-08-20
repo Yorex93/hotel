@@ -29,4 +29,8 @@ class PageItem extends Model implements Transformable
      */
     protected $guarded = [];
 
+    public function page(){
+    	return $this->belongsTo(Page::class);
+    }
+
 }

@@ -25,6 +25,8 @@ class PageItemsController extends Controller
      */
     protected $repository;
 
+    protected $relations = ['page'];
+
     /**
      * @var PageItemValidator
      */
@@ -49,17 +51,10 @@ class PageItemsController extends Controller
      */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $pageItems = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $pageItems,
-            ]);
-        }
-
-        return view('pageItems.index', compact('pageItems'));
+        $pageItems = $this->repository->with($this->relations)->all();
+        return response()->json([
+            'data' => $pageItems,
+        ]);
     }
 
     /**
@@ -103,80 +98,36 @@ class PageItemsController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $pageItem = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $pageItem,
-            ]);
-        }
-
-        return view('pageItems.show', compact('pageItem'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $pageItem = $this->repository->find($id);
-
-        return view('pageItems.edit', compact('pageItem'));
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param  PageItemUpdateRequest $request
+     * @param  Request $request
      * @param  string            $id
      *
      * @return Response
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
-    public function update(PageItemUpdateRequest $request, $id)
+    public function update(Request $request, $id)
     {
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
-            $pageItem = $this->repository->update($request->all(), $id);
+            $pageItem = $this->repository->update($request->only(['heading', 'content']), $id);
 
             $response = [
                 'message' => 'PageItem updated.',
                 'data'    => $pageItem->toArray(),
             ];
 
-            if ($request->wantsJson()) {
+            return response()->json($response);
 
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
         } catch (ValidatorException $e) {
+            return response()->json([
+                'error'   => true,
+                'message' => $e->getMessageBag()
+            ]);
 
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
 

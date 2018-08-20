@@ -30,6 +30,16 @@ const FACILITY_URLS = {
     GET: `${API_URL}/facilities`,
 };
 
+const PAGE_URLS = {
+    PAGE: `${API_URL}/pages`,
+    PAGE_ITEMS: `${API_URL}/pageItems`,
+};
+
+const HOTEL_SERVICES_URLS = {
+    GET: `${API_URL}/hotelServices`,
+};
+
+
 export {
     SITE_URL,
     AUTH_URLS,
@@ -37,5 +47,7 @@ export {
     LOCATION_URLS,
     MEDIA_URLS,
     ROOM_URLS,
-    FACILITY_URLS
+    FACILITY_URLS,
+    PAGE_URLS,
+    HOTEL_SERVICES_URLS
 }

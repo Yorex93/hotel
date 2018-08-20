@@ -30,4 +30,8 @@ class Page extends Model implements Transformable
      */
     protected $guarded = [];
 
+    public function page_items(){
+    	return $this->hasMany(PageItem::class);
+    }
+
 }

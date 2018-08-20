@@ -66,6 +66,7 @@
             items: [
                 { name: 'Dashboard', icon: 'home', link: 'dashboard', exact: true },
                 { name: 'Hotels', icon: 'location_city', link: 'hotels' },
+                { name: 'Hotel Services', icon: 'fitness_center', link: 'hotelServices' },
                 { name: 'Room Types', icon: 'hotel', link: 'roomTypes' },
                 { name: 'Rooms', icon: 'hotel', link: 'rooms' },
                 { name: 'Activities', icon: 'beach_access', link: 'activities' },
@@ -74,6 +75,7 @@
                 { name: 'Bookings', icon: 'event', link: 'bookings' },
                 { name: 'Payments', icon: 'credit_card', link: 'payments' },
                 { name: 'Coupons', icon: 'card_giftcard', link: 'coupons' },
+                { name: 'Page Content', icon: 'book', link: 'pages' },
                 { name: 'Users', icon: 'persons', link: 'users' },
                 { name: 'Settings', icon: 'settings', link: 'settings' },
             ],
@@ -85,6 +87,9 @@
             ...mapActions({ fetchCountries : 'location/fetchCountries' }),
             ...mapActions({ fetchRoomTypes : 'room/fetchRoomTypes' }),
             ...mapActions({ fetchFacilities : 'facility/fetchFacilities' }),
+            ...mapActions({ fetchPageItems : 'page/fetchPageItems' }),
+            ...mapActions({ fetchHotelServices : 'hotelService/fetchHotelServices' }),
+            ...mapActions({ fetchParentServices : 'hotelService/fetchParentServices' }),
             logout(){
                 this.userLogout({router: this.$router});
             }
@@ -99,6 +104,9 @@
                 this.fetchCountries();
                 this.fetchRoomTypes();
                 this.fetchFacilities();
+                this.fetchPageItems();
+                this.fetchParentServices();
+                this.fetchHotelServices();
                 this.$toastr.defaultProgressBar = false;
                 this.$toastr.defaultTimeout = 3000;
             }, 1000);

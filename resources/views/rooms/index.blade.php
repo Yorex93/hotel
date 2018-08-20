@@ -23,7 +23,7 @@
             </div>
         </div> <!-- / .row -->
     </div> <!-- / .container -->
-    <div class="home__bg rooms__bg" style="background-image: {{ asset('img/rooms_bg.jpg') }}"></div>
+    <div class="home__bg rooms__bg" style="background-image: url({{ asset('img/rooms_bg.jpg') }})"></div>
 </section> <!-- / .section__header -->
 
 <!-- section rooms-1 -->

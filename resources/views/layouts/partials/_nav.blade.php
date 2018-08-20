@@ -1,3 +1,15 @@
+@php
+
+    $food_beverages = collect($navServices)->filter(function($value){
+        return $value->category == 'FOOD-BEVERAGES';
+    });
+
+    $spa_fitness = collect($navServices)->first(function($value){
+        return $value->category == 'SPA-FITNESS';
+    });
+
+@endphp
+
 <nav class="navbar navbar-default">
     <div class="container">
 
@@ -33,14 +45,36 @@
                         Rooms
                     </a>
                 </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        Food & Beverage <i class="icon ion-chevron-down"></i></a>
+                        <ul class="dropdown-menu">
+                            @foreach($food_beverages AS $item)
+                                <li>
+                                    <a href="{{ route('hotel-services.show', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
+                                </li>
+                            @endforeach
+                        </ul>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Services</a></li>
-                <li><a href="#">Facilities</a></li>
-                <li><a href="#">Contact</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        Spa Arena <i class="icon ion-chevron-down"></i></a>
+                        <ul class="dropdown-menu">
+                            @foreach($spa_fitness->children AS $item)
+                                <li>
+                                    <a href="{{ route('hotel-services.show', ['slug' => $item->slug]) }}">{{ $item->title }}</a>
+                                </li>
+                            @endforeach
+                        </ul>
+                </li>
+                <li><a href="{{ route('facilities.index') }}">Facilities</a></li>
+                <li><a href="{{ route('page.contact') }}">Contact</a></li>
                 {{--<li><a href="{{ route('services.index') }}">Services</a></li>--}}
-                {{--<li><a href="{{ route('facilities.index') }}">Facilities</a></li>--}}
-                {{--<li><a href="{{ route('page.contact') }}">Contact</a></li>--}}
+
+
             </ul>
         </div><!-- /.navbar-collapse -->
 

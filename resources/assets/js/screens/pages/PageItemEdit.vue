@@ -1,0 +1,118 @@
+<template>
+  <div>
+    <h1 class="display-1 primary-text mb-3">Editing {{ pageItem.heading }}</h1>
+     <v-card>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex xs12>
+                <v-text-field v-model="pageItem.heading" label="Heading"></v-text-field>
+              </v-flex>
+              <v-flex xs12>
+                <vue-editor v-model="pageItem.content" placeholder="Enter Content"></vue-editor>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" @click.prevent="submitUpdate">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    <v-dialog
+        v-model="getUpdatePageItem.loading"
+        hide-overlay
+        persistent
+        width="300"
+    >
+      <v-card
+              color="green"
+              dark
+      >
+        <v-card-text>
+          Updating pageItem
+          <v-progress-linear
+                  indeterminate
+                  color="white"
+                  class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+  </div>
+</template>
+
+<script>
+    import {mapActions, mapGetters} from 'vuex';
+    import { VueEditor } from 'vue2-editor';
+    export default {
+
+        name: 'PageList',
+        data: () => ({
+
+            totalFacilities: 0,
+            dialog: false,
+            pageItem: {
+                id: '',
+                heading: '',
+                content: '',
+                for: '',
+            },
+        }),
+
+        validations: {},
+
+        methods: {
+            ...mapActions('page', ['fetchPageItems', 'updatePageItem', 'clearPageComponentData']),
+            submitUpdate(){
+                this.updatePageItem(this.pageItem);
+            },
+
+            close () {
+                this.dialog = false;
+                setTimeout(() => {
+                    this.editedItem = Object.assign({}, this.defaultItem)
+                }, 300)
+            },
+            loadPageItem(){
+                let pageItem = this.getPageItems.data.find(r => r.id === this.$route.params.id);
+                if(pageItem === undefined){
+                    this.$router.push({ name: 'pages' });
+                } else {
+                    this.pageItem = JSON.parse(JSON.stringify(pageItem));
+                }
+            },
+        },
+
+        computed: {
+            ...mapGetters('page', ['getPageItems', 'getUpdatePageItem']),
+        },
+
+        created() {},
+
+        watch: {
+            'getUpdatePageItem.done': function(value){
+                if(value){
+                    this.$toastr.s(`Updated successfully`);
+                    this
+                }
+            }
+        },
+
+        mounted(){
+            if (this.$route.params.id) {
+                this.loadPageItem();
+            }
+        },
+
+        beforeRouteLeave(to, from, next){
+            next();
+        }
+
+    }
+</script>
+
+<style>
+
+</style>

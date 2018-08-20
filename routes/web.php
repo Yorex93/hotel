@@ -23,6 +23,10 @@ Route::group(['namespace' => 'Frontend'], function(){
 		Route::get('/{slug}', 'ServiceController@show')->name('services.show');
 	});
 
+	Route::group(['prefix' => 'hotel-services'], function(){
+		Route::get('/{slug}', 'ServiceController@showHotelService')->name('hotel-services.show');
+	});
+
 	Route::group(['prefix' => 'gallery'], function(){
 		Route::get('', 'MediaController@index')->name('gallery.index');
 	});

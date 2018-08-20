@@ -76,6 +76,20 @@ import CouponList from '../screens/coupons/CouponList';
 import CouponEdit from '../screens/coupons/CouponEdit';
 import CouponCreate from '../screens/coupons/CouponCreate';
 
+/**
+ * Pages
+ */
+import PageItemList from '../screens/pages/PageItemList';
+import PageItemEdit from '../screens/pages/PageItemEdit';
+
+/**
+ * Hotel Services
+ */
+import HotelServiceList from '../screens/hotels/services/HotelServiceList';
+import HotelServiceCreate from '../screens/hotels/services/HotelServiceCreate';
+import HotelServiceEdit from '../screens/hotels/services/HotelServiceEdit';
+
+
 
 const routes = [
     { path: '/admin/login', component: Auth, beforeEnter: Guard.guest },
@@ -122,6 +136,13 @@ const routes = [
             { path: 'coupons', component: CouponList, name: 'coupons' },
             { path: 'coupons/create', component: CouponCreate, name: 'createCoupon' },
             { path: 'coupons/:id/edit', component: CouponEdit, name: 'editCoupon' },
+
+            { path: 'hotelServices', component: HotelServiceList, name: 'hotelServices' },
+            { path: 'hotelServices/create', component: HotelServiceCreate, name: 'createHotelServices' },
+            { path: 'hotelServices/:id/edit', component: HotelServiceEdit, name: 'editHotelService' },
+
+            { path: 'pages', component: PageItemList, name: 'pages' },
+            { path: 'pages/:id/edit', component: PageItemEdit, name: 'editPage' },
 
             { path: 'settings', component: Settings, name: 'settings' },
             { path: '*', component: NotFound },

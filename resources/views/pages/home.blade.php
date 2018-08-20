@@ -9,10 +9,31 @@
     .testimonials__img img{
         height: 120px;
     }
+
+    .about__desc p {
+        line-height: 1.8em;
+    }
+
+    .about__desc h3 {
+        font-size: 30px;
+    }
 </style>
 @endsection
 
+
+
+
 @section('content')
+
+    @php
+
+        $welcomeContent = collect($pageItems)->firstWhere('for', 'home.welcome');
+        $roomContent = collect($pageItems)->firstWhere('for', 'home.rooms');
+        $galleryContent = collect($pageItems)->firstWhere('for', 'home.gallery');
+        $testimonialContent = collect($pageItems)->firstWhere('for', 'home.testimonials');
+
+
+    @endphp
 
     <!-- CONTENT
   ================================================== -->
@@ -34,14 +55,14 @@
             <!-- Wrapper for slides -->
             <div class="carousel-inner" role="listbox">
 
-                <div class="item item__1 active" style="background: url('{{ asset('images/room-banner.jpeg') }}') no-repeat center center / cover;">
+                <div class="item item__1 no-tint active" style="background: url('{{ asset('images/room-banner.jpeg') }}') no-repeat center center / cover;">
                     <div class="item__container">
                         <div class="item-container__inner">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <div class="item__content">
-                                            <h1 class="item_content__title">An Oasis of <span>Serenity</span></h1>
+                                            <h1 class="item_content__title">The Ideal <span>Home</span></h1>
                                             <div class="divider">
                                                 <hr class="line1">
                                                 <hr class="line2">
@@ -80,7 +101,7 @@
                     </div> <!-- / .item__container -->
                 </div> <!-- / .item -->
 
-                <div class="item item__3" style="background: url('{{ asset('images/pool-banner.jpg') }}') no-repeat center center / cover;">
+                <div class="item item__3 no-tint" style="background: url('{{ asset('images/pool-banner.jpg') }}') no-repeat center center / cover;">
                     <div class="item__container">
                         <div class="item-container__inner">
                             <div class="container">
@@ -209,14 +230,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="about__desc">
-                            <p class="about_desc__subtitle">About us</p>
-                            <h3 class="about_desc__title">AN OASIS OF SERENITY</h3>
-                            <p class="about_desc__desc">
-                                Hotel Valerie is a luxury and affordable boutique hotel located in Asaba, Delta State Nigeria that provides to its guests elegant, comfortable and modern rooms, delicious meals and other facilities.
-                            </p>
-                            <p class="about_desc__desc">
-                                Our signature style of hospitality and value is unmatched. No matter where you go, you will be surrounded by our friendly smiles. And the considerate service of staff will make your experience in our hotel wonderful and memorable
-                            </p>
+                            {!! $welcomeContent ? $welcomeContent['content'] : '' !!}
                             <a href="{{ route('page.about') }}" class="btn btn-default">Learn More</a>
                         </div> <!-- / .about__desc -->
                     </div>
@@ -236,7 +250,9 @@
                         <hr class="line2">
                         <hr class="line1">
                     </div> <!-- / .divider -->
-                    <p class="section__subtitle">All our rooms are ensuite bathrooms and have dial-up & wi-fi internet access, mini bar, safe box, hair dryers, intercom and telephone facilities that will make you feel completely at home.</p>
+                    <p class="section__subtitle">
+                        {!! $roomContent ? strip_tags($roomContent['content']) : '' !!}
+                    </p>
                 </div>
             </div> <!-- / .row -->
         </div> <!-- / .container -->
@@ -347,7 +363,7 @@
                         <hr class="line1">
                     </div> <!-- / .divider -->
                     <p class="section__subtitle">
-                        A couple of views from our hotel in Asaba
+                        {!! $galleryContent ? strip_tags($galleryContent['content']) : '' !!}
                     </p>
                 </div>
             </div> <!-- / .row -->
@@ -382,7 +398,7 @@
                         <hr class="line1">
                     </div> <!-- / .divider -->
                     <p class="section__subtitle testimonials__subtitle">
-                        What our customers say about us
+                        {!! $testimonialContent ? strip_tags($testimonialContent['content']) : '' !!}
                     </p>
                 </div>
             </div> <!-- / .row -->

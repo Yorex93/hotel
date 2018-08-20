@@ -15,14 +15,18 @@ use Hotel\Services\File\FileService;
 use Hotel\Services\File\LocalStorageFileService;
 use Hotel\Services\Hotel\DefaultHotelService;
 use Hotel\Services\Hotel\HotelService;
+use Hotel\Services\HotelServices\DefaultHotelServicesService;
+use Hotel\Services\HotelServices\HotelServicesService;
 use Hotel\Services\Location\DefaultLocationService;
 use Hotel\Services\Location\LocationService;
 use Hotel\Services\Media\DefaultMediaService;
 use Hotel\Services\Media\MediaService;
 use Hotel\Services\RoomType\DefaultRoomTypeService;
 use Hotel\Services\RoomType\RoomTypeService;
+use Hotel\ViewComposers\NavComposer;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -42,8 +46,10 @@ class AppServiceProvider extends ServiceProvider
 		    'activities' => Activity::class,
 		    'coupons' => Coupon::class,
 		    'facilities' => Facility::class,
-		    'services' => Service::class
+		    'services' => Service::class,
+		    'hotel_services' => \Hotel\Entities\HotelService::class
 	    ]);
+
     }
 
     /**
@@ -60,5 +66,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(RoomTypeService::class, DefaultRoomTypeService::class);
         $this->app->bind(MediaService::class, DefaultMediaService::class);
         $this->app->bind(FacilityService::class, DefaultFacilityService::class);
+        $this->app->bind(HotelServicesService::class, DefaultHotelServicesService::class);
     }
 }

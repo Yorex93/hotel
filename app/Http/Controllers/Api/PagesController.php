@@ -49,29 +49,21 @@ class PagesController extends Controller
      */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $pages = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $pages,
-            ]);
-        }
-
-        return view('pages.index', compact('pages'));
+        $pages = $this->repository->with('page_items')->all();
+        return response()->json([
+            'data' => $pages,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  PageCreateRequest $request
+     * @param  Request $request
      *
      * @return \Illuminate\Http\Response
      *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
-    public function store(PageCreateRequest $request)
+    public function store(Request $request)
     {
         try {
 
@@ -84,58 +76,19 @@ class PagesController extends Controller
                 'data'    => $page->toArray(),
             ];
 
-            if ($request->wantsJson()) {
 
-                return response()->json($response);
-            }
+            return response()->json($response);
 
-            return redirect()->back()->with('message', $response['message']);
+
         } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        $page = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
             return response()->json([
-                'data' => $page,
+                'error'   => true,
+                'message' => $e->getMessageBag()
             ]);
         }
-
-        return view('pages.show', compact('page'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $page = $this->repository->find($id);
 
-        return view('pages.edit', compact('page'));
-    }
 
     /**
      * Update the specified resource in storage.
@@ -160,23 +113,15 @@ class PagesController extends Controller
                 'data'    => $page->toArray(),
             ];
 
-            if ($request->wantsJson()) {
+            return response()->json($response);
 
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
         } catch (ValidatorException $e) {
 
-            if ($request->wantsJson()) {
+            return response()->json([
+                'error'   => true,
+                'message' => $e->getMessageBag()
+            ]);
 
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
 
@@ -191,15 +136,10 @@ class PagesController extends Controller
     public function destroy($id)
     {
         $deleted = $this->repository->delete($id);
+        return response()->json([
+            'message' => 'Page deleted.',
+            'deleted' => $deleted,
+        ]);
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'Page deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
-
-        return redirect()->back()->with('message', 'Page deleted.');
     }
 }
