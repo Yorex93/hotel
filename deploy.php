@@ -44,7 +44,6 @@ desc('Execute artisan artisan passport:keys');
 
 task('passport:keys', function () {
 	run('{{bin/php}} {{release_path}}/artisan passport:keys --force');
-	run('composer dump-autoload');
 	run('{{bin/php}} {{release_path}}/artisan db:seed --class=PageItemSeeder');
 	run('{{bin/php}} {{release_path}}/artisan db:seed --class=HotelServiceSeeder');
 });
@@ -55,5 +54,5 @@ after('deploy:failed', 'deploy:unlock');
 // Migrate database before symlink new release.
 
 before('deploy:symlink', 'artisan:migrate');
-before('artisan:optimize', 'passport:keys');
+after('deploy:symlink', 'passport:keys');
 

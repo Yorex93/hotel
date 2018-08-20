@@ -17,7 +17,7 @@ function getRequestConfig({...additionalHeaders} = null) {
 }
 
 function checkForUnauthorized(response){
-    if([].includes(response.status)){
+    if([401, 403].includes(response.status)){
         localStorage.clear();
         window.location.reload(true);
     }

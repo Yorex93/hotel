@@ -30,7 +30,7 @@ class ServiceController extends Controller
 			$pageTitle = " | Services | ".$hotelService->title;
 			return view('services.hotel.show', compact('hotelService', 'pageTitle'));
 		} catch (ModelNotFoundException $e){
-
+			return redirect()->route('home');
 		}
 
 
