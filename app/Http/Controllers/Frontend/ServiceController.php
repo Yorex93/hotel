@@ -27,7 +27,7 @@ class ServiceController extends Controller
 	public function showHotelService($slug){
 		try{
 			$hotelService = $this->hotelServicesService->findBySlug($slug);
-			$pageTitle = " | Services | ".$hotelService->title;
+			$pageTitle = "Services | ".$hotelService->title;
 			return view('services.hotel.show', compact('hotelService', 'pageTitle'));
 		} catch (ModelNotFoundException $e){
 			return redirect()->route('home');
