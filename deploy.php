@@ -46,6 +46,7 @@ task('passport:keys', function () {
 	run('{{bin/php}} {{release_path}}/artisan passport:keys --force');
 	run('{{bin/php}} {{release_path}}/artisan db:seed --class=PageItemSeeder');
 	run('{{bin/php}} {{release_path}}/artisan db:seed --class=HotelServiceSeeder');
+	run('{{bin/php}} {{release_path}}/artisan config:clear');
 });
 
 // [Optional] if deploy fails automatically unlock.

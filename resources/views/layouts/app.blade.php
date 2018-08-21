@@ -30,6 +30,27 @@
             display: block;
             margin: 0 auto;
         }
+
+        .booking__section{
+            padding: 40px 0;
+            background: #374853
+        }
+
+        .form-label{
+            margin-bottom: 10px;
+            color: #9E9E9E;
+        }
+
+        .vdp-datepicker input, .booking-check-form select{
+            width: 100%;
+            height: 50px;
+            padding: 10px;
+            background: transparent;
+            color: #FFFFFF;
+            border: 2px solid #FFFFFF;
+            margin-bottom: 10px;
+            outline: none;
+        }
     </style>
 
     @yield('styles')
@@ -68,6 +89,11 @@
     <!-- JS Custom -->
     <script src="{{ asset('assets/js/theme.js') }}"></script>
     <script src="{{ asset('assets/js/google_maps.js') }}"></script>
+
+    <!--<script src="https://unpkg.com/vue"></script>-->
+    <script src="https://unpkg.com/vue@2.5.17/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/vuejs-datepicker"></script>
+    <script src="{{ asset('js/moment.js') }}"></script>
 
     @yield('scripts')
 </body>

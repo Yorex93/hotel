@@ -136,6 +136,7 @@
     </section> <!-- / .section__home -->
 
     <!-- section availability -->
+    @if(false)
     <section class="section__availability">
         <div class="container">
             <div class="row">
@@ -205,6 +206,8 @@
             </div> <!-- / .row -->
         </div> <!-- / .container -->
     </section> <!-- .section__availability -->
+    @endif
+    <div id="booking-section"></div>
 
     <!-- section about -->
     <section class="section__about" id="section__about">
@@ -767,4 +770,8 @@
     </section> <!-- / .section__contacts -->
     @endif
 
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('js/booking.js') }}"></script>
 @endsection
