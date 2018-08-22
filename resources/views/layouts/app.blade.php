@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="Located in the heart of Asaba, Delta State Nigeria, we offer our exclusive quality and affordable hotel and rooms for business and leisure activities">
 
-    <title>{{ config('app.name', 'Hotel Valerie') }}{{ isset($pageTitle) ? ' | '.$pageTitle : '' }}</title>
+    <title>{{ env('HOTEL_NAME', 'Hotel Valerie') }}{{ isset($pageTitle) ? ' | '.$pageTitle : '' }}</title>
 
     <link href="{{ asset('assets/plugins/lightbox/dist/css/lightbox.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/plugins/ionicons/css/ionicons.min.css') }}" rel="stylesheet" type="text/css">

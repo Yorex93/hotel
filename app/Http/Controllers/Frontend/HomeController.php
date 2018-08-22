@@ -4,7 +4,6 @@ namespace Hotel\Http\Controllers\Frontend;
 
 use Hotel\Http\Controllers\Controller;
 use Hotel\Mail\Contact;
-use Hotel\Repositories\PageItemRepository;
 use Hotel\Repositories\PageRepository;
 use Hotel\Services\Hotel\HotelService;
 use Hotel\Services\RoomType\RoomTypeService;
