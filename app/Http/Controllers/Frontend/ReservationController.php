@@ -15,7 +15,6 @@ class ReservationController extends Controller
 	}
 
 	public function index(Request $request){
-		$available = $this->roomTypeService->checkAvailability($request);
 		return view('reservations.index');
 	}
 
