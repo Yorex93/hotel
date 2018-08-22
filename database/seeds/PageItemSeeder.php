@@ -28,6 +28,22 @@ class PageItemSeeder extends Seeder
 			    ['for' => 'home.testimonials', 'heading' => 'Testimonials', 'content' => 'What our customers say about us']
 
 		    ]
+	    ],
+	    'Contact' => [
+		    'title' => 'Contact',
+		    'for' => 'contact',
+		    'items' => [
+		    	['for' => 'contact.entry', 'heading' => 'Contact Us', 'content' => '<p></p>'],
+			    ['for' => 'contact.success-message', 'heading' => 'Success', 'content' => 'Your message has been received']
+		    ]
+	    ],
+	    'About' => [
+		    'title' => 'About',
+		    'for' => 'about',
+		    'items' => [
+			    ['for' => 'about.main', 'heading' => 'About Us', 'content' => '<p></p>'],
+			    ['for' => 'about.secondary', 'heading' => 'Secondary', 'content' => '<p></p>']
+		    ]
 	    ]
     ];
 

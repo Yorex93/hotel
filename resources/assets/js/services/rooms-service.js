@@ -50,14 +50,18 @@ function getRooms(){
 
 /**
  *
- * @return Promise
+ * @return {Promise<AxiosResponse<any>>}
  */
-function createRoom(hotelId, roomTypeId, roomCount){
-    let url = `${ROOM_URLS.ROOM}`;
-    let data = {
-        hotelId, roomTypeId, roomCount
+function createRooms(data){
+    let url = `${ROOM_URLS.CREATE_ROOMS}`;
+    let postObject = {
+        hotel_id: data.hotelId,
+        room_type_id: data.roomTypeId,
+        count: data.count,
+        start: data.start,
+        prefix: data.prefix
     };
-    return apiClient.postForPromise(url, data);
+    return apiClient.postForPromise(url, postObject);
 }
 
 /**
@@ -86,7 +90,7 @@ export {
     updateRoomType,
     deleteRoomType,
     getRooms,
-    createRoom,
+    createRooms,
     deleteRooms,
     updateRoom
 }

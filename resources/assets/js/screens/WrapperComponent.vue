@@ -90,6 +90,7 @@
             ...mapActions({ fetchPageItems : 'page/fetchPageItems' }),
             ...mapActions({ fetchHotelServices : 'hotelService/fetchHotelServices' }),
             ...mapActions({ fetchParentServices : 'hotelService/fetchParentServices' }),
+            ...mapActions({ fetchRooms : 'room/fetchRooms' }),
             logout(){
                 this.userLogout({router: this.$router});
             }
@@ -107,6 +108,7 @@
                 this.fetchPageItems();
                 this.fetchParentServices();
                 this.fetchHotelServices();
+                this.fetchRooms();
                 this.$toastr.defaultProgressBar = false;
                 this.$toastr.defaultTimeout = 3000;
             }, 1000);

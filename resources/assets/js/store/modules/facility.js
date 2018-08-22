@@ -53,7 +53,7 @@ const actions = {
     updateFacility({commit, dispatch}, data) {
         commit('setUpdateFacility', { type: 'LOADING', value: true });
         commit('setUpdateFacility', { type: 'ERROR', value: {} });
-        facilityService.updateFacility(data.id, data).then((resp) => {
+        facilityService.updateFacility(data).then((resp) => {
             let result = resp.data;
             commit('setUpdateFacility', { type: 'DATA', value: result.data });
             commit('setUpdateFacility', { type: 'DONE', value: true });

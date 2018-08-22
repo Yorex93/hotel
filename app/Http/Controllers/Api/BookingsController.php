@@ -2,6 +2,8 @@
 
 namespace Hotel\Http\Controllers\Api;
 
+use Hotel\Services\Booking\BookingService;
+use Hotel\Services\RoomType\RoomTypeService;
 use Illuminate\Http\Request;
 use Hotel\Http\Controllers\Controller;
 
@@ -21,25 +23,42 @@ use Hotel\Validators\BookingValidator;
 class BookingsController extends Controller
 {
     /**
-     * @var BookingRepository
+     * @var BookingService
      */
-    protected $repository;
+    protected $bookingService;
 
     /**
      * @var BookingValidator
      */
     protected $validator;
 
-    /**
-     * BookingsController constructor.
-     *
-     * @param BookingRepository $repository
-     * @param BookingValidator $validator
-     */
-    public function __construct(BookingRepository $repository, BookingValidator $validator)
+    protected $roomTypeService;
+
+	/**
+	 * BookingsController constructor.
+	 *
+	 * @param BookingService $booking_service
+	 * @param BookingValidator $validator
+	 * @param RoomTypeService $room_type_service
+	 */
+    public function __construct(BookingService $booking_service, BookingValidator $validator, RoomTypeService $room_type_service)
     {
-        $this->repository = $repository;
+        $this->bookingService = $booking_service;
         $this->validator  = $validator;
+        $this->roomTypeService = $room_type_service;
+    }
+
+
+    public function checkAvailability(Request $request){
+    	$this->validate($request, [
+    		'checkIn' => 'required | numeric',
+    		'checkOut' => 'required | numeric',
+    		'adults' => 'required | integer',
+    		'children' => 'required | integer',
+	    ]);
+
+    	$available = $this->roomTypeService->checkAvailability($request);
+    	return response()->json(['data' => $available], 200);
     }
 
     /**
@@ -49,17 +68,7 @@ class BookingsController extends Controller
      */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $bookings = $this->repository->all();
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $bookings,
-            ]);
-        }
-
-        return view('bookings.index', compact('bookings'));
     }
 
     /**

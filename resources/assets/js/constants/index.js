@@ -23,6 +23,7 @@ const MEDIA_URLS = {
 
 const ROOM_URLS = {
     ROOM_TYPE: `${API_URL}/roomTypes`,
+    CREATE_ROOMS: `${API_URL}/roomTypes/createRooms`,
     ROOM: `${API_URL}/rooms`,
 };
 

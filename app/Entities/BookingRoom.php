@@ -14,8 +14,8 @@ use Prettus\Repository\Traits\TransformableTrait;
  * @property int $booking_id
  * @property int|null $room_type_id
  * @property int|null $room_id
- * @property string $check_in
- * @property string $check_out
+ * @property \Carbon\Carbon|null $check_in
+ * @property \Carbon\Carbon|null $check_out
  * @property int $adults
  * @property int $children
  * @property float $amount

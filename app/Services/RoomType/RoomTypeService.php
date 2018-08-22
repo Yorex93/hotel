@@ -14,6 +14,7 @@ use Hotel\Http\Requests\RoomTypeCreateRequest;
 use Hotel\Http\Requests\RoomTypeUpdateRequest;
 use Hotel\Services\IncludesMedia;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 interface RoomTypeService extends IncludesMedia {
@@ -91,5 +92,23 @@ interface RoomTypeService extends IncludesMedia {
 	 * @throws ModelNotFoundException
 	 */
 	public function getBySlug(string $slug);
+
+	/**
+	 * @param int $hotelId
+	 * @param int $roomTypeId
+	 * @param int $count
+	 * @param int $start
+	 * @param string $prefix
+	 *
+	 * @return mixed | Collection
+	 */
+	public function createRooms(int $hotelId, int $roomTypeId, int $count, int $start,  $prefix = '');
+
+	/**
+	 * @param Request $request
+	 *
+	 * @return mixed | Collection
+	 */
+	public function checkAvailability(Request $request);
 
 }

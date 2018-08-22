@@ -160,16 +160,17 @@ class RoomTypesController extends Controller
     }
 
 	public function addMedia( Request $request, $id){
+		$this->validate($request, [
+			'files' => 'required',
+			'files.*' => 'mimes:jpg,pdf,png,jpeg,svg,doc,docx'
+		]);
+
 		try{
 			$roomType = $this->roomTypeService->getById($id);
 		} catch (ModelNotFoundException $exception){
 			return response()->json([ 'error' => 'Not Found', 'message' => 'Room type with id '.$id.' not found' ], 404);
 		}
 
-		$this->validate($request, [
-			'files' => 'required',
-			'files.*' => 'mimes:jpg,pdf,png,jpeg,svg,doc,docx'
-		]);
 
 		$media = $this->roomTypeService->addMedia($request->file('files'), $roomType);
 
@@ -184,5 +185,28 @@ class RoomTypesController extends Controller
 			'message' => 'Media Added',
 			'data' => $media,
 		]);
+	}
+
+
+	public function createRooms(Request $request){
+		$this->validate($request, [
+			'hotel_id' => 'required | exists:hotels,id',
+			'room_type_id' => 'required | exists:room_types,id',
+			'count' => 'required | integer | min:1',
+			'start' => 'required | integer'
+		]);
+		$hotel_id = $request->get('hotel_id');
+		$room_type_id = $request->get('room_type_id');
+		$count = $request->get('count');
+		$start = $request->get('start');
+		$prefix = $request->get('prefix');
+
+		$rooms = $this->roomTypeService->createRooms($hotel_id, $room_type_id, $count, $start, $prefix);
+
+		return response()->json([
+			'message' => 'Rooms Added',
+			'data' => $rooms,
+		]);
+
 	}
 }

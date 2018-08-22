@@ -9,15 +9,18 @@
 namespace Hotel\ViewComposers;
 
 
+use Hotel\Services\Facility\FacilityService;
 use Hotel\Services\HotelServices\HotelServicesService;
 use Illuminate\View\View;
 
 class NavComposer {
 
 	protected $hotelServices;
+	protected $facilityService;
 
-	public function __construct(HotelServicesService $hotel_services_service) {
+	public function __construct(HotelServicesService $hotel_services_service, FacilityService $facility_service) {
 		$this->hotelServices = $hotel_services_service;
+		$this->facilityService = $facility_service;
 	}
 
 	/**
@@ -29,5 +32,6 @@ class NavComposer {
 	public function compose(View $view)
 	{
 		$view->with('navServices', $this->hotelServices->findAllForNav());
+		$view->with('navFacilities', $this->facilityService->getAllFacilitiesForNav());
 	}
 }

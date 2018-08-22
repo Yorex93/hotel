@@ -135,78 +135,6 @@
         </div><!-- /.carousel -->
     </section> <!-- / .section__home -->
 
-    <!-- section availability -->
-    @if(false)
-    <section class="section__availability">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-12">
-
-                    <!-- Reservation form -->
-                    <form class="reservation__form">
-                        <div class="form-group">
-                            <div class="form-group__inner">
-                                <label for="reservation__check-in">Arrival date</label>
-                                <input type="text" class="form-control date" id="reservation__check-in" value="{{ \Carbon\Carbon::now()->format('d F Y') }}">
-                            </div> <!-- / .form-group__inner -->
-                        </div> <!-- / .form-group -->
-                        <div class="form-group">
-                            <div class="form-group__inner">
-                                <label for="reservation__check-out">Departure date</label>
-                                <input type="text" class="form-control date" id="reservation__check-out" value="{{ \Carbon\Carbon::now()->addDay()->format('d F Y') }}">
-                            </div> <!-- / .form-group__inner -->
-                        </div> <!-- / .form-group -->
-                        <div class="form-group">
-                            <div class="form-group__inner">
-                                <label for="reservation__adults">Adults</label>
-                                <input type="text" id="reservation__adults">
-                                <div class="dropdown reservation-dropdown">
-                                    <button class="dropdown-toggle" type="button" id="adults-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        <span>1 Adult</span>
-                                        <i class="icon ion-chevron-down"></i>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="adults-dropdown">
-                                        <li><a href="#">1 Adult</a></li>
-                                        <li><a href="#">2 Adults</a></li>
-                                        <li><a href="#">3 Adults</a></li>
-                                    </ul>
-                                </div> <!-- . -->
-                            </div> <!-- / .form-group__inner -->
-                        </div> <!-- / .form-group -->
-                        <div class="form-group">
-                            <div class="form-group__inner">
-                                <label for="reservation__children">Children</label>
-                                <input type="text" id="reservation__children">
-                                <div class="dropdown reservation-dropdown">
-                                    <button class="dropdown-toggle" type="button" id="children-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                        <span>1 Child</span>
-                                        <i class="icon ion-chevron-down"></i>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="children-dropdown">
-                                        <li><a href="#">1 Child</a></li>
-                                        <li><a href="#">2 Children</a></li>
-                                        <li><a href="#">3 Children</a></li>
-                                    </ul>
-                                </div> <!-- . -->
-                            </div> <!-- / .form-group__inner -->
-                        </div> <!-- / .form-group -->
-                    </form> <!-- / .reservation__form -->
-
-                </div>
-            </div> <!-- / .row -->
-            <div class="row">
-                <div class="col-xs-12">
-
-                    <!-- Reservation button -->
-                    <div class="reservation__button">
-                        <button type="submit" class="btn btn-reservation">Check availability</button>
-                    </div> <!-- / .reservation__button -->
-
-                </div>
-            </div> <!-- / .row -->
-        </div> <!-- / .container -->
-    </section> <!-- .section__availability -->
-    @endif
     <div id="booking-section"></div>
 
     <!-- section about -->
@@ -443,7 +371,6 @@
     </section> <!-- / .section__testimonials -->
 
     @if(false)
-    <!-- section Events -->
     <section class="section__events">
         <div class="container">
             <div class="row">

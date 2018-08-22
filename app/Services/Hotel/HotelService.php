@@ -10,9 +10,11 @@ use Hotel\Services\IncludesMedia;
 interface HotelService extends IncludesMedia {
 
 	/**
+	 * @param bool $basic_details
+	 *
 	 * @return mixed | \Illuminate\Support\Collection
 	 */
-	function getHotels();
+	function getHotels($basic_details = false);
 
 	/**
 	 * @param $hotelId

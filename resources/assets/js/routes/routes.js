@@ -114,7 +114,6 @@ const routes = [
             { path: 'activities/:id/edit', component: ActivityCreate, name: 'editActivity' },
 
             { path: 'facilities', component: FacilityList, name: 'facilities' },
-            { path: 'facilities/create', component: FacilityCreate, name: 'createFacility' },
             { path: 'facilities/:id/edit', component: FacilityEdit, name: 'editFacility' },
 
             { path: 'services', component: ServiceList, name: 'services' },
@@ -138,7 +137,6 @@ const routes = [
             { path: 'coupons/:id/edit', component: CouponEdit, name: 'editCoupon' },
 
             { path: 'hotelServices', component: HotelServiceList, name: 'hotelServices' },
-            { path: 'hotelServices/create', component: HotelServiceCreate, name: 'createHotelServices' },
             { path: 'hotelServices/:id/edit', component: HotelServiceEdit, name: 'editHotelService' },
 
             { path: 'pages', component: PageItemList, name: 'pages' },

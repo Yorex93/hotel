@@ -75,6 +75,36 @@ const actions = {
         });
     },
 
+
+    fetchRooms({commit}){
+        commit('setRooms', { type: 'LOADING', value: true });
+        commit('setRooms', { type: 'ERROR', value: {} });
+        roomService.getRooms().then((resp) => {
+            let result = resp.data;
+            commit('setRooms', { type: 'DATA', value: result.data });
+            commit('setRooms', { type: 'DONE', value: true });
+        }).catch(error => {
+            commit('setRooms', { type: 'ERROR', value: error });
+        }).finally(() => {
+            commit('setRooms', { type: 'LOADING', value: false});
+        });
+    },
+
+    createRooms({commit, dispatch}, data){
+        commit('setCreateRooms', { type: 'LOADING', value: true });
+        commit('setCreateRooms', { type: 'ERROR', value: {} });
+        roomService.createRooms(data).then((resp) => {
+            let result = resp.data;
+            commit('setCreateRooms', { type: 'DATA', value: result.data });
+            commit('setCreateRooms', { type: 'DONE', value: true });
+            dispatch('fetchRooms');
+        }).catch(error => {
+            commit('setCreateRooms', { type: 'ERROR', value: error });
+        }).finally(() => {
+            commit('setCreateRooms', { type: 'LOADING', value: false});
+        });
+    },
+
     clearRoomComponentData({commit}, dataToClear){
         if(typeof dataToClear === 'string'){
             try{
@@ -97,7 +127,7 @@ const mutations = {
     setDeleteRoomType(state, { type, value }) { state.deleteRoomType.mutate( type, value ) },
 
     setCreateRooms(state, { type, value }) { state.createRooms.mutate( type, value ) },
-    setRooms(state, { type, value }) { state.roomTypes.mutate( type, value ) },
+    setRooms(state, { type, value }) { state.rooms.mutate( type, value ) },
     setUpdateRooms(state, { type, value }) { state.updateRooms.mutate( type, value ) },
     setDeleteRooms(state, { type, value }) { state.deleteRooms.mutate( type, value ) },
 };

@@ -59,18 +59,25 @@ class DefaultFacilityService implements FacilityService {
 	/**
 	 * @param $facilityId
 	 *
-	 * @return mixed | Model | Collection
+	 * @return mixed | Model | Facility
 	 * @throws ModelNotFoundException
 	 */
 	function getFacilityById( $facilityId ) {
-		return $this->facilityRepo->find($facilityId);
+		return $this->facilityRepo->with('media')->find($facilityId);
 	}
 
 	/**
-	 * @return mixed | array | Collection
+	 * @param bool $withMedia
+	 *
+	 * @return mixed | array | Facility
 	 */
-	function getAllFacilities() {
-		return $this->facilityRepo->all();
+	function getAllFacilities($withMedia = true) {
+		if($withMedia){
+			return $this->facilityRepo->with('media')->all();
+		} else {
+			return $this->facilityRepo->all();
+		}
+
 	}
 
 	/**
@@ -105,5 +112,24 @@ class DefaultFacilityService implements FacilityService {
 			}
 		}
 		return collect($uploadedMedia);
+	}
+
+	/**
+	 * @param $facilitySlug
+	 *
+	 * @return mixed | Model | Collection
+	 * @throws ModelNotFoundException
+	 */
+	function getFacilityBySlug( $facilitySlug ) {
+		$facility = $this->facilityRepo->with('media')->findWhere(['slug' => $facilitySlug]);
+		if(count($facility) > 0){
+			return $facility[0];
+		} else {
+			throw new ModelNotFoundException("Facility with slug ".$facilitySlug." not found");
+		}
+	}
+
+	function getAllFacilitiesForNav() {
+		return $this->facilityRepo->all(['id', 'slug', 'name']);
 	}
 }

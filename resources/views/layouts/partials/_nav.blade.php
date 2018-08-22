@@ -39,7 +39,7 @@
                         Home
                     </a>
                 </li>
-                <li><a href="{{ 1 == 2 ? route('page.about') : '#'}}">About Us</a></li>
+                <li><a href="{{ route('page.about') }}">About Us</a></li>
                 <li>
                     <a href="{{ route('rooms.index') }}">
                         Rooms
@@ -70,7 +70,18 @@
                             @endforeach
                         </ul>
                 </li>
-                <li><a href="{{ route('facilities.index') }}">Facilities</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        Facilities <i class="icon ion-chevron-down"></i>
+                    </a>
+                    <ul class="dropdown-menu">
+                        @foreach($navFacilities AS $item)
+                            <li>
+                                <a href="{{ route('facilities.show', ['slug' => $item->slug]) }}">{{ $item->name }}</a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </li>
                 <li><a href="{{ route('page.contact') }}">Contact</a></li>
                 {{--<li><a href="{{ route('services.index') }}">Services</a></li>--}}
 

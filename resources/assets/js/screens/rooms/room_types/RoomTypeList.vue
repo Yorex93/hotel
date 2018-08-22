@@ -27,6 +27,7 @@
         </td>
       </template>
     </v-data-table>
+
   </div>
 
 </template>
@@ -55,12 +56,13 @@
                 { text: 'Rooms', value: 'rooms', sortable: false},
                 { text: 'Creation Date', value: 'created_at' , sortable: false},
                 { text: 'Actions', value: 'name' , sortable: false},
-            ]
+            ],
         }),
 
         computed: {
             ...mapGetters('room', ['getRoomTypes']),
         },
+
         methods: {
             ...mapActions('room', ['fetchRoomTypes']),
             editRoomType(roomType){

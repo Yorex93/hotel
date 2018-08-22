@@ -9,6 +9,7 @@
 namespace Hotel\Services\Facility;
 
 
+use Hotel\Entities\Facility;
 use Hotel\Services\IncludesMedia;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -36,15 +37,25 @@ interface FacilityService extends IncludesMedia {
 	/**
 	 * @param $facilityId
 	 *
-	 * @return mixed | Model | Collection
+	 * @return mixed | Model | Facility
 	 * @throws ModelNotFoundException
 	 */
 	function getFacilityById($facilityId);
 
 	/**
+	 * @param $facilitySlug
+	 *
+	 * @return mixed | Model | Facility
+	 * @throws ModelNotFoundException
+	 */
+	function getFacilityBySlug($facilitySlug);
+
+	/**
+	 * @param bool $withMedia
+	 *
 	 * @return mixed | array | Collection
 	 */
-	function getAllFacilities();
+	function getAllFacilities($withMedia = true);
 
 	/**
 	 * @param $facilityId
@@ -52,5 +63,9 @@ interface FacilityService extends IncludesMedia {
 	 * @return boolean
 	 */
 	function deleteFacilityById($facilityId);
+
+
+	function getAllFacilitiesForNav();
+
 
 }

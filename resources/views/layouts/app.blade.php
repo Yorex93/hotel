@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/owl-carousel/dist/assets/owl.carousel.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/owl-carousel/dist/assets/owl.theme.default.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/theme.css') }}">
+    <link rel="stylesheet" href="{{ asset('/css/animate.css') }}">
 
     <style>
         .btn-reservation-top{
@@ -29,6 +30,10 @@
             height: 120px;
             display: block;
             margin: 0 auto;
+        }
+
+        .section__header {
+            height: calc(50vh - 135px);
         }
 
         .booking__section{
@@ -50,6 +55,40 @@
             border: 2px solid #FFFFFF;
             margin-bottom: 10px;
             outline: none;
+        }
+
+        .booking__stage{
+            padding: 40px 0;
+            position: relative;
+        }
+
+        div.loading{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        div.loading svg{
+            height: 100px;
+            width: auto;
+        }
+
+        .welcome_content__title{
+            font-size: 40px !important;
+        }
+
+        .service-image{
+            width: auto;
+            height: 200px;
+        }
+
+        @media screen and (max-width: 767px){
+            .welcome_content__title{
+                font-size: 24px !important;
+            }
         }
     </style>
 
@@ -90,8 +129,8 @@
     <script src="{{ asset('assets/js/theme.js') }}"></script>
     <script src="{{ asset('assets/js/google_maps.js') }}"></script>
 
-    <!--<script src="https://unpkg.com/vue"></script>-->
-    <script src="https://unpkg.com/vue@2.5.17/dist/vue.min.js"></script>
+    <script src="https://unpkg.com/vue"></script>
+    {{--<script src="https://unpkg.com/vue@2.5.17/dist/vue.min.js"></script>--}}
     <script src="https://unpkg.com/vuejs-datepicker"></script>
     <script src="{{ asset('js/moment.js') }}"></script>
 

@@ -8,21 +8,21 @@
 
 namespace Hotel\Services\RoomType;
 
-
-use Defuse\Crypto\Exception\IOException;
-use Hotel\Entities\Media;
+use Carbon\Carbon;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Hotel\Entities\Room;
 use Hotel\Entities\RoomType;
 use Hotel\Http\Requests\RoomTypeCreateRequest;
 use Hotel\Http\Requests\RoomTypeUpdateRequest;
 use Hotel\Repositories\MediaRepository;
+use Hotel\Repositories\RoomRepository;
 use Hotel\Repositories\RoomTypeRepository;
 use Hotel\Services\File\FileService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\UploadedFile;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Request;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class DefaultRoomTypeService implements RoomTypeService {
@@ -30,17 +30,19 @@ class DefaultRoomTypeService implements RoomTypeService {
 	protected $roomTypeRepo;
 	protected $fileService;
 	protected $mediaRepo;
+	protected $roomRepo;
 
 	protected $relations = ['media', 'rooms', 'hotel', 'facilities', 'services', 'tags'];
 
 
 	public function __construct(RoomTypeRepository $room_type_repository,
 		FileService $file_service,
-		MediaRepository $media_repository) {
+		MediaRepository $media_repository, RoomRepository $room_repository) {
 
 		$this->roomTypeRepo = $room_type_repository;
 		$this->fileService = $file_service;
 		$this->mediaRepo = $media_repository;
+		$this->roomRepo = $room_repository;
 
 	}
 
@@ -189,5 +191,63 @@ class DefaultRoomTypeService implements RoomTypeService {
 			throw new ModelNotFoundException();
 		}
 		return $r[0];
+	}
+
+
+	/**
+	 * @param int $hotelId
+	 * @param int $roomTypeId
+	 * @param int $count
+	 * @param int $start
+	 * @param string $prefix
+	 *
+	 * @return mixed | Collection
+	 */
+	public function createRooms(int $hotelId, int $roomTypeId, int $count, int $start,  $prefix = '') {
+		$cnt = 0;
+		$created = [];
+		$failed = 0;
+		while($cnt < $count){
+			$room = new Room();
+			$room->hotel_id = $hotelId;
+			$room->room_type_id = $roomTypeId;
+			$room->room_code = $prefix.$start;
+			try {
+				$room->saveOrFail();
+				$created[] = $room;
+			} catch ( \Throwable $e ) {
+				$failed++;
+			}
+			$cnt++;
+			$start++;
+		}
+		return collect(['created' => $created, 'failed' => $failed]);
+	}
+
+	/**
+	 * @param Request $request
+	 *
+	 * @return mixed | Collection
+	 */
+	public function checkAvailability( Request $request ) {
+		$checkIn = $request->get('checkIn');
+		$checkOut = $request->get('checkOut');
+		$children = $request->get('children');
+		$adults = $request->get('adults');
+
+		$checkInDate = Carbon::createFromTimestampMs($checkIn)->format('Y-m-d');
+		$checkOutDate = Carbon::createFromTimestampMs($checkOut)->format('Y-m-d');
+
+		$rooms = Room::query()->where(function (Builder $query) use ($checkInDate, $checkOutDate, $adults, $children){
+			return $query->whereHas('room_type', function (Builder $queryRoomType) use ($adults, $children){
+				return $queryRoomType->where('max_children', '>=', $children)
+				                     ->where('max_adults', '>=', $adults)
+				                     ->where('max_people', '>=', ($adults + $children));
+			})->whereDoesntHave('booking_rooms', function (Builder $queryBookingRooms) use ($checkInDate, $checkOutDate){
+				return $queryBookingRooms->where('check_in', '>=', $checkInDate)
+				                         ->where('check_in', '<=', $checkOutDate);
+			});
+		})->with(['hotel', 'room_type'])->groupBy('hotel_id', 'room_type_id')->get();
+		return $rooms;
 	}
 }

@@ -21,6 +21,8 @@ Route::group(['namespace'=>'Api', 'prefix'=>'v1'], function() {
 	Route::post( '/login', 'UserController@login');
 	Route::post( '/register', 'UserController@register');
 
+	Route::get('/reservations/check', 'BookingsController@checkAvailability');
+
 	Route::get('countries', 'LocationsController@countries');
 	Route::get('countries/{id}/states', 'LocationsController@states');
 
@@ -33,7 +35,12 @@ Route::group(['namespace'=>'Api', 'prefix'=>'v1'], function() {
 
 		Route::resource('locations', 'LocationsController');
 
-		Route::resource('roomTypes', 'RoomTypesController');
+		//Route::resource('roomTypes', 'RoomTypesController');
+		Route::post('roomTypes/createRooms', 'RoomTypesController@createRooms');
+		Route::get('roomTypes', 'RoomTypesController@index');
+		Route::post('roomTypes', 'RoomTypesController@store');
+		Route::put('roomTypes/{id}', 'RoomTypesController@update');
+		Route::delete('roomTypes/{id}', 'RoomTypesController@destroy');
 		Route::post('roomTypes/{id}/addMedia', 'RoomTypesController@addMedia');
 
 		Route::resource('facilities', 'FacilitiesController');

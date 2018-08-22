@@ -143,7 +143,7 @@
                 if(value){
                     this.$toastr.s(`Updated successfully`);
                     this.dialog = false;
-                    this.clearPageComponentData();
+                    this.clearPageComponentData('setUpdatePageItem');
                 }
             }
         },

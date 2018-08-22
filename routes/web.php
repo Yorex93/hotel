@@ -17,6 +17,7 @@ Auth::routes();
 Route::group(['namespace' => 'Frontend'], function(){
 	Route::get('/', 'HomeController@index')->name('home');
 	Route::get('/contact', 'HomeController@contact')->name('page.contact');
+	Route::post('/contact', 'HomeController@contactSubmit')->name('contact.submit');
 
 	Route::group(['prefix' => 'services'], function(){
 		Route::get('', 'ServiceController@index')->name('services.index');

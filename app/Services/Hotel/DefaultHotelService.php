@@ -30,8 +30,13 @@ class DefaultHotelService implements HotelService{
 		$this->mediaRepo = $media_repository;
 	}
 
-	function getHotels() {
-		return $this->hotelRepository->with($this->relations)->all();
+	function getHotels($basic_details = false) {
+		if($basic_details){
+			return $this->hotelRepository->with(['location.contactPerson'])->all();
+		} else {
+			return $this->hotelRepository->with($this->relations)->all();
+		}
+
 	}
 
 	function updateHotel(int $hotelId, HotelUpdateRequest $request ) {

@@ -38,4 +38,8 @@ class Room extends Model implements Transformable
 	public function hotel(){
 		return $this->belongsTo(Hotel::class);
 	}
+
+	public function booking_rooms(){
+		return $this->hasMany(BookingRoom::class);
+	}
 }

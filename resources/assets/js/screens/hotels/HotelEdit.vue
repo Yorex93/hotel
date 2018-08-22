@@ -15,7 +15,6 @@
       <v-tab ripple target="hotel-details">Hotel Details</v-tab>
       <v-tab ripple target="location-details">Location Details</v-tab>
       <v-tab ripple target="hotel-media">Media</v-tab>
-      <v-tab ripple target="hotel-facilities">Facilities</v-tab>
 
       <v-tab-item id="hotel-details">
         <v-alert
@@ -300,13 +299,6 @@
                 v-on:media-uploaded="uploadedMedia($event)"
                 v-on:media-deleted="fetchHotels"
         />
-      </v-tab-item>
-
-      <v-tab-item id="hotel-facilities">
-        <facilities-list
-            :facilities="hotel.facilities"
-            :can-modify="true"
-            v-on:sycn-facilities="syncFacilities($event)"/>
       </v-tab-item>
     </v-tabs>
 
