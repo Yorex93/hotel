@@ -102,6 +102,8 @@
             border: 1px solid lightgray;
             transition: 0.3s all;
             cursor: pointer;
+            height: 200px;
+            margin-bottom: 15px;
         }
 
         .room:hover {
