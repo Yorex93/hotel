@@ -61,6 +61,28 @@ class BookingsController extends Controller
     	return response()->json(['data' => $available], 200);
     }
 
+	public function makeReservation(Request $request){
+		$this->validate($request, [
+			'checkIn' => 'required | numeric',
+			'checkOut' => 'required | numeric',
+			'adults' => 'required | integer',
+			'children' => 'required | integer',
+			'firstName' => 'required',
+			'lastName' => 'required',
+			'phone' => 'required',
+			'email' => 'required | email',
+			'roomId' => 'required | exists:rooms,id',
+			'paymentMethod' => 'required'
+		]);
+
+		try{
+			$booking = $this->bookingService->createBooking($request);
+			return response()->json(['data' => $booking], 200);
+		} catch (\Throwable $e){
+			return response()->json(['data' => $e], 500);
+		}
+	}
+
     /**
      * Display a listing of the resource.
      *

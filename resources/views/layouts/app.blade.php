@@ -69,6 +69,11 @@
             position: absolute;
             top: 0;
             left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            justify-content: center;
+            background: rgba(255,255,255,0.9);
         }
 
         div.loading svg{
@@ -90,6 +95,72 @@
                 font-size: 24px !important;
             }
         }
+
+        .room {
+            display: flex;
+            padding: 10px;
+            border: 1px solid lightgray;
+            transition: 0.3s all;
+            cursor: pointer;
+        }
+
+        .room:hover {
+            box-shadow: 3px 4px 20px 0px #ddd;
+        }
+
+        .room-block {
+            display:  flex;
+        }
+
+        .room-img {
+            flex: 1;
+        }
+
+        .room-img img{
+            width: 100%;
+        }
+
+        .room-details {
+            flex: 1;
+            padding-left: 20px
+        }
+
+        .room-details h2 {
+            margin: 0;
+        }
+
+        .room-details h3 {
+            margin: 0;
+        }
+
+        table.room-selection{
+            margin: 20px;
+            width: 100%;
+            border-color: lightgray;
+        }
+
+        table.room-selection td{
+            padding: 0 20px
+        }
+
+        .confirm-booking > div{
+            margin-bottom : 20px
+        }
+
+        .confirm-booking .heading {
+            font-weight: bold;
+        }
+
+        .confirm-booking .value {
+            font-size: 16px
+        }
+
+        .confirm-booking .value.amount{
+            font-size: 20px;
+            color: green;
+            font-weight: bold;
+        }
+
     </style>
 
     @yield('styles')

@@ -32,7 +32,7 @@ class Booking extends Model implements Transformable
      */
     protected $guarded = [];
 
-    public function rooms(){
+    public function booking_rooms(){
     	return $this->hasMany(BookingRoom::class);
     }
 
@@ -40,4 +40,11 @@ class Booking extends Model implements Transformable
     	return $this->hasMany(BookingActivity::class);
     }
 
+    public function payments(){
+    	return $this->hasMany(Payment::class);
+    }
+
+    public function hotel(){
+    	return $this->belongsTo(Hotel::class);
+    }
 }

@@ -247,7 +247,7 @@ class DefaultRoomTypeService implements RoomTypeService {
 				return $queryBookingRooms->where('check_in', '>=', $checkInDate)
 				                         ->where('check_in', '<=', $checkOutDate);
 			});
-		})->with(['hotel', 'room_type'])->groupBy('hotel_id', 'room_type_id')->get();
+		})->with(['hotel.location', 'room_type.media'])->groupBy('hotel_id', 'room_type_id')->get();
 		return $rooms;
 	}
 }

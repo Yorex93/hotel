@@ -45,6 +45,7 @@ Route::group(['namespace' => 'Frontend'], function(){
 	Route::group(['prefix' => 'reservations'], function(){
 		Route::get('', 'ReservationController@index')->name('reservations.index');
 		Route::get('/check', 'ReservationController@check')->name('reservations.check');
+		Route::post('/make', 'ReservationController@make')->name('reservations.make');
 	});
 
 	Route::group(['prefix' => 'facilities'], function(){
