@@ -1,5 +1,5 @@
-//const SITE_URL = "http://hotelvaleriesuitesng.com";
-const SITE_URL = "http://127.0.0.1:8000";
+const SITE_URL = "http://hotelvaleriesuitesng.com";
+//const SITE_URL = "http://127.0.0.1:8000";
 const API_URL = `${SITE_URL}/api/v1`;
 
 const AUTH_URLS = {
