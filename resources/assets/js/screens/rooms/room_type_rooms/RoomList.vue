@@ -286,7 +286,7 @@
                 if(done){
                     this.$toastr.s("Rooms created successfully");
                     this.clearRoomComponentData('setCreateRooms');
-                    this.closeModal();
+                    this.closeDialog();
                 }
             }
         },
