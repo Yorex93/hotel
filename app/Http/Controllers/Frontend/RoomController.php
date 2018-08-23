@@ -29,9 +29,10 @@ class RoomController extends Controller
 
 	public function show($slug){
 		try {
+			$hotels = $this->hotelService->getHotels();
 			$roomType = $this->roomTypeService->getBySlug( $slug );
 			$roomTypes = $this->roomTypeService->getAll();
-			return view( 'rooms.show', compact( 'roomType', 'roomTypes' ) );
+			return view( 'rooms.show', compact( 'roomType', 'roomTypes', 'hotels' ) );
 		} catch (ModelNotFoundException $e){
 			return view( 'page.home' )->with('error', 'Room type not found');
 		}

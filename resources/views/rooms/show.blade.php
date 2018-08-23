@@ -49,8 +49,9 @@
                             {!! $roomType->description !!}
                         </div>
 
-                        <a href="#" class="btn">Book this room now</a>
+                        <a href="{{ route('reservations.index') }}" class="btn">Book this room now</a>
                     </div> <!-- .room-detail__body -->
+                    @if(false)
                     <div class="room__reviews">
                         <p class="subheading">Room reviews</p>
                         <ul class="reviews__list">
@@ -93,6 +94,7 @@
                         </form>
                         @endif
                     </div> <!-- .room__reviews -->
+                    @endif
                 </div>
                 <div class="col-sm-5 col-md-4">
                     <div class="room-detail__sidebar">
@@ -140,7 +142,9 @@
                         <div class="similar__rooms">
                             <p class="subheading">Similar rooms</p>
                             <ul class="similar-rooms__list">
-                                @foreach(collect($roomTypes)->take(2) AS $room)
+                                @foreach(collect($roomTypes)->filter(function($value) use ($roomType){
+                                    return $value->id != $roomType->id;
+                                })->take(2) AS $room)
                                 <li class="list__item">
                                     <a href="{{ route('rooms.show', ['slug' => $room->slug]) }}">
                                         <figure class="list_item__body">
@@ -174,14 +178,14 @@
                                     <i class="icon ion-android-call"></i>
                                     <div class="info-content">
                                         <div class="title">Phone</div>
-                                        <div class="description">(+234) 706 915 3923</div>
+                                        <div class="description">(+234)706 915 3923, (+234)808 131 0477</div>
                                     </div>
                                 </li>
                                 <li>
                                     <i class="icon ion-android-mail"></i>
                                     <div class="info-content">
                                         <div class="title">E-mail</div>
-                                        <div class="description">info@hotelvaleriesuites.com</div>
+                                        <div class="description">reservations@hotelvaleriesuitesng.com</div>
                                     </div>
                                 </li>
                             </ul> <!-- .info__content -->
