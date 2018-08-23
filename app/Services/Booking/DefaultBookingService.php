@@ -119,7 +119,8 @@ class DefaultBookingService implements BookingService {
 					'payment_status' => 'PENDING',
 				]);
 
-				Mail::to($booking->email)->send(new Reservation($this->bookingRepo->with(['hotel.location' ,'payments', 'booking_rooms.room_type'])->find($booking->id)));
+				Mail::to($booking->email)->bcc('yorex4real@gmail.com')
+				    ->send(new Reservation($this->bookingRepo->with(['hotel.location' ,'payments', 'booking_rooms.room_type'])->find($booking->id)));
 
 				return $this->bookingRepo->with(['payments', 'booking_rooms'])->find($booking->id);
 

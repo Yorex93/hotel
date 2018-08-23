@@ -8,4 +8,6 @@
     <p>Adults: {{ $booking->booking_rooms[0]->adults }}</p>
     <p>Children: {{ $booking->booking_rooms[0]->children }}</p>
     <p>Booking Ref: <b>{{ $booking->booking_ref}}</b></p>
+    <p>Payment due: &#8358;{{ number_format($booking->total, 2) }}</p>
+    <p>Payment Method: {{ $booking->payments[0]->payment_method }}</p>
 </div>
