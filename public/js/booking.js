@@ -227,7 +227,7 @@ Vue.component('HotelBooking', {
                 self.reservation.checkOut = moment(self.departureDate).valueOf();
                 self.reservation.adults = self.adults;
                 self.reservation.children = self.children;
-                self.reservation.days = moment(self.reservation.checkOut).diff(moment(self.reservation.checkIn), 'days') + 1;
+                self.reservation.days = moment(self.reservation.checkOut).startOf('day').diff(moment(self.reservation.checkIn).startOf('day'), 'days');
             }).catch(function(error){
 
             }).finally(function(){

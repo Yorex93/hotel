@@ -68,7 +68,7 @@ class DefaultBookingService implements BookingService {
 			$checkInDate = Carbon::createFromTimestampMs($checkIn)->format('Y-m-d');
 			$checkOutDate = Carbon::createFromTimestampMs($checkOut)->format('Y-m-d');
 
-			$days = Carbon::createFromTimestampMs($checkOut)->diffInDays(Carbon::createFromTimestampMs($checkIn));
+			$days = Carbon::createFromTimestampMs($checkOut)->startOfDay()->diffInDays(Carbon::createFromTimestampMs($checkIn)->startOfDay());
 
 			$rooms = $this->getRoomsFor($checkInDate, $checkOutDate, $room->room_type_id, $room->hotel_id);
 
