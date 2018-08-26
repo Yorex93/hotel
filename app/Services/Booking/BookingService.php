@@ -10,6 +10,7 @@ namespace Hotel\Services\Booking;
 
 
 use Hotel\Entities\Booking;
+use Hotel\Entities\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -43,6 +44,14 @@ interface BookingService {
 	 * @return boolean
 	 */
 	function deleteBooking($bookingId);
+
+	/**
+	 * @param string $reference
+	 *
+	 * @return mixed | Payment
+	 * @throws \Exception
+	 */
+	public function checkPayment( string $reference );
 
 
 }

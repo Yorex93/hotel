@@ -102,8 +102,14 @@
             border: 1px solid lightgray;
             transition: 0.3s all;
             cursor: pointer;
-            height: 200px;
+
             margin-bottom: 15px;
+        }
+
+        @media screen and (min-width: 768px){
+            .room {
+                height: 200px;
+            }
         }
 
         .room:hover {
@@ -163,6 +169,31 @@
             font-weight: bold;
         }
 
+        .room-info {
+            display: flex;
+            margin: 0 15px;
+            border: 1px solid lightgrey;
+            flex-wrap: wrap;
+        }
+
+        .room-info > div{
+            flex: 1 0 33%;
+            padding: 0 10px;
+        }
+        .room-info > div:not(:last-child){
+            border-right: 1px solid lightgrey;
+        }
+
+        @media screen and (max-width: 767px){
+            .room-info > div{
+                flex: 1 0 100%;
+                border-bottom: 1px solid lightgrey;
+                border-right: none !important;
+            }
+            .room-info > div:last-child{
+                border-bottom: none;
+            }
+        }
     </style>
 
     @yield('styles')
@@ -185,7 +216,7 @@
     </div>
 
     @include('layouts.partials._footer')
-
+    <script src="{{ asset('js/promise-polyfill.min.js') }}"></script>
     <!-- JS Global -->
     <script src="{{ asset('assets/plugins/jquery/jquery-1.12.4.min.js') }}"></script>
     <script src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
@@ -206,6 +237,7 @@
     {{--<script src="https://unpkg.com/vue@2.5.17/dist/vue.min.js"></script>--}}
     <script src="https://unpkg.com/vuejs-datepicker"></script>
     <script src="{{ asset('js/moment.js') }}"></script>
+    <script src="https://js.paystack.co/v1/inline.js"></script>
 
     @yield('scripts')
 </body>

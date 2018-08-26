@@ -23,6 +23,8 @@ Route::group(['namespace'=>'Api', 'prefix'=>'v1'], function() {
 
 	Route::get('/reservations/check', 'BookingsController@checkAvailability');
 	Route::post('/reservations/make', 'BookingsController@makeReservation');
+	Route::post('/reservations/confirmPayment', 'BookingsController@confirmPayment');
+
 
 	Route::get('countries', 'LocationsController@countries');
 	Route::get('countries/{id}/states', 'LocationsController@states');

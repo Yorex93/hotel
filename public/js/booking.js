@@ -64,11 +64,148 @@ Vue.component('Room', {
     }
 });
 
+Vue.component('paystack', {
+    template: `<button
+            v-if="!embed"
+            class="btn btn-booking"
+            @click="payWithPaystack"
+            v-text="text"/>
+          <div v-else id="paystackEmbedContainer"/>`,
+    props: {
+        embed: {
+            type: Boolean,
+            default: false
+        },
+        paystackkey: {
+            type: String,
+            required: true
+        },
+        email: {
+            type: String,
+            required: true
+        },
+        amount: {
+            type: Number,
+            required: true
+        },
+        reference: {
+            type: String,
+            required: true
+        },
+        callback: {
+            type: Function,
+            required: true,
+            default: function(response) {}
+        },
+        close: {
+            type: Function,
+            required: true,
+            default: function() {}
+        },
+        text: {
+            type: String,
+            default: 'Make Payment'
+        },
+        metadata: {
+            type: Object,
+            default: function() { return {} }
+        },
+        currency: {
+            type: String,
+            default: 'NGN'
+        },
+        plan: {
+            type: String,
+            default: ''
+        },
+        quantity: {
+            type: String,
+            default: ''
+        },
+        subaccount: {
+            type: String,
+            default: ''
+        },
+        transaction_charge: {
+            type: Number,
+            default: 0
+        },
+        bearer: {
+            type: String,
+            default: ''
+        },
+    },
+    computed: {
+        scriptLoaded: function() {
+            /**
+             * TODO:
+             * Find a fix to move promise away from computed
+             **/
+            /* eslint-disable vue/no-async-in-computed-properties */
+            return Promise.resolve();
+        }
+    },
+    mounted() {
+        if (this.embed) {
+            this.payWithPaystack()
+        }
+    },
+
+    methods: {
+        loadScript(callback) {
+            const script = document.createElement('script');
+            script.src = 'https://js.paystack.co/v1/inline.js';
+            document.getElementsByTagName('head')[0].appendChild(script);
+            if (script.readyState) {  // IE
+                script.onreadystatechange = () => {
+                    if (script.readyState === 'loaded' || script.readyState === 'complete') {
+                        script.onreadystatechange = null;
+                        callback()
+                    }
+                }
+            } else {  // Others
+                script.onload = () => {
+                    callback()
+                }
+            }
+        },
+        payWithPaystack() {
+            this.scriptLoaded.then(() => {
+                const paystackOptions = {
+                    key: this.paystackkey,
+                    email: this.email,
+                    amount: this.amount,
+                    ref: this.reference,
+                    callback: (response) => {
+                        this.callback(response)
+                    },
+                    onClose: () => {
+                        this.close()
+                    },
+                    metadata: this.metadata,
+                    currency: this.currency,
+                    plan: this.plan,
+                    quantity: this.quantity,
+                    subaccount: this.subaccount,
+                    transaction_charge: this.transaction_charge,
+                    bearer: this.bearer
+                };
+                if (this.embed) {
+                    paystackOptions.container = 'paystackEmbedContainer'
+                }
+                const handler = window.PaystackPop.setup(paystackOptions);
+                if (!this.embed) {
+                    handler.openIframe()
+                }
+            })
+        }
+    }
+});
+
 
 Vue.component('HotelBooking', {
     components: {
         datepicker: vuejsDatepicker,
-
     },
     data: function () {
         return {
@@ -125,9 +262,11 @@ Vue.component('HotelBooking', {
                 specialRequest: '',
                 days : 1,
             },
+            paystackkey: 'pk_test_ba7cea1238ef1ed327c962e055d09cf879270c72',
             selectedRoom: {},
             errors: [],
-            booking: {}
+            paymentErrors: [],
+            booking: {},
         }
     },
 
@@ -135,7 +274,7 @@ Vue.component('HotelBooking', {
         if(window.location.pathname === '/reservations'){
             this.isReservation = true;
             const queryParams = this.getQueryParams();
-            console.log(queryParams);
+            //console.log(queryParams);
             if(queryParams['checkIn'] && !isNaN(parseInt(queryParams['checkIn']))){
                 this.arrivalDate = new Date(parseInt(queryParams['checkIn']));
                 this.reservation.checkIn = queryParams['checkIn'];
@@ -209,7 +348,10 @@ Vue.component('HotelBooking', {
             this.foundRooms = [];
             this.currentStage = 0;
             this.selectedRoom = {};
+            this.errors = [];
+            this.paymentErrors = [];
             this.reservation = Object.assign({}, this.defaultReservation);
+            this.booking = {};
         },
 
         checkAvailability(){
@@ -237,7 +379,7 @@ Vue.component('HotelBooking', {
         },
 
         getDate(date){
-            return moment(parseInt(date)).format('YYYY-MM-D');
+            return moment(parseInt(date)).format('YYYY-MM-DD');
         },
 
         getAmount(amount){
@@ -282,6 +424,7 @@ Vue.component('HotelBooking', {
             window.location = window.location.origin;
         },
 
+
         makeBooking(paymentMethod){
             this.loading = true;
             this.loadingMessage = "Kindly hold while we place your reservation..";
@@ -307,7 +450,105 @@ Vue.component('HotelBooking', {
             }).then(function (response) {
                 //console.log(response);
                 self.booking = response.data;
-                self.currentStage = 3;
+                if(paymentMethod === 'LOCATION'){
+                    self.currentStage = 3;
+                    this.resetData();
+                } else {
+                    self.loading = false;
+                    self.loadingMessage = '';
+                    self.payWithPaystack(response.data);
+                }
+
+            }).catch(function(error){
+                //console.log(error);
+            }).finally(function(){
+                self.loading = false;
+                self.loadingMessage = '';
+            });
+        },
+
+        payWithPaystack(booking){
+            let paymentsCount = booking.payments.length;
+            const paystackOptions = {
+                key: this.paystackkey,
+                email: booking.email,
+                amount: (booking.total_due * 100),
+                ref: booking.payments[paymentsCount - 1].payment_ref,
+                callback: (response) => {
+                    this.paystackCallback(response)
+                },
+                onClose: () => {
+                    this.paystackClose()
+                },
+                currency: 'NGN',
+            };
+            const handler = window.PaystackPop.setup(paystackOptions);
+            handler.openIframe()
+        },
+
+        paystackCallback(response){
+            this.loading = true;
+            this.loadingMessage = "Confirming payment status..";
+            const data = {
+                reference: response.reference,
+            };
+
+            let postObj = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                body: JSON.stringify(data)
+            };
+
+            let url = `${window.location.origin}/api/v1/reservations/confirmPayment`;
+            let self = this;
+            fetch(url, postObj).then(function (resp) {
+                return resp.json();
+            }).then(function (response) {
+                //console.log(response);
+                if(response.data.success){
+                    self.currentStage = 3;
+                    this.resetData();
+                }
+            }).catch(function(error){
+                //console.log(error);
+            }).finally(function(){
+                self.loading = false;
+                self.loadingMessage = '';
+            });
+        },
+
+        paystackClose(){
+            this.loading = true;
+            this.paymentErrors = [];
+            this.loadingMessage = "Checking payment status..";
+            const data = {
+                reference: this.booking.payments[this.booking.payments.length - 1].payment_ref,
+            };
+
+            let postObj = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json; charset=utf-8",
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                body: JSON.stringify(data)
+            };
+
+            let url = `${window.location.origin}/api/v1/reservations/confirmPayment`;
+            let self = this;
+            fetch(url, postObj).then(function (resp) {
+                return resp.json();
+            }).then(function (response) {
+                //console.log(response);
+                if(response.data.success){
+                    self.currentStage = 3;
+                    self.resetData();
+                } else {
+                    self.paymentErrors.push(response.data.message);
+                }
             }).catch(function(error){
                 //console.log(error);
             }).finally(function(){
@@ -353,7 +594,8 @@ Vue.component('HotelBooking', {
     	                <div class="container">
                           <div class="row">
                             <div class="col-md-12 animated fadeIn" v-if="currentStage === 0">
-                              <h2 v-if="getQueryParams()['checkIn'] || searched">{{ foundRooms.length }} room types found</h2>
+                              <h2 v-if="getQueryParams()['checkIn'] || searched">
+                              {{ foundRooms.length }} room types available</h2>
                               <div v-if="foundRooms.length > 0">
                                 <div class="col-md-6 col-sm-6 col-xs-12" v-for="room in foundRooms">
                                   <div class="room" @click="selectRoom(room)">
@@ -368,13 +610,11 @@ Vue.component('HotelBooking', {
                                       <a @click.prevent="backTo(0)" style="cursor: pointer;letter-spacing: 0;">Back to room selection</a>
                                     </p>
                                     <h2 class="section__heading">Room info</h2>
-                                    <table style="padding: 20px" border="1" cellpadding="5" cellspacing="5" class="room-selection">
-                                      <tr>
-                                        <td><h4>{{ selectedRoom.room_type.title.toUpperCase() }}</h4></td>
-                                        <td><h4>{{ selectedRoom.hotel.name.toUpperCase() }} {{ selectedRoom.hotel.location ? '('+selectedRoom.hotel.location.name+')' : '' }}</h4></td>
-                                        <td><h4><b style="color: green">&#8358;{{ getAmount(selectedRoom.room_type.base_price_per_night) }}</b>/night</h4></td>
-                                      </tr>
-                                    </table>
+                                    <div class="room-info">
+                                        <div><h4>{{ selectedRoom.room_type.title.toUpperCase() }}</h4></div>
+                                        <div><h4>{{ selectedRoom.hotel.name.toUpperCase() }} {{ selectedRoom.hotel.location ? '('+selectedRoom.hotel.location.name+')' : '' }}</h4></div>
+                                        <div><h4><b style="color: green">&#8358;{{ getAmount(selectedRoom.room_type.base_price_per_night) }}</b>/night</h4></div>
+                                    </div>
                                     <h2 class="section__heading">Personal info</h2>
                                             <!-- Alert message -->
                                     <div class="alert" id="form_reservation" role="alert"></div>
@@ -471,13 +711,11 @@ Vue.component('HotelBooking', {
                                       <a @click.prevent="backTo(1)" style="cursor: pointer;letter-spacing: 0;">Back to form</a>
                                       </p>
                                       
-                                      <table style="padding: 20px" border="1" cellpadding="5" cellspacing="5" class="room-selection">
-                                      <tr>
-                                        <td><h4>{{ selectedRoom.room_type.title.toUpperCase() }}</h4></td>
-                                        <td><h4>{{ selectedRoom.hotel.name.toUpperCase() }} {{ selectedRoom.hotel.location ? '('+selectedRoom.hotel.location.name+')' : '' }}</h4></td>
-                                        <td><h4><b style="color: green">&#8358;{{ getAmount(selectedRoom.room_type.base_price_per_night) }}</b>/night</h4></td>
-                                      </tr>
-                                    </table>
+                                      <div class="room-info">
+                                        <div><h4>{{ selectedRoom.room_type.title.toUpperCase() }}</h4></div>
+                                        <div><h4>{{ selectedRoom.hotel.name.toUpperCase() }} {{ selectedRoom.hotel.location ? '('+selectedRoom.hotel.location.name+')' : '' }}</h4></div>
+                                        <div><h4><b style="color: green">&#8358;{{ getAmount(selectedRoom.room_type.base_price_per_night) }}</b>/night</h4></div>
+                                    </div>
                                     
                                       <div class="col-md-4 col-sm-6 col-xs-12">
                                         <div class="heading">Check in</div>
@@ -524,8 +762,13 @@ Vue.component('HotelBooking', {
                                         <div class="value amount">&#8358;{{ getAmount(parseInt(selectedRoom.room_type.base_price_per_night) * parseInt(reservation.days)) }}</div>
                                       </div>
                                       
+                                      <div class="col-md-12 col-sm-12 col-xs-12" v-if="paymentErrors.length > 0">
+                                        <div class="alert alert-danger"><p>Transaction Failed</p></div>
+                                      </div>
+                                      
                                       <div class="col-md-12 col-sm-12 col-xs-12">
-                                        <button class="btn btn-booking" v-if="false">Pay Online Now</button>
+                                       
+                                        <button class="btn btn-booking" @click.prevent="makeBooking('ONLINE')">Pay Online Now</button>
                                         <button class="btn btn-booking" @click.prevent="makeBooking('LOCATION')">Pay at Location</button>
                                       </div>
                                     </div>
@@ -544,9 +787,10 @@ Vue.component('HotelBooking', {
                                  <button class="btn btn-booking" @click.prevent="goHome">Back to Home</button>         
                               </div>
                             </div>
-                          </div> <!-- / .row -->
-                        </div> <!-- / .container -->
+                          </div>
+                        </div>
                     </section>
+                   
                 </div>`,
 
 });

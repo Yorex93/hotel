@@ -225,29 +225,56 @@ class DefaultRoomTypeService implements RoomTypeService {
 	}
 
 	/**
-	 * @param Request $request
+	 * @param int $checkIn
+	 * @param int $checkOut
+	 * @param int $adults
+	 * @param int $children
 	 *
 	 * @return mixed | Collection
 	 */
-	public function checkAvailability( Request $request ) {
-		$checkIn = $request->get('checkIn');
-		$checkOut = $request->get('checkOut');
-		$children = $request->get('children');
-		$adults = $request->get('adults');
+	public function checkAvailability( int $checkIn, int $checkOut, int $adults, int $children ) {
 
+		return $this->getRoomsFor($checkIn, $checkOut, $adults, $children)
+		            ->with(['hotel.location', 'room_type.media'])->groupBy('hotel_id', 'room_type_id')->get();
+	}
+
+
+	/**
+	 * @param int $checkIn
+	 * @param int $checkOut
+	 * @param int $adults
+	 * @param int $children
+	 *
+	 * @return mixed | Collection
+	 */
+	public function getAvailableRooms( int $checkIn, int $checkOut, int $adults, int $children ) {
+		$this->getRoomsFor($checkIn, $checkOut, $adults, $children)->with('room_type')->get();
+	}
+
+	/**
+	 * @param int $checkIn
+	 * @param int $checkOut
+	 * @param int $adults
+	 * @param int $children
+	 *
+	 * @return Builder
+	 */
+	private function getRoomsFor(int $checkIn, int $checkOut, int $adults, int $children){
 		$checkInDate = Carbon::createFromTimestampMs($checkIn)->format('Y-m-d');
 		$checkOutDate = Carbon::createFromTimestampMs($checkOut)->format('Y-m-d');
 
-		$rooms = Room::query()->where(function (Builder $query) use ($checkInDate, $checkOutDate, $adults, $children){
+		return Room::query()->where(function (Builder $query) use ($checkInDate, $checkOutDate, $adults, $children){
 			return $query->whereHas('room_type', function (Builder $queryRoomType) use ($adults, $children){
 				return $queryRoomType->where('max_children', '>=', $children)
 				                     ->where('max_adults', '>=', $adults)
 				                     ->where('max_people', '>=', ($adults + $children));
 			})->whereDoesntHave('booking_rooms', function (Builder $queryBookingRooms) use ($checkInDate, $checkOutDate){
 				return $queryBookingRooms->where('check_in', '>=', $checkInDate)
-				                         ->where('check_in', '<=', $checkOutDate);
+				                         ->where('check_in', '<=', $checkOutDate)
+				                         ->whereDoesntHave('booking', function (Builder $queryBooking){
+					                         return $queryBooking->where('booking_status', 'CANCELLED');
+				                         });
 			});
-		})->with(['hotel.location', 'room_type.media'])->groupBy('hotel_id', 'room_type_id')->get();
-		return $rooms;
+		});
 	}
 }

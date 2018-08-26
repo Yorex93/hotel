@@ -57,7 +57,12 @@ class BookingsController extends Controller
     		'children' => 'required | integer',
 	    ]);
 
-    	$available = $this->roomTypeService->checkAvailability($request);
+	    $checkIn = $request->get('checkIn');
+	    $checkOut = $request->get('checkOut');
+	    $children = $request->get('children');
+	    $adults = $request->get('adults');
+
+    	$available = $this->roomTypeService->checkAvailability($checkIn, $checkOut, $adults, $children);
     	return response()->json(['data' => $available], 200);
     }
 
@@ -76,10 +81,24 @@ class BookingsController extends Controller
 		]);
 
 		try{
-			$booking = $this->bookingService->createBooking($request);
-			return response()->json(['data' => $booking], 200);
+			$response = $this->bookingService->createBooking($request);
+			return response()->json(['data' => $response], 200);
 		} catch (\Throwable $e){
-			return response()->json(['data' => $e], 500);
+			return response()->json(['error' => $e->getMessage()], 500);
+		}
+	}
+
+
+	public function confirmPayment(Request $request){
+    	$this->validate($request, [
+    		'reference' => 'required | exists:payments,payment_ref'
+	    ]);
+
+		try{
+			$payment = $this->bookingService->checkPayment($request->get('reference'));
+			return response()->json(['data' => $payment], 200);
+		} catch (\Throwable $e){
+			return response()->json(['data' => $e->getMessage()], 500);
 		}
 	}
 

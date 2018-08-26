@@ -105,10 +105,23 @@ interface RoomTypeService extends IncludesMedia {
 	public function createRooms(int $hotelId, int $roomTypeId, int $count, int $start,  $prefix = '');
 
 	/**
-	 * @param Request $request
+	 * @param int $checkIn
+	 * @param int $checkOut
+	 * @param int $adults
+	 * @param int $children
 	 *
 	 * @return mixed | Collection
 	 */
-	public function checkAvailability(Request $request);
+	public function checkAvailability(int $checkIn, int $checkOut, int $adults, int $children);
+
+	/**
+	 * @param int $checkIn
+	 * @param int $checkOut
+	 * @param int $adults
+	 * @param int $children
+	 *
+	 * @return mixed | Collection
+	 */
+	public function getAvailableRooms(int $checkIn, int $checkOut, int $adults, int $children);
 
 }
