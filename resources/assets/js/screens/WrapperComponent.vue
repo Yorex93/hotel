@@ -72,7 +72,7 @@
                // { name: 'Activities', icon: 'beach_access', link: 'activities' },
                 { name: 'Facilities', icon: 'hot_tub', link: 'facilities' },
                // { name: 'Services', icon: 'room_service', link: 'services' },
-               // { name: 'Bookings', icon: 'event', link: 'bookings' },
+                { name: 'Bookings', icon: 'event', link: 'bookings' },
                // { name: 'Payments', icon: 'credit_card', link: 'payments' },
                // { name: 'Coupons', icon: 'card_giftcard', link: 'coupons' },
                 { name: 'Page Content', icon: 'book', link: 'pages' },

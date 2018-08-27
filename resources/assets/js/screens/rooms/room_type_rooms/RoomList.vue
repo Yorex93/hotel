@@ -233,7 +233,7 @@
         },
 
         computed: {
-            ...mapGetters('room', ['getRooms', 'getRoomTypes', 'getCreateRooms', 'getParentServices']),
+            ...mapGetters('room', ['getRooms', 'getRoomTypes', 'getCreateRooms']),
             ...mapGetters('hotel', ['getHotels', 'getHotelById']),
 
             roomHotelErrors () {

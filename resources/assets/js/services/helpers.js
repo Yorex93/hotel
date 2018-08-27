@@ -62,11 +62,31 @@ let fileResolvers = {
     },
 };
 
+function getQueryStringFromObject(obj) {
+    let urlString = '';
+    for (let prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+            if (obj[prop] != null && obj[prop].constructor === Array) {
+                obj[prop].forEach(i => {
+                    urlString += `${prop}=${i}&`;
+                });
+            }
+            else {
+                if(obj[prop].toString().trim() !== ''){
+                    urlString += prop + '=' + obj[prop] + '&';
+                }
+            }
+        }
+    }
+    return urlString.substr(0, urlString.length - 1);
+}
+
 
 export {
     getQueryParams,
     dateHelpers,
     currencyFilters,
     urlResolvers,
-    fileResolvers
+    fileResolvers,
+    getQueryStringFromObject
 }

@@ -193,7 +193,64 @@ class DefaultBookingService implements BookingService {
 	 * @return mixed | Collection
 	 */
 	function getBookings( Request $request ) {
-		// TODO: Implement getBookings() method.
+		$page = $request->has('page') ? $request->get('page') : 0;
+		$pageSize = $request->has('per_page') ? $request->get('per_page') : 15;
+		$keyword = $request->has('keyword') ? $request->get('keyword') : null;
+		$startDate = $request->has('startDate') ? $request->get('startDate') : null;
+		$endDate = $request->has('endDate') ? $request->get('endDate') : null;
+		$status = $request->has('status') ? $request->get('status') : null;
+		$booking_ref = $request->has('booking_ref') ? $request->get('booking_ref') : null;
+		$hotel_id = $request->has('hotel_id') ? $request->get('hotel_id') : null;
+		$room_type_id = $request->has('room_type_id') ? $request->get('room_type_id') : null;
+		$check_in = $request->has('check_in') ? $request->get('check_in') : null;
+
+		$bookings = Booking::query();
+
+		if(!is_null($startDate)){
+			$bookings = $bookings->where('created_at', '>=', Carbon::createFromTimestampMs($startDate)
+			                                                       ->startOfDay()->format('Y-m-d H:i:s'));
+		}
+
+		if(!is_null($endDate)){
+			$bookings = $bookings->where('created_at', '<=', Carbon::createFromTimestampMs($endDate)
+			                                                       ->endOfDay()->format('Y-m-d H:i:s'));
+		}
+
+		if(!is_null($keyword)){
+			$bookings = $bookings->where('name', 'LIKE', "%$keyword%")
+			                     ->orWhere('email', 'LIKE', "%$keyword%")
+			                     ->orWhere('phone', 'LIKE', "%$keyword%");
+		}
+
+		if(!is_null($status)){
+			$bookings = $bookings->where('booking_status', $status);
+		}
+
+		if(!is_null($booking_ref)){
+			$bookings = $bookings->where('booking_ref', $booking_ref);
+		}
+
+		if(!is_null($hotel_id) || !is_null($room_type_id) || is_null($check_in)){
+			$bookings = $bookings->whereHas('booking_rooms', function (Builder $bookingRoomQuery) use ($hotel_id, $room_type_id, $check_in){
+				$q =  $bookingRoomQuery;
+				if(!is_null($hotel_id)){
+					$q = $q->where('hotel_id', $hotel_id);
+				}
+
+				if(!is_null($room_type_id)){
+					$q = $q->where('room_type_id', $room_type_id);
+				}
+
+				if(!is_null($check_in)){
+					$q = $q->where('check_in', Carbon::createFromTimestampMs($check_in)->format('Y-m-d'));
+				}
+
+				return $q;
+			});
+		}
+
+		return $bookings->with('booking_rooms', 'payments')->orderBy('created_at', 'DESC')->paginate($pageSize, ['*'], 'page', $page);
+
 	}
 
 	/**
