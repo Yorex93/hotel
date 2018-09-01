@@ -262,7 +262,7 @@ Vue.component('HotelBooking', {
                 specialRequest: '',
                 days : 1,
             },
-            paystackkey: 'pk_test_ba7cea1238ef1ed327c962e055d09cf879270c72',
+            paystackkey: 'pk_live_7e88f2a4d71d5f06608720ccbaf86385458492b4',
             selectedRoom: {},
             errors: [],
             paymentErrors: [],

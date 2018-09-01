@@ -163,16 +163,8 @@ class BookingsController extends Controller
      */
     public function show($id)
     {
-        $booking = $this->repository->find($id);
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $booking,
-            ]);
-        }
-
-        return view('bookings.show', compact('booking'));
+    	return null;
     }
 
     /**
@@ -242,16 +234,6 @@ class BookingsController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'Booking deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
-
-        return redirect()->back()->with('message', 'Booking deleted.');
+        return null;
     }
 }

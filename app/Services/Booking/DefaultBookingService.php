@@ -284,7 +284,7 @@ class DefaultBookingService implements BookingService {
 				return response()->json(['message'=>'No booking found for payment'],500);
 			}
 
-			$secret_key = env('PAYSTACK_TEST_PRIVATE_KEY');
+			$secret_key = env('PAYSTACK_LIVE_PRIVATE_KEY');
 			curl_setopt_array($curl, array(
 				CURLOPT_URL => "https://api.paystack.co/transaction/verify/" . rawurlencode($reference),
 				CURLOPT_RETURNTRANSFER => true,
