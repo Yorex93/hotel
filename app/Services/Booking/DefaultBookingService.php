@@ -11,10 +11,12 @@ namespace Hotel\Services\Booking;
 
 use Carbon\Carbon;
 use Hotel\Entities\Booking;
+use Hotel\Entities\HotelSettings;
 use Hotel\Entities\Payment;
 use Hotel\Entities\Room;
 use Hotel\Mail\PaymentConfirmed;
 use Hotel\Mail\Reservation;
+use Hotel\Mail\ReservationNotification;
 use Hotel\Repositories\BookingRepository;
 use Hotel\Repositories\BookingRoomRepository;
 use Hotel\Repositories\PaymentRepository;
@@ -57,6 +59,12 @@ class DefaultBookingService implements BookingService {
 		$booking_id = 0;
 		$booking_room_id = 0;
 		$payment_id = 0;
+		$hotel_settings = HotelSettings::all();
+		$hotel_setting = null;
+		if($hotel_settings->count() > 0){
+			$hotel_setting = $hotel_settings->first();
+		}
+
 		try{
 			$room = $this->roomRepo->find($room_id);
 			$room_type = $this->roomTypeRepo->find($room->room_type_id);
@@ -128,8 +136,11 @@ class DefaultBookingService implements BookingService {
 
 				try{
 					if($request->get('paymentMethod') === 'LOCATION'){
-						Mail::to($booking->email)->bcc('yorex4real@gmail.com')
-						    ->send(new Reservation($this->bookingRepo->with(['hotel.location' ,'payments', 'booking_rooms.room_type'])->find($booking->id)));
+						$b = $this->bookingRepo->with(['hotel.location' ,'payments', 'booking_rooms.room_type'])->find($booking->id);
+						Mail::to($booking->email)->send(new Reservation($b));
+						if(!is_null($hotel_setting)){
+							Mail::to($hotel_setting->email)->send(new ReservationNotification($b));
+						}
 					}
 
 				} catch (\Exception $e){
