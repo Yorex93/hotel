@@ -32,7 +32,7 @@ class ReservationNotification extends Mailable
     public function build()
     {
 	    return $this->view('mails.reservation_notification')
-	                ->from('reservations@hotelvaleriesuitesng.com')
+	                ->from('notifications@hotelvaleriesuitesng.com')->replyTo($this->booking->email)
 	                ->subject('New Hotel Booking on Hotel Valerie');
     }
 }
