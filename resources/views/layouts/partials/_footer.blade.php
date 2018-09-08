@@ -6,9 +6,10 @@
                     <div class="footer__item">
                         <img src="{{ asset('images/valerie-logo.png') }}" />
                         <ul class="social__icons">
-                            <li class="social-icons__item"><a href="#"><i class="icon ion-social-twitter" aria-hidden="true"></i></a></li>
+                            <li class="social-icons__item"><a href="https://twitter.com/hotel_valerie"><i class="icon ion-social-twitter" aria-hidden="true"></i></a></li>
                             <li class="social-icons__item"><a href="#"><i class="icon ion-social-facebook" aria-hidden="true"></i></a></li>
-                            <li class="social-icons__item"><a href="#"><i class="icon ion-social-googleplus" aria-hidden="true"></i></a></li>
+                            <li class="social-icons__item"><a href="https://www.instagram.com/hotelvaleriesuites/"><i class="icon ion-social-instagram" aria-hidden="true"></i></a></li>
+                            <li class="social-icons__item"><a href="https://plus.google.com/u/3/114095228898470435400"><i class="icon ion-social-googleplus" aria-hidden="true"></i></a></li>
                         </ul> <!-- .social__icons -->
                     </div> <!-- .footer__item -->
                 </div>
