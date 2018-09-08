@@ -139,7 +139,7 @@ class DefaultBookingService implements BookingService {
 						$b = $this->bookingRepo->with(['hotel.location' ,'payments', 'booking_rooms.room_type'])->find($booking->id);
 						Mail::to($booking->email)->send(new Reservation($b));
 						if(!is_null($hotel_setting)){
-							Mail::to($hotel_setting->email)->send(new ReservationNotification($b));
+							Mail::to($hotel_setting->reservation_email)->send(new ReservationNotification($b));
 						}
 					}
 
