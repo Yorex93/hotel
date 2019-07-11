@@ -18,7 +18,19 @@ class HotelValidator extends LaravelValidator
      * @var array
      */
     protected $rules = [
-        ValidatorInterface::RULE_CREATE => [],
-        ValidatorInterface::RULE_UPDATE => [],
+        ValidatorInterface::RULE_CREATE => [
+        	'name' => 'required | min:4',
+	        'description' => 'required | min:100',
+	        'email' => 'required | email',
+	        'phone' => 'required',
+	        'parent_hotel_id' => 'nullable | numeric | exists:hotels,id'
+        ],
+        ValidatorInterface::RULE_UPDATE => [
+	        'name' => 'required | min:4',
+	        'description' => 'required | min:100',
+	        'email' => 'required | email',
+	        'phone' => 'required',
+	        'parent_hotel_id' => 'nullable | numeric | exists:hotels,id'
+        ],
     ];
 }

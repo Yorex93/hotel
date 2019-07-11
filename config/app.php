@@ -159,6 +159,7 @@ return [
         // Hotel\Providers\BroadcastServiceProvider::class,
         Hotel\Providers\EventServiceProvider::class,
         Hotel\Providers\RouteServiceProvider::class,
+        Hotel\Providers\ViewComposerProvider::class,
 
     ],
 
